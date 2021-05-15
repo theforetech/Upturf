@@ -6,7 +6,7 @@ const data = {
     {
       id: 1,
       fullName: 'John Doe',
-      username: 'johndoe',
+      name: 'johndoe',
       password: 'admin',
       // eslint-disable-next-line global-require
       avatar: require('@/assets/images/avatars/13-small.png'),
@@ -25,7 +25,7 @@ const data = {
     {
       id: 2,
       fullName: 'Jane Doe',
-      username: 'janedoe',
+      name: 'janedoe',
       password: 'client',
       // eslint-disable-next-line global-require
       avatar: require('@/assets/images/avatars/1-small.png'),
@@ -96,13 +96,12 @@ mock.onPost('/jwt/login').reply(request => {
 })
 
 mock.onPost('/jwt/register').reply(request => {
-  const { username, email, password } = JSON.parse(request.data)
+  const { name, email, password } = JSON.parse(request.data)
 
   // If not any of data is missing return 400
-  if (!(username && email && password)) return [400]
+  if (!(name && email && password)) return [400]
 
   const isEmailAlreadyInUse = data.users.find(user => user.email === email)
-  const isUsernameAlreadyInUse = data.users.find(user => user.username === username)
 
   const error = {
     password: !password ? ['Please enter password'] : null,
@@ -111,18 +110,17 @@ mock.onPost('/jwt/register').reply(request => {
       if (isEmailAlreadyInUse) return ['This email is already in use.']
       return null
     })(),
-    username: (() => {
-      if (!username) return ['Please enter your username.']
-      if (isUsernameAlreadyInUse) return ['This username is already in use.']
+    name: (() => {
+      if (!name) return ['Please enter your name.']
       return null
     })(),
   }
 
-  if (!error.username && !error.email) {
+  if (!error.name && !error.email) {
     const userData = {
       email,
       password,
-      username,
+      name,
       fullName: '',
       avatar: null,
       role: 'admin',

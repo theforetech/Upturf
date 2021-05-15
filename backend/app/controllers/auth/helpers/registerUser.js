@@ -12,6 +12,7 @@ const registerUser = (req = {}) => {
       name: req.name,
       email: req.email,
       password: req.password,
+      role: req.role,
       verification: uuid.v4()
     })
     user.save((err, item) => {

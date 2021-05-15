@@ -55,7 +55,7 @@ router.post('/reset', trimRequest.all, validateResetPassword, resetPassword)
 router.get(
   '/token',
   requireAuth,
-  roleAuthorization(['user', 'admin']),
+  roleAuthorization(['user', 'admin', 'vendor']),
   trimRequest.all,
   getRefreshToken
 )
