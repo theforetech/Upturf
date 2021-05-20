@@ -181,6 +181,23 @@ export default [
       ],
     },
   },
+  {
+    path: '/pages/components/categories',
+    name: 'pages-categories',
+    component: () => import('@/views/pages/components/Categories'),
+    meta: {
+      pageTitle: 'Category',
+      breadcrumb: [
+        {
+          text: 'Pages',
+        },
+        {
+          text: 'Category',
+          active: true,
+        },
+      ],
+    },
+  },
 
   {
     path: '/pages/faq',
