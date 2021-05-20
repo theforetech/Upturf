@@ -285,7 +285,7 @@ import {
   BFormGroup,
   BFormInput,
 } from 'bootstrap-vue'
-import { codeIconInfo } from './code'
+import { codeIconInfo } from '../../forms/form-wizard/code'
 
 export default {
   components: {
