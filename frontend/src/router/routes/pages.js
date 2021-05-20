@@ -10,6 +10,16 @@ export default [
     },
   },
   {
+    path: '/profile-form',
+    name: 'profile-form',
+    component: () => import('@/views/pages/forms/profile-form.vue'),
+    meta: {
+      layout: 'full',
+      resource: 'Auth',
+      redirectIfLoggedIn: true,
+    },
+  },
+  {
     path: '/login',
     name: 'auth-login',
     component: () => import('@/views/pages/authentication/Login.vue'),
