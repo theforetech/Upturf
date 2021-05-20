@@ -15,8 +15,6 @@ export default [
     component: () => import('@/views/pages/forms/profile-form.vue'),
     meta: {
       layout: 'full',
-      resource: 'Auth',
-      redirectIfLoggedIn: true,
     },
   },
   {
