@@ -319,4 +319,21 @@ export default [
       ],
     },
   },
+  {
+    path: '/turfs/add',
+    name: 'add-turf',
+    component: () => import('@/views/pages/turf/add-turf.vue'),
+    meta: {
+      pageTitle: 'Add Turf',
+      breadcrumb: [
+        {
+          text: 'Turfs',
+        },
+        {
+          text: 'New',
+          active: true,
+        },
+      ],
+    },
+  },
 ]

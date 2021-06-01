@@ -2,12 +2,12 @@ const { backend } = require('../../../global-vars')
 
 export default {
   // Endpoints
-  loginEndpoint: `${backend}/login`,
+  loginEndpoint: `${backend}/user/login`,
   // loginEndpoint: '/jwt/login',
-  registerEndpoint: `${backend}/register`,
+  registerEndpoint: `${backend}/user/register`,
   // registerEndpoint: '/jwt/register',
-  refreshEndpoint: `${backend}/token`,
-  logoutEndpoint: `${backend}/logout`,
+  refreshEndpoint: `${backend}/user/token`,
+  logoutEndpoint: `${backend}/user/logout`,
 
   // This will be prefixed in authorization header with token
   // e.g. Authorization: Bearer <token>

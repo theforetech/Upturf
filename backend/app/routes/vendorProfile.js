@@ -13,12 +13,12 @@ const {
   getProfile,
   updateProfile,
   changePassword
-} = require('../controllers/profile')
+} = require('../controllers/vendorProfile')
 
 const {
   validateUpdateProfile,
   validateChangePassword
-} = require('../controllers/profile/validators')
+} = require('../controllers/vendorProfile/validators')
 
 /*
  * Profile routes
@@ -28,7 +28,7 @@ const {
  * Get profile route
  */
 router.get(
-  '/user',
+  '/vendor',
   requireAuth,
   roleAuthorization(['user', 'admin']),
   trimRequest.all,
@@ -39,7 +39,7 @@ router.get(
  * Update profile route
  */
 router.patch(
-  '/user',
+  '/vendor',
   requireAuth,
   roleAuthorization(['user', 'admin']),
   trimRequest.all,
@@ -51,7 +51,7 @@ router.patch(
  * Change password route
  */
 router.post(
-  '/user/changePassword',
+  '/vendor/changePassword',
   requireAuth,
   roleAuthorization(['user', 'admin']),
   trimRequest.all,

@@ -15,7 +15,7 @@ const {
   getRefreshToken,
   login,
   roleAuthorization
-} = require('../controllers/auth')
+} = require('../controllers/authVendor')
 
 const {
   validateRegister,
@@ -23,7 +23,7 @@ const {
   validateForgotPassword,
   validateResetPassword,
   validateLogin
-} = require('../controllers/auth/validators')
+} = require('../controllers/authVendor/validators')
 
 /*
  * Auth routes
@@ -32,18 +32,18 @@ const {
 /*
  * Register route
  */
-router.post('/user/register', trimRequest.all, validateRegister, register)
+router.post('/vendor/register', trimRequest.all, validateRegister, register)
 
 /*
  * Verify route
  */
-router.post('/user/verify', trimRequest.all, validateVerify, verify)
+router.post('/vendor/verify', trimRequest.all, validateVerify, verify)
 
 /*
  * Forgot password route
  */
 router.post(
-  '/user/forgot',
+  '/vendor/forgot',
   trimRequest.all,
   validateForgotPassword,
   forgotPassword
@@ -53,7 +53,7 @@ router.post(
  * Reset password route
  */
 router.post(
-  '/user/reset',
+  '/vendor/reset',
   trimRequest.all,
   validateResetPassword,
   resetPassword
@@ -73,6 +73,6 @@ router.get(
 /*
  * Login route
  */
-router.post('/user/login', trimRequest.all, validateLogin, login)
+router.post('/vendor/login', trimRequest.all, validateLogin, login)
 
 module.exports = router
