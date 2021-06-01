@@ -1,59 +1,35 @@
 <template>
 
-  <div class="misc-wrapper">
-    <b-link class="brand-logo">
-      <vuexy-logo />
-      <h2 class="brand-text text-primary ml-1">
-        Vuexy
-      </h2>
-    </b-link>
-    <b-col
-      v-for="x in categories"
-      :key="x"
-      lg="4"
-      md="6"
-    >
-      <turf-card
-        card-text="///"
-      /></b-col>
-
-    <div class="misc-inner p-2 p-sm-3">
-      <!--      <div class="w-100 text-center">-->
-      <!--        <h2 class="mb-1">-->
-      <!--          Page Not Found 🕵🏻‍♀️-->
-      <!--        </h2>-->
-      <!--        <p class="mb-2">-->
-      <!--          Oops! 😖 The requested URL was not found on this server.-->
-      <!--        </p>-->
-
-      <!--        <b-button-->
-      <!--            variant="primary"-->
-      <!--            class="mb-2 btn-sm-block"-->
-      <!--            :to="{path:'/'}"-->
-      <!--        >-->
-      <!--          Back to home-->
-      <!--        </b-button>-->
-
-      <!--        &lt;!&ndash; image &ndash;&gt;-->
-
-      <!--      </div>-->
-    </div>
+  <div>
+    <b-row>
+      <b-col
+        v-for="x in categories"
+        :key="x.name"
+        lg="6"
+        md="6"
+        xs="12"
+      >
+        <turf-card
+          :card-title="x.name"
+          :card-image="x.img"
+          :turf-cost="x.cost"
+          :rating="x.rating"
+        /></b-col>
+    </b-row>
   </div>
   <!-- / Error page-->
 </template>
 
 <script>
 /* eslint-disable global-require */
-import { BLink, BCol } from 'bootstrap-vue'
-import VuexyLogo from '@core/layouts/components/Logo.vue'
+import { BCol, BRow } from 'bootstrap-vue'
+
 import store from '@/store/index'
 import TurfCard from '../../card/card-advance/TurfCard.vue'
 
 export default {
   components: {
-    VuexyLogo,
-    BLink,
-    // BRow,
+    BRow,
     BCol,
     TurfCard,
 
@@ -61,21 +37,33 @@ export default {
 
   data() {
     return {
-      downImg: require('@/assets/images/pages/error.svg'),
       categories: [
         {
-          img: '',
-          name: '',
+          img: '/images/turfs/turf1.jpeg',
+          name: 'Shubham Sports Complex',
+          cost: '1500',
+          rating: 1,
         },
         {
-          img: '',
-          name: '',
+          img: '/images/turfs/turf2.jpg',
+          name: 'Sirifort Stadium',
+          cost: '1200',
+          rating: 4,
         },
         {
-          img: '',
-          name: '',
+          img: '/images/turfs/turf3.jpg',
+          name: 'Lords Stadium',
+          cost: '12500',
+          rating: 3,
+        },
+        {
+          img: '/images/turfs/turf4.jpg',
+          name: 'Panchsheel Badminton Club',
+          cost: '500',
+          rating: 2,
         },
       ],
+      downImg: require('@/assets/images/pages/error.svg'),
     }
   },
   computed: {
