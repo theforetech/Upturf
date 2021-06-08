@@ -58,10 +58,22 @@ export default {
 
   },
   props: {
-    cardTitle: String,
-    cardImage: String,
-    turfCost: String,
-    rating: Number,
+    cardTitle: {
+      type: String,
+      default: '',
+    },
+    cardImage: {
+      type: String,
+      default: '',
+    },
+    turfCost: {
+      type: String,
+      default: '',
+    },
+    rating: {
+      type: Number,
+      default: 0,
+    },
   },
 }
 

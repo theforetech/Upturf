@@ -1,12 +1,12 @@
 const passport = require('passport')
-const User = require('../app/models/user')
-const auth = require('../app/middleware/auth')
-const JwtStrategy = require('passport-jwt').Strategy
+const Vendor = require('../app/models/vendor')
+const auth = require('../app/middleware/authVendor')
+const JwtStrategyVendor = require('passport-jwt').Strategy
 
 /**
  * Extracts token from: header, body or query
  * @param {Object} req - request object
- * @returns {string|null} token - decrypted token
+ * @returns {string} token - decrypted token
  */
 const jwtExtractor = (req) => {
   let token = null
@@ -21,28 +21,30 @@ const jwtExtractor = (req) => {
     // Decrypts token
     token = auth.decrypt(token)
   }
-  console.log(token)
   return token
 }
 
 /**
  * Options object for jwt middlware
  */
-const jwtOptions = {
+const jwtOptionsVendor = {
   jwtFromRequest: jwtExtractor,
-  secretOrKey: process.env.JWT_SECRET
+  secretOrKey: process.env.JWT_SECRET_VENDOR
 }
 
 /**
  * Login with JWT middleware
  */
-const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
-  User.findById(payload.data._id, (err, user) => {
-    if (err) {
-      return done(err, false)
-    }
-    return !user ? done(null, false) : done(null, user)
-  })
-})
+const jwtLoginVendor = new JwtStrategyVendor(
+  jwtOptionsVendor,
+  (payload, done) => {
+    Vendor.findById(payload.data._id, (err, vendor) => {
+      if (err) {
+        return done(err, false)
+      }
+      return !vendor ? done(null, false) : done(null, vendor)
+    })
+  }
+)
 
-passport.use('user', jwtLogin)
+passport.use('vendor', jwtLoginVendor)

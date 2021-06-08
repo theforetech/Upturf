@@ -9,7 +9,12 @@ const setVendorInfo = (req = {}) => {
       name: req.name,
       email: req.email,
       role: req.role,
-      verified: req.verified
+      verified: req.verified,
+      address: req.address,
+      contactName: req.contactName,
+      profileForm: req.profileForm,
+      turfs: req.turfs === undefined ? req.turfs : req.turfs.length,
+      phoneNumber: req.phoneNumber
     }
     // Adds verification for testing purposes
     if (process.env.NODE_ENV !== 'production') {

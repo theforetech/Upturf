@@ -27,6 +27,14 @@ const VendorSchema = new mongoose.Schema(
     verification: {
       type: String
     },
+    verified: {
+      type: Boolean,
+      default: false
+    },
+    role: {
+      type: String,
+      default: 'vendor'
+    },
     profileForm: {
       type: Boolean,
       default: false

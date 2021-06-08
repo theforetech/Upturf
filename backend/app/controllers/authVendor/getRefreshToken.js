@@ -11,6 +11,7 @@ const { isIDGood, handleError } = require('../../middleware/utils')
  * @param {Object} res - response object
  */
 const getRefreshToken = async (req, res) => {
+  console.log('SADASDASD')
   try {
     const tokenEncrypted = req.headers.authorization
       .replace('Bearer ', '')

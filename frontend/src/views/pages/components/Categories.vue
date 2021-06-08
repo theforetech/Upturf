@@ -1,5 +1,4 @@
 <template>
-
   <div>
     <b-row>
       <b-col
@@ -32,9 +31,7 @@ export default {
     BRow,
     BCol,
     TurfCard,
-
   },
-
   data() {
     return {
       categories: [

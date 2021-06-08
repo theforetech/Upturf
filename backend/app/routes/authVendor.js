@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
-require('../../config/passport')
+require('../../config/vendorPassport')
 const passport = require('passport')
-const requireAuth = passport.authenticate('jwt', {
+const requireAuth = passport.authenticate('vendor', {
   session: false
 })
 const trimRequest = require('trim-request')
@@ -32,32 +32,22 @@ const {
 /*
  * Register route
  */
-router.post('/vendor/register', trimRequest.all, validateRegister, register)
+router.post('/register', trimRequest.all, validateRegister, register)
 
 /*
  * Verify route
  */
-router.post('/vendor/verify', trimRequest.all, validateVerify, verify)
+router.post('/verify', trimRequest.all, validateVerify, verify)
 
 /*
  * Forgot password route
  */
-router.post(
-  '/vendor/forgot',
-  trimRequest.all,
-  validateForgotPassword,
-  forgotPassword
-)
+router.post('/forgot', trimRequest.all, validateForgotPassword, forgotPassword)
 
 /*
  * Reset password route
  */
-router.post(
-  '/vendor/reset',
-  trimRequest.all,
-  validateResetPassword,
-  resetPassword
-)
+router.post('/reset', trimRequest.all, validateResetPassword, resetPassword)
 
 /*
  * Get new refresh token
@@ -65,7 +55,7 @@ router.post(
 router.get(
   '/token',
   requireAuth,
-  roleAuthorization(['user', 'admin', 'vendor']),
+  roleAuthorization(['admin', 'vendor']),
   trimRequest.all,
   getRefreshToken
 )
@@ -73,6 +63,6 @@ router.get(
 /*
  * Login route
  */
-router.post('/vendor/login', trimRequest.all, validateLogin, login)
+router.post('/login', trimRequest.all, validateLogin, login)
 
 module.exports = router
