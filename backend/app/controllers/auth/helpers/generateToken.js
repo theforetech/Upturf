@@ -28,4 +28,30 @@ const generateToken = (user = '') => {
   }
 }
 
-module.exports = { generateToken }
+/**
+ * Generates a refresh token
+ * @param {Object} user - user object
+ */
+const generateRefreshToken = (user = '') => {
+  try {
+    // Gets expiration time
+    const expiration = Math.floor(Date.now() / 1000) + 60 * 24 * 60 * 2
+
+    // returns signed and encrypted token
+    return encrypt(
+      jwt.sign(
+        {
+          data: {
+            _id: user
+          },
+          exp: expiration
+        },
+        process.env.JWT_SECRET
+      )
+    )
+  } catch (error) {
+    throw error
+  }
+}
+
+module.exports = { generateToken, generateRefreshToken }

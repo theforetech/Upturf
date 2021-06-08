@@ -44,6 +44,10 @@ require('@/assets/scss/style.scss')
 
 Vue.config.productionTip = false
 
+const { backend } = require('./global-vars')
+
+Vue.prototype.$backend = backend
+
 new Vue({
   router,
   store,

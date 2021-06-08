@@ -10,6 +10,14 @@ export default [
     },
   },
   {
+    path: '/profile-form',
+    name: 'profile-form',
+    component: () => import('@/views/pages/forms/profile-form.vue'),
+    meta: {
+      layout: 'full',
+    },
+  },
+  {
     path: '/login',
     name: 'auth-login',
     component: () => import('@/views/pages/authentication/Login.vue'),
@@ -166,6 +174,23 @@ export default [
         },
         {
           text: 'Profile',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: '/pages/components/categories',
+    name: 'pages-categories',
+    component: () => import('@/views/pages/components/Categories'),
+    meta: {
+      pageTitle: 'Category',
+      breadcrumb: [
+        {
+          text: 'Pages',
+        },
+        {
+          text: 'Category',
           active: true,
         },
       ],

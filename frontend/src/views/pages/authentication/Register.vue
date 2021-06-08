@@ -56,21 +56,21 @@
             >
               <!-- username -->
               <b-form-group
-                label="Username"
+                label="Name"
                 label-for="register-username"
               >
                 <validation-provider
                   #default="{ errors }"
-                  name="Username"
-                  vid="username"
+                  name="Name"
+                  vid="name"
                   rules="required"
                 >
                   <b-form-input
-                    id="register-username"
-                    v-model="username"
-                    name="register-username"
+                    id="register-name"
+                    v-model="name"
+                    name="register-name"
                     :state="errors.length > 0 ? false:null"
-                    placeholder="johndoe"
+                    placeholder="John Doe"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -239,9 +239,9 @@ export default {
   data() {
     return {
       status: '',
-      username: '',
-      userEmail: '',
-      password: '',
+      name: 'ADmIn',
+      userEmail: 'admin@demo.com',
+      password: 'admin',
       sideImg: require('@/assets/images/pages/register-v2.svg'),
       // validation
       required,
@@ -266,11 +266,13 @@ export default {
       this.$refs.registerForm.validate().then(success => {
         if (success) {
           useJwt.register({
-            username: this.username,
+            name: this.name,
             email: this.userEmail,
             password: this.password,
+            role: 'admin',
           })
             .then(response => {
+              console.log(response.data)
               useJwt.setToken(response.data.accessToken)
               useJwt.setRefreshToken(response.data.refreshToken)
               localStorage.setItem('userData', JSON.stringify(response.data.userData))
@@ -278,7 +280,7 @@ export default {
               this.$router.push('/')
             })
             .catch(error => {
-              this.$refs.registerForm.setErrors(error.response.data.error)
+              this.$refs.registerForm.setErrors(error)
             })
         }
       })

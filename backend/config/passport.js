@@ -6,7 +6,7 @@ const JwtStrategy = require('passport-jwt').Strategy
 /**
  * Extracts token from: header, body or query
  * @param {Object} req - request object
- * @returns {string} token - decrypted token
+ * @returns {string|null} token - decrypted token
  */
 const jwtExtractor = (req) => {
   let token = null
@@ -21,6 +21,7 @@ const jwtExtractor = (req) => {
     // Decrypts token
     token = auth.decrypt(token)
   }
+  console.log(token)
   return token
 }
 
@@ -44,4 +45,4 @@ const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
   })
 })
 
-passport.use(jwtLogin)
+passport.use('user', jwtLogin)

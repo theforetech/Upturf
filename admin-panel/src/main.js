@@ -23,7 +23,7 @@ import '@/libs/tour'
 // Axios Mock Adapter
 import '@/@fake-db/db'
 
-import '@/firebase/firebaseConfig.js'
+import '@/firebase/firebaseConfig'
 
 // BSV Plugin Registration
 Vue.use(ToastPlugin)
@@ -43,6 +43,10 @@ require('@core/scss/core.scss')
 require('@/assets/scss/style.scss')
 
 Vue.config.productionTip = false
+
+const { backend } = require('./global-vars')
+
+Vue.prototype.$backend = backend
 
 new Vue({
   router,

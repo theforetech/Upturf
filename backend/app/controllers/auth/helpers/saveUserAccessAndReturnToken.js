@@ -1,6 +1,6 @@
 const UserAccess = require('../../../models/userAccess')
 const { setUserInfo } = require('./setUserInfo')
-const { generateToken } = require('./generateToken')
+const { generateToken, generateRefreshToken } = require('./generateToken')
 const {
   getIP,
   getBrowserInfo,
@@ -29,8 +29,29 @@ const saveUserAccessAndReturnToken = (req = {}, user = {}) => {
         const userInfo = await setUserInfo(user)
         // Returns data with access token
         resolve({
-          token: generateToken(user._id),
-          user: userInfo
+          accessToken: generateToken(user._id),
+          refreshToken: generateRefreshToken(user._id),
+          userData: {
+            ...userInfo,
+            ability:
+              userInfo.role === 'admin'
+                ? [
+                    {
+                      action: 'manage',
+                      subject: 'all'
+                    }
+                  ]
+                : [
+                    {
+                      action: 'read',
+                      subject: 'ACL'
+                    },
+                    {
+                      action: 'read',
+                      subject: 'Auth'
+                    }
+                  ]
+          }
         })
       } catch (error) {
         reject(error)

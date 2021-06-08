@@ -1,4 +1,4 @@
-const { generateToken } = require('./generateToken')
+const { generateToken, generateRefreshToken } = require('./generateToken')
 
 /**
  * Builds the registration token
@@ -13,9 +13,16 @@ const returnRegisterToken = (
     if (process.env.NODE_ENV !== 'production') {
       userInfo.verification = verification
     }
+    userInfo.ability = [
+      {
+        action: 'manage',
+        subject: 'all'
+      }
+    ]
     const data = {
-      token: generateToken(_id),
-      user: userInfo
+      accessToken: generateToken(_id),
+      refreshToken: generateRefreshToken(_id),
+      userData: userInfo
     }
     resolve(data)
   })

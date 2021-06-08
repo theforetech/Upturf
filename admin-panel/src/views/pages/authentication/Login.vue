@@ -282,6 +282,7 @@ export default {
             password: this.password,
           })
             .then(response => {
+              console.log(response.data)
               const { userData } = response.data
               useJwt.setToken(response.data.accessToken)
               useJwt.setRefreshToken(response.data.refreshToken)
@@ -290,7 +291,7 @@ export default {
 
               // ? This is just for demo purpose as well.
               // ? Because we are showing eCommerce app's cart items count in navbar
-              this.$store.commit('app-ecommerce/UPDATE_CART_ITEMS_COUNT', userData.extras.eCommerceCartItemsCount)
+              // this.$store.commit('app-ecommerce/UPDATE_CART_ITEMS_COUNT', userData.extras.eCommerceCartItemsCount)
 
               // ? This is just for demo purpose. Don't think CASL is role based in this case, we used role in if condition just for ease
               this.$router.replace(getHomeRouteForLoggedInUser(userData.role))
@@ -299,7 +300,7 @@ export default {
                     component: ToastificationContent,
                     position: 'top-right',
                     props: {
-                      title: `Welcome ${userData.fullName || userData.username}`,
+                      title: `Welcome ${userData.name || userData.email}`,
                       icon: 'CoffeeIcon',
                       variant: 'success',
                       text: `You have successfully logged in as ${userData.role}. Now you can start to explore!`,
@@ -308,6 +309,7 @@ export default {
                 })
             })
             .catch(error => {
+              console.log(error)
               this.$refs.loginForm.setErrors(error.response.data.error)
             })
         }

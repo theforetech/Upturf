@@ -1,6 +1,6 @@
 {
-  "name": "surf-a-turf-admin",
-  "version": "1.0.0",
+  "name": "admin-panel-surfaturf",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
