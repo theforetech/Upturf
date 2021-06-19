@@ -9,14 +9,32 @@ const storage = multer.diskStorage({
         cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     }
 });
+//Delete file
+// let resultHandler = function (err) {
+//     if (err) {
+//         console.log("unlink failed", err);
+//     } else {
+//         console.log("file deleted");
+//     }
+// }
+
+// fs.unlink(req.file.path, resultHandler);
+
 //init upload
 const upload = multer({
     storage:storage,
     limits:{fileSize: 1000000},
     fileFilter: function(req, file, cb){
         checkFileType(file,cb);
+    },
+    key: function(req, file, cb){
+        req.saved_files.push({
+            name: file.originalname,
+
+        });
+        console.log(file.originalname);
     }
-}).single('myImage');
+});
 //Check File Type
 function checkFileType(file,cb){
     const filetypes = /jpeg|jpg|png|gif/;
@@ -41,28 +59,58 @@ app.use(express.static('./public'));
 
 app.get('/', (req,res) => res.render('index'));
 
-app.post('/upload', (req, res)=>{
-    upload(req,res,(err)=>{
-        if(err){
-            res.render('index', {
-                msg: err
-            })
-        }
-        else{
-            if(req.file == undefined){
-                res.render('index',{
-                    msg: 'Error : Please select a file'
+const  upload_auth = (req, res, next) => {
+    req.saved_files=[];
+    next();
+}
 
-                });
-            }else{
-                res.render('index',{
-                    msg: 'File Uploaded',
-                    file: `uploads/${req.file.filename}`
+app.post('/upload', upload_auth, upload.single('file'),
+(req, res)=>{
+    res.json(req.saved_files);
+    // upload(req,res,(err)=>{
+    //     // if(err){
+    //     //     res.render('index', {
+    //     //         msg: err
+    //     //     })
+    //     // }
+    //     // else{
+    //     //     if(req.file == undefined){
+    //     //         res.render('index',{
+    //     //             msg: 'Error : Please select a file'
 
-                });
-            }
-        }
-    })
+    //     //         });
+    //     //     }else{
+    //     //         res.render('index',{
+    //     //             msg: 'File Uploaded',
+    //     //             file: `uploads/${req.file.filename}`
+
+    //     //         });
+    //     //     }
+    //     // }
+    // })
+});
+app.post('/delete', (req, res)=>{
+    // upload(req,res,(err)=>{
+    //     if(err){
+    //         res.render('index', {
+    //             msg: err
+    //         })
+    //     }
+    //     else{
+    //         if(req.file == undefined){
+    //             res.render('index',{
+    //                 msg: 'Error : Please select a file'
+
+    //             });
+    //         }else{
+    //             res.render('index',{
+    //                 msg: 'File Uploaded',
+    //                 file: `uploads/${req.file.filename}`
+
+    //             });
+    //         }
+    //     }
+    // })
 });
 
 const port = 3000;
