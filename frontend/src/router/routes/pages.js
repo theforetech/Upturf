@@ -196,6 +196,23 @@ export default [
       ],
     },
   },
+  {
+    path: '/pages/components/turfs',
+    name: 'pages-turfs',
+    component: () => import('@/views/pages/components/Turfs'),
+    meta: {
+      pageTitle: 'Turfs',
+      breadcrumb: [
+        {
+          text: 'Pages',
+        },
+        {
+          text: 'Turfs',
+          active: true,
+        },
+      ],
+    },
+  },
 
   {
     path: '/pages/faq',
