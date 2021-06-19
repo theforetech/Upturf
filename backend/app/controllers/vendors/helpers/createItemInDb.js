@@ -3,28 +3,43 @@ const Vendor = require('../../../models/vendor')
 const { buildErrObject } = require('../../../middleware/utils')
 
 /**
- * Registers a new vendor in database
+ * Creates a new item in database
  * @param {Object} req - request object
  */
-const registerVendor = (req = {}) => {
+const createItemInDb = ({
+  name = '',
+  email = '',
+  password = '',
+  role = '',
+  phone = '',
+  city = '',
+  country = ''
+}) => {
   return new Promise((resolve, reject) => {
     const vendor = new Vendor({
-      name: req.name,
-      email: req.email,
-      address: req.address,
-      contactName: req.contactName,
-      phoneNumber: req.phoneNumber,
-      password: req.password,
-      role: req.role,
+      name,
+      email,
+      password,
+      role,
+      phone,
+      city,
+      country,
       verification: uuid.v4()
     })
     vendor.save((err, item) => {
       if (err) {
         reject(buildErrObject(422, err.message))
       }
+
+      item = JSON.parse(JSON.stringify(item))
+
+      delete item.password
+      delete item.blockExpires
+      delete item.loginAttempts
+
       resolve(item)
     })
   })
 }
 
-module.exports = { registerVendor }
+module.exports = { createItemInDb }

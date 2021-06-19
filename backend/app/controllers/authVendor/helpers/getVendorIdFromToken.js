@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const { buildErrObject } = require('../../../middleware/utils')
-const { decrypt } = require('../../../middleware/auth')
+const { decrypt } = require('../../../middleware/authVendor')
 
 /**
  * Gets vendor id from token
@@ -9,12 +9,16 @@ const { decrypt } = require('../../../middleware/auth')
 const getVendorIdFromToken = (token = '') => {
   return new Promise((resolve, reject) => {
     // Decrypts, verifies and decode token
-    jwt.verify(decrypt(token), process.env.JWT_SECRET, (err, decoded) => {
-      if (err) {
-        reject(buildErrObject(409, 'BAD_TOKEN'))
+    jwt.verify(
+      decrypt(token),
+      process.env.JWT_SECRET_VENDOR,
+      (err, decoded) => {
+        if (err) {
+          reject(buildErrObject(409, 'BAD_TOKEN'))
+        }
+        resolve(decoded.data._id)
       }
-      resolve(decoded.data._id)
-    })
+    )
   })
 }
 

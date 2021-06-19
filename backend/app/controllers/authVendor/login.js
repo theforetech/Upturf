@@ -2,7 +2,7 @@ const { matchedData } = require('express-validator')
 
 const {
   findVendor,
-  VendorIsBlocked,
+  vendorIsBlocked,
   checkLoginAttemptsAndBlockExpires,
   passwordsDoNotMatch,
   saveLoginAttemptsToDB,
@@ -10,7 +10,7 @@ const {
 } = require('./helpers')
 
 const { handleError } = require('../../middleware/utils')
-const { checkPassword } = require('../../middleware/auth')
+const { checkPassword } = require('../../middleware/authVendor')
 
 /**
  * Login function called by route
@@ -21,7 +21,8 @@ const login = async (req, res) => {
   try {
     const data = matchedData(req)
     const Vendor = await findVendor(data.email)
-    await VendorIsBlocked(Vendor)
+    console.log(Vendor)
+    await vendorIsBlocked(Vendor)
     await checkLoginAttemptsAndBlockExpires(Vendor)
     const isPasswordMatch = await checkPassword(data.password, Vendor)
     if (!isPasswordMatch) {

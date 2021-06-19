@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 require('../../config/passport')
 const passport = require('passport')
-const requireAuth = passport.authenticate('jwt', {
+const requireAuth = passport.authenticate('user', {
   session: false
 })
 const trimRequest = require('trim-request')

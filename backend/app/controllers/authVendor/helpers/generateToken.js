@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { encrypt } = require('../../../middleware/auth')
+const { encrypt } = require('../../../middleware/authVendor')
 
 /**
  * Generates a token
@@ -20,7 +20,7 @@ const generateToken = (vendor = '') => {
           },
           exp: expiration
         },
-        process.env.JWT_SECRET
+        process.env.JWT_SECRET_VENDOR
       )
     )
   } catch (error) {
@@ -46,7 +46,7 @@ const generateRefreshToken = (vendor = '') => {
           },
           exp: expiration
         },
-        process.env.JWT_SECRET
+        process.env.JWT_SECRET_VENDOR
       )
     )
   } catch (error) {

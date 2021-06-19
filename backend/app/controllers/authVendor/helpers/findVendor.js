@@ -11,7 +11,7 @@ const findVendor = (email = '') => {
       {
         email
       },
-      'password loginAttempts blockExpires name email role verified verification',
+      'password loginAttempts blockExpires name email role verified verification address phoneNumber contactName turfs profileForm',
       async (err, item) => {
         try {
           await itemNotFound(err, item, 'Vendor_DOES_NOT_EXIST')

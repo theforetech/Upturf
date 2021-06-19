@@ -23,14 +23,15 @@ const prepareToSendEmail = (user = {}, subject = '', htmlMessage = '') => {
         ? console.log(`Email SENT to: ${user.email}`)
         : console.log(`Email FAILED to: ${user.email}`)
     )
-  } else if (process.env.NODE_ENV === 'development') {
-    console.log(data)
-    sendEmail(data, (messageSent) =>
-      messageSent
-        ? console.log(`Email SENT to: ${user.email}`)
-        : console.log(`Email FAILED to: ${user.email}`)
-    )
   }
+  // } else if (process.env.NODE_ENV === 'development') {
+  //   console.log(data)
+  //   sendEmail(data, (messageSent) =>
+  //     messageSent
+  //       ? console.log(`Email SENT to: ${user.email}`)
+  //       : console.log(`Email FAILED to: ${user.email}`)
+  //   )
+  // }
 }
 
 module.exports = { prepareToSendEmail }

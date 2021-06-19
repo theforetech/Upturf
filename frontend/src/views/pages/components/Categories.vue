@@ -1,5 +1,4 @@
 <template>
-
   <div>
     <b-row>
       <b-col
@@ -34,9 +33,7 @@ export default {
     BCol,
     // TurfCard,
     SportCard,
-
   },
-
   data() {
     return {
       // categories: [

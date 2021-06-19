@@ -18,7 +18,7 @@ const register = async (req, res) => {
     // Gets locale from header 'Accept-Language'
     const locale = req.getLocale()
     req = matchedData(req)
-    const doesEmailExists = await emailExists(req.email)
+    const doesEmailExists = await emailExists(req.email, 'user')
     console.log(req)
     if (!doesEmailExists) {
       // if (!req.role) {
