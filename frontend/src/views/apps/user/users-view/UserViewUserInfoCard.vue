@@ -12,22 +12,22 @@
         <!-- User Avatar & Action Buttons -->
         <div class="d-flex justify-content-start">
           <b-avatar
-            :src="userData.avatar"
-            :text="avatarText(userData.fullName)"
-            :variant="`light-${resolveUserRoleVariant(userData.role)}`"
+            :src="userInfo.photoURL"
+            :text="avatarText(userInfo.displayName)"
+            :variant="`light-${resolveUserRoleVariant(userInfo.role)}`"
             size="104px"
             rounded
           />
           <div class="d-flex flex-column ml-1">
             <div class="mb-1">
               <h4 class="mb-0">
-                {{ userData.fullName }}
+                {{ userInfo.displayName }}
               </h4>
-              <span class="card-text">{{ userData.email }}</span>
+              <span class="card-text">{{ userInfo.email }}</span>
             </div>
             <div class="d-flex flex-wrap">
               <b-button
-                :to="{ name: 'apps-users-edit', params: { id: userData.id } }"
+                :to="{ name: 'apps-users-edit', params: { id: userInfo.id } }"
                 variant="primary"
               >
                 Edit
@@ -97,7 +97,7 @@
               <span class="font-weight-bold">Username</span>
             </th>
             <td class="pb-50">
-              {{ userData.username }}
+              {{ userInfo.username }}
             </td>
           </tr>
           <tr>
@@ -109,7 +109,7 @@
               <span class="font-weight-bold">Status</span>
             </th>
             <td class="pb-50 text-capitalize">
-              {{ userData.status }}
+              {{ userInfo.status }}
             </td>
           </tr>
           <tr>
@@ -121,7 +121,7 @@
               <span class="font-weight-bold">Role</span>
             </th>
             <td class="pb-50 text-capitalize">
-              {{ userData.role }}
+              {{ userInfo.role }}
             </td>
           </tr>
           <tr>
@@ -133,7 +133,7 @@
               <span class="font-weight-bold">Country</span>
             </th>
             <td class="pb-50">
-              {{ userData.country }}
+              {{ userInfo.country }}
             </td>
           </tr>
           <tr>
@@ -145,7 +145,7 @@
               <span class="font-weight-bold">Contact</span>
             </th>
             <td>
-              {{ userData.contact }}
+              {{ userInfo.contact }}
             </td>
           </tr>
         </table>
@@ -166,7 +166,7 @@ export default {
     BCard, BButton, BRow, BCol, BAvatar,
   },
   props: {
-    userData: {
+    userInfo: {
       type: Object,
       required: true,
     },

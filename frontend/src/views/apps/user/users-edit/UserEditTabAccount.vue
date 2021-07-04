@@ -6,15 +6,15 @@
       <template #aside>
         <b-avatar
           ref="previewEl"
-          :src="userData.avatar"
-          :text="avatarText(userData.fullName)"
-          :variant="`light-${resolveUserRoleVariant(userData.role)}`"
+          :src="userInfo.photoURL"
+          :text="avatarText(userInfo.displayName)"
+          :variant="`light-${resolveUserRoleVariant(userInfo.role)}`"
           size="90px"
           rounded
         />
       </template>
       <h4 class="mb-1">
-        {{ userData.fullName }}
+        {{ userInfo.displayName }}
       </h4>
       <div class="d-flex flex-wrap">
         <b-button
@@ -61,7 +61,7 @@
           >
             <b-form-input
               id="username"
-              v-model="userData.username"
+              v-model="userInfo.username"
             />
           </b-form-group>
         </b-col>
@@ -77,7 +77,7 @@
           >
             <b-form-input
               id="full-name"
-              v-model="userData.fullName"
+              v-model="userInfo.displayName"
             />
           </b-form-group>
         </b-col>
@@ -93,7 +93,7 @@
           >
             <b-form-input
               id="email"
-              v-model="userData.email"
+              v-model="userInfo.email"
               type="email"
             />
           </b-form-group>
@@ -109,7 +109,7 @@
             label-for="user-status"
           >
             <v-select
-              v-model="userData.status"
+              v-model="userInfo.status"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               :options="statusOptions"
               :reduce="val => val.value"
@@ -129,7 +129,7 @@
             label-for="user-role"
           >
             <v-select
-              v-model="userData.role"
+              v-model="userInfo.role"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               :options="roleOptions"
               :reduce="val => val.value"
@@ -150,7 +150,7 @@
           >
             <b-form-input
               id="company"
-              v-model="userData.company"
+              v-model="userInfo.company"
             />
           </b-form-group>
         </b-col>
@@ -233,7 +233,7 @@ export default {
     vSelect,
   },
   props: {
-    userData: {
+    userInfo: {
       type: Object,
       required: true,
     },
@@ -299,7 +299,7 @@ export default {
 
     const { inputImageRenderer } = useInputImageRenderer(refInputEl, base64 => {
       // eslint-disable-next-line no-param-reassign
-      props.userData.avatar = base64
+      props.userInfo.photoURL = base64
     })
 
     return {

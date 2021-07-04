@@ -72,12 +72,12 @@ mock.onPost('/jwt/login').reply(request => {
         expiresIn: jwtConfig.refreshTokenExpireTime,
       })
 
-      const userData = { ...user }
+      const userInfo = { ...user }
 
-      delete userData.password
+      delete userInfo.password
 
       const response = {
-        userData,
+        userInfo,
         accessToken,
         refreshToken,
       }
@@ -117,7 +117,7 @@ mock.onPost('/jwt/register').reply(request => {
   }
 
   if (!error.name && !error.email) {
-    const userData = {
+    const userInfo = {
       email,
       password,
       name,
@@ -138,16 +138,16 @@ mock.onPost('/jwt/register').reply(request => {
     if (length) {
       lastIndex = data.users[length - 1].id
     }
-    userData.id = lastIndex + 1
+    userInfo.id = lastIndex + 1
 
-    data.users.push(userData)
+    data.users.push(userInfo)
 
-    const accessToken = jwt.sign({ id: userData.id }, jwtConfig.secret, { expiresIn: jwtConfig.expireTime })
+    const accessToken = jwt.sign({ id: userInfo.id }, jwtConfig.secret, { expiresIn: jwtConfig.expireTime })
 
-    const user = { ...userData }
+    const user = { ...userInfo }
     delete user.password
     const response = {
-      userData: user,
+      userInfo: user,
       accessToken,
     }
 
@@ -162,16 +162,16 @@ mock.onPost('/jwt/refresh-token').reply(request => {
   try {
     const { id } = jwt.verify(refreshToken, jwtConfig.refreshTokenSecret)
 
-    const userData = { ...data.users.find(user => user.id === id) }
+    const userInfo = { ...data.users.find(user => user.id === id) }
 
-    const newAccessToken = jwt.sign({ id: userData.id }, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn })
-    const newRefreshToken = jwt.sign({ id: userData.id }, jwtConfig.refreshTokenSecret, {
+    const newAccessToken = jwt.sign({ id: userInfo.id }, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn })
+    const newRefreshToken = jwt.sign({ id: userInfo.id }, jwtConfig.refreshTokenSecret, {
       expiresIn: jwtConfig.refreshTokenExpireTime,
     })
 
-    delete userData.password
+    delete userInfo.password
     const response = {
-      userData,
+      userInfo,
       accessToken: newAccessToken,
       refreshToken: newRefreshToken,
     }

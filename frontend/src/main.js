@@ -25,6 +25,11 @@ import '@/@fake-db/db'
 
 import '@/firebase/firebaseConfig'
 
+// Auth0 Plugin
+import AuthPlugin from './plugins/auth'
+
+Vue.use(AuthPlugin)
+
 // BSV Plugin Registration
 Vue.use(ToastPlugin)
 Vue.use(ModalPlugin)

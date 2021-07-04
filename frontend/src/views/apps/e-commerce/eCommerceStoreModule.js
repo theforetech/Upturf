@@ -4,8 +4,8 @@ export default {
   namespaced: true,
   state: {
     cartItemsCount: (() => {
-      const userData = JSON.parse(localStorage.getItem('userData'))
-      return userData && userData.extras ? userData.extras.eCommerceCartItemsCount : 0
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+      return userInfo && userInfo.extras ? userInfo.extras.eCommerceCartItemsCount : 0
     })(),
   },
   getters: {},

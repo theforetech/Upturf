@@ -30,10 +30,10 @@ export default {
           .catch(error => reject(error))
       })
     },
-    // addUser(ctx, userData) {
+    // addUser(ctx, userInfo) {
     //   return new Promise((resolve, reject) => {
     //     axios
-    //       .post('/apps/user/users', { user: userData })
+    //       .post('/apps/user/users', { user: userInfo })
     //       .then(response => resolve(response))
     //       .catch(error => reject(error))
     //   })

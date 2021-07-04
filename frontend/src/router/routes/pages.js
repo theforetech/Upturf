@@ -1,5 +1,15 @@
 export default [
   {
+    path: '/callback',
+    name: 'auth-callback',
+    component: () => import('@/views/pages/authentication/Callback.vue'),
+    meta: {
+      layout: 'full',
+      resource: 'Auth',
+      action: 'read',
+    },
+  },
+  {
     path: '/error-404',
     name: 'error-404',
     component: () => import('@/views/error/Error404.vue'),
