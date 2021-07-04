@@ -8,6 +8,7 @@
       id="carousel-crossfade"
       indicators
       fade
+      style="transform: scale(1.025);"
     >
       <b-carousel-slide
         v-for="y in cardImage"
@@ -17,18 +18,41 @@
       />
     </b-carousel>
     <template #footer>
-      <h1 class="turf-title">
-        {{ cardTitle }}
-      </h1>
-      <b-badge
-        variant="success"
-        class="badge"
-      >
-        <span>{{ rating }}</span>  <feather-icon
-          icon="StarIcon"
-          class="star-icon"
-        /><i class="fas fa-star" />
-      </b-badge></template>
+      <div style="background-color: #3b4253!important;">
+        <h1 class="turf-title w-75">
+          {{ cardTitle }}
+        </h1>
+        <b-badge
+          variant="success"
+          class="badge"
+        >
+          <span>{{ rating }}</span>  <feather-icon
+            icon="StarIcon"
+            class="star-icon"
+          />
+          <!--          /><i class="fas fa-star" />-->
+        </b-badge>
+      </div>
+      <div style="background-color: #3b4253!important; margin-top: 2.5rem;">
+        <h1
+          class="turf-title w-25"
+          style="float: right; text-align: right;"
+        >
+          {{ turfAvgCost }}
+        </h1>
+        <div
+          style="float: left;"
+          class="w-75"
+        >
+          <feather-icon
+            icon="MapPinIcon"
+            class="star-icon"
+          />
+          &nbsp;
+          <span>{{ street }}</span>
+        </div>
+      </div>
+    </template>
     <b-card-text />
   </b-card>
 </template>
@@ -74,13 +98,21 @@ export default {
       type: Array,
       default: () => [{}],
     },
-    turfCost: {
+    turfAvgCost: {
       type: String,
       default: '',
     },
     rating: {
       type: Number,
       default: 0,
+    },
+    street: {
+      type: String,
+      default: '',
+    },
+    sports: {
+      type: Array,
+      default: () => [{}],
     },
   },
 }
@@ -91,13 +123,18 @@ export default {
 .turf-card>.card-body{
   padding: 0;
   border-radius: 1.5rem;
+  background-color: transparent;
 }
 .turf-card{
   border-radius: 1.5rem;
-  background: rgba(0,0,0,0);
+  /*background: rgba(0,0,0,0);*/
+  /*background-color: #000;*/
 }
 .turf-card>.card-footer{
   border-top: 0px;
+  /*background-color: transparent;*/
+  padding-left: 10px;
+  padding-right: 20px;
 
 }
 .turf-title {

@@ -11,8 +11,10 @@
         <turf-card
           :card-title="x.name"
           :card-image="x.img"
-          :turf-cost="x.cost"
+          :turf-avg-cost="x.cost"
           :rating="x.rating"
+          :street="x.street"
+          :sports="x.sports"
         />
       </b-col>
     </b-row>
@@ -42,22 +44,26 @@ export default {
           img: ['http://localhost:8080/images/turfs/turf1.jpeg', 'http://localhost:8080/images/turfs/turf2.jpg',
           ],
           name: 'Shubham Sports Complex',
-          cost: '1500',
+          cost: '₹₹',
           rating: 1,
+          street: 'Charmwood Village, Faridabad',
         },
         {
           img: ['http://localhost:8080/images/turfs/turf1.jpeg', 'http://localhost:8080/images/turfs/turf2.jpg',
           ],
           name: 'Mohan Bagaan',
-          cost: '160000',
+          cost: '₹₹₹',
           rating: 5,
+          street: 'Grandeur, Allahbad',
         },
         {
           img: ['http://localhost:8080/images/turfs/turf1.jpeg', 'http://localhost:8080/images/turfs/turf2.jpg',
           ],
           name: 'Mere ghar ke piche',
-          cost: '5',
+          cost: '₹',
           rating: 2.5,
+          street: 'Gomti Nagar, Lucknow',
+
         },
       ],
       downImg: require('@/assets/images/pages/error.svg'),
