@@ -3,6 +3,10 @@ node_modules
 vuesax-full-package
 /dist
 
+# multer uploads
+#multer-api/resources/uploads/*.*
+#multer-api/resources/minified/*.*
+
 # local env files
 .env.local
 .env.*.local
