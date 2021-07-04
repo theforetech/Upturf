@@ -1,0 +1,36 @@
+version: '3.6'
+services:
+  postgres:
+    image: postgres:12
+    restart: always
+    volumes:
+    - /var/lib/hasura_postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+  graphql-engine:
+    image: hasura/graphql-engine:v2.0.0-beta.2
+    ports:
+      - "8080:8080"
+    depends_on:
+    - "postgres"
+    - "storage"
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      ## enable the console served by server
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+      ## enable debugging mode. It is recommended to disable this in production
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      ## uncomment next line to set an admin secret
+      HASURA_GRAPHQL_ADMIN_SECRET: SurfATurf
+      HASURA_GRAPHQL_JWT_SECRET: '{"type": "RS512", "key": "-----BEGIN CERTIFICATE-----\nMIIDBzCCAe+gAwIBAgIJEEokVI2S03QkMA0GCSqGSIb3DQEBCwUAMCExHzAdBgNV\nBAMTFnN1cmZhdHVyZi5ldS5hdXRoMC5jb20wHhcNMjEwNjE4MTcxMzIxWhcNMzUw\nMjI1MTcxMzIxWjAhMR8wHQYDVQQDExZzdXJmYXR1cmYuZXUuYXV0aDAuY29tMIIB\nIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAseojJAVN4Ac6vm4M8Vv3qn/Z\n4FXkBvubNetVtZngY+luGcQt9EaJn/owc5Fe0Kh9kVyZjI6Txev8pBJprnSg//SY\naQo11WFdEcmWspBh+AajH62zQB+SYZIlHV9gHFa8Uo89luC9ijCIlDa0pNW5T5/k\nrDKDoFYxlp8k3CyxPfbzLNdpX6FSlVytN9e1E2fpDjiNbVusswXdX2nqdWylYipW\n+QH8mXfzqUc0m0jfFN8gqCAD8pn5SAIo5SEqwszKds2H0Fmwtg5Vrt/k4Ys0u5O1\nbvf+Z1ZUe3bu1gjrRquKks+TIAx0pjPfRlZsOnzg09/3U/054GuACMcK+XdKNwID\nAQABo0IwQDAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBTiJ+9ZxQ4UljlBwPdq\n1m1dvcTEWDAOBgNVHQ8BAf8EBAMCAoQwDQYJKoZIhvcNAQELBQADggEBAHsswDd7\n3jRC66Jy6McOQ170PgBhMqQpAPY/64xDDsfnltiRnd0w7sQjUtbFk2nmvsU+307B\newPuZLS8RVvDdm4ygBWmFGhOYxNdfr8o3102zUNPmB+A6+nTF20BMPvebYhQVCsu\nvUP4dJgENHPqqGCOTzrO5az7gBaiqeM23Z/269cH8jTZKaoe6JMrUjQ6sdf8tm5r\nctLW2mv1Zz2sUebz503nHflifMezsERPLOSWkw7x4dCqGxPwr/P2fRngtjaCIP8P\noneF9krBDtQPTOnkaROtUB+hmefK4MfKlye+aL3AjdgeK74nftnpKL6X0Ln73Piv\nE/ZmBU+WwlDLaaQ=\n-----END CERTIFICATE-----"}'
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
+  storage:
+    image: surfaturf/multer-file-upload:latest
+    restart: always
+    environment:
+      HASURA_SECRET: SurfATurf
+#volumes:
+#  db_data:/var/lib/hasura_postgres
+
