@@ -180,6 +180,23 @@ export default [
     },
   },
   {
+    path: '/pages/components/turf-page',
+    name: 'pages-profile',
+    component: () => import('@/views/pages/components/Turf-page/TurfPage'),
+    meta: {
+      pageTitle: 'Turf Page',
+      breadcrumb: [
+        {
+          text: 'Pages',
+        },
+        {
+          text: 'Turf Page',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
     path: '/pages/components/categories',
     name: 'pages-categories',
     component: () => import('@/views/pages/components/Categories'),
