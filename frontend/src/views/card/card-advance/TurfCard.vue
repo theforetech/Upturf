@@ -38,7 +38,10 @@
           class="turf-title w-25"
           style="float: right; text-align: right;"
         >
-          {{ turfAvgCost }}
+          <span
+            v-for="x in turfAvgCost"
+            :key="x"
+          >₹</span>
         </h1>
         <div
           style="float: left;"
@@ -99,8 +102,8 @@ export default {
       default: () => [{}],
     },
     turfAvgCost: {
-      type: String,
-      default: '',
+      type: Number,
+      default: 1,
     },
     rating: {
       type: Number,
