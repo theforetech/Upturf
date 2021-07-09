@@ -1,3 +1,5 @@
+[![DeepSource](https://deepsource.io/gh/theforetech/SurfATurf.svg/?label=active+issues&show_trend=true&token=RqSb58I5nLAqjGF5JeI2wnmc)](https://deepsource.io/gh/theforetech/SurfATurf/?ref=repository-badge)
+
 # Node.js express.js MongoDB JWT REST API - Basic Project Skeleton
 
 ## Getting started
