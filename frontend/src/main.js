@@ -3,6 +3,7 @@ import { ToastPlugin, ModalPlugin } from 'bootstrap-vue'
 import VueCompositionAPI from '@vue/composition-api'
 
 import i18n from '@/libs/i18n'
+import VueApollo from 'vue-apollo'
 import router from './router'
 import store from './store'
 import App from './App.vue'
@@ -28,6 +29,9 @@ import '@/firebase/firebaseConfig'
 // Auth0 Plugin
 import AuthPlugin from './plugins/auth'
 
+import { apolloClient } from './apollo'
+
+Vue.use(VueApollo)
 Vue.use(AuthPlugin)
 
 // BSV Plugin Registration
@@ -47,6 +51,10 @@ require('@core/scss/core.scss')
 // import assets styles
 require('@/assets/scss/style.scss')
 
+const apolloProvider = new VueApollo({
+  defaultClient: apolloClient,
+})
+
 Vue.config.productionTip = false
 
 const { backend } = require('./global-vars')
@@ -57,5 +65,6 @@ new Vue({
   router,
   store,
   i18n,
+  apolloProvider,
   render: h => h(App),
 }).$mount('#app')

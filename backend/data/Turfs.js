@@ -1,2 +1,0 @@
-
-db.createCollection( 'Turfs', {validator: {$jsonSchema: {bsonType: 'object',title:'Turfs',required: [         '_turfId',          'sport',          'vendor',          'slots'],properties: {_turfId: {bsonType: 'objectId'},turfName: {bsonType: 'string'},description: {bsonType: 'string'},adress: {bsonType: 'string'},city: {bsonType: 'string'},state: {bsonType: 'string'},pinCode: {bsonType: 'int'},gMap: {bsonType: 'string'},sport: {bsonType: 'objectId'},vendor: {bsonType: 'objectId'},slots: {bsonType: 'objectId'}}         }      }});  
