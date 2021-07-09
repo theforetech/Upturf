@@ -151,7 +151,8 @@ export default {
   padding:6px 7px;
 }
 .badge>span{
-  padding-top: 1px;
+  padding-top: 10px;
+  size: 10px;
 }
 </style>
 <style>
