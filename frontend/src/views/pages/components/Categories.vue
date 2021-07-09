@@ -24,6 +24,7 @@
 import { BCol, BRow } from 'bootstrap-vue'
 
 import store from '@/store/index'
+import gql from 'graphql-tag'
 // import TurfCard from '../../card/card-advance/TurfCard.vue'
 import SportCard from '../../card/card-advance/SportCard.vue'
 
@@ -91,6 +92,20 @@ export default {
         return this.downImg
       }
       return this.downImg
+    },
+  },
+  methods: {
+    async getSports() {
+      const result = await this.$apollo.query({
+        query: gql`query {
+            sport {
+            disabled
+            id
+            name
+          }
+        }`,
+      })
+      console.log(result)
     },
   },
 }
