@@ -1,2 +1,0 @@
-
-db.createCollection( 'slots', {validator: {$jsonSchema: {bsonType: 'object',title:'slots',required: [         'Turfs'],properties: {startTime: {bsonType: 'timestamp'},price: {bsonType: 'double'},endTime: {bsonType: 'timestamp'},weekday: {bsonType: 'int'},Turfs: {bsonType: 'objectId'}}         }      }});  
