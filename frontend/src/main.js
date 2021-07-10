@@ -29,7 +29,7 @@ import '@/firebase/firebaseConfig'
 // Auth0 Plugin
 import AuthPlugin from './plugins/auth'
 
-import { apolloClient } from './apollo'
+const { apolloClient } = require('./apollo')
 
 Vue.use(VueApollo)
 Vue.use(AuthPlugin)

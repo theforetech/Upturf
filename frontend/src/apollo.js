@@ -17,4 +17,4 @@ const apolloClient = new ApolloClient({
   cache,
 })
 
-exports.apolloClient = apolloClient
+export default { apolloClient }

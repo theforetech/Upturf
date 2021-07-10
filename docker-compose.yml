@@ -27,7 +27,7 @@ services:
       HASURA_GRAPHQL_JWT_SECRET: '{"type": "RS512", "key": "-----BEGIN CERTIFICATE-----\nMIIDBzCCAe+gAwIBAgIJEEokVI2S03QkMA0GCSqGSIb3DQEBCwUAMCExHzAdBgNV\nBAMTFnN1cmZhdHVyZi5ldS5hdXRoMC5jb20wHhcNMjEwNjE4MTcxMzIxWhcNMzUw\nMjI1MTcxMzIxWjAhMR8wHQYDVQQDExZzdXJmYXR1cmYuZXUuYXV0aDAuY29tMIIB\nIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAseojJAVN4Ac6vm4M8Vv3qn/Z\n4FXkBvubNetVtZngY+luGcQt9EaJn/owc5Fe0Kh9kVyZjI6Txev8pBJprnSg//SY\naQo11WFdEcmWspBh+AajH62zQB+SYZIlHV9gHFa8Uo89luC9ijCIlDa0pNW5T5/k\nrDKDoFYxlp8k3CyxPfbzLNdpX6FSlVytN9e1E2fpDjiNbVusswXdX2nqdWylYipW\n+QH8mXfzqUc0m0jfFN8gqCAD8pn5SAIo5SEqwszKds2H0Fmwtg5Vrt/k4Ys0u5O1\nbvf+Z1ZUe3bu1gjrRquKks+TIAx0pjPfRlZsOnzg09/3U/054GuACMcK+XdKNwID\nAQABo0IwQDAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBTiJ+9ZxQ4UljlBwPdq\n1m1dvcTEWDAOBgNVHQ8BAf8EBAMCAoQwDQYJKoZIhvcNAQELBQADggEBAHsswDd7\n3jRC66Jy6McOQ170PgBhMqQpAPY/64xDDsfnltiRnd0w7sQjUtbFk2nmvsU+307B\newPuZLS8RVvDdm4ygBWmFGhOYxNdfr8o3102zUNPmB+A6+nTF20BMPvebYhQVCsu\nvUP4dJgENHPqqGCOTzrO5az7gBaiqeM23Z/269cH8jTZKaoe6JMrUjQ6sdf8tm5r\nctLW2mv1Zz2sUebz503nHflifMezsERPLOSWkw7x4dCqGxPwr/P2fRngtjaCIP8P\noneF9krBDtQPTOnkaROtUB+hmefK4MfKlye+aL3AjdgeK74nftnpKL6X0Ln73Piv\nE/ZmBU+WwlDLaaQ=\n-----END CERTIFICATE-----"}'
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
   storage:
-    image: surfaturf/multer-file-upload:latest
+    image: surfaturf/file-upload-api:latest
     restart: always
     environment:
       HASURA_SECRET: SurfATurf

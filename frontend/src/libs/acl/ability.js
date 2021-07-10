@@ -6,6 +6,7 @@ import { initialAbility } from './config'
 // ? You can update this if you store user abilities to more secure place
 // ! Anyone can update localStorage so be careful and please update this
 const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-const existingAbility = userInfo ? userInfo.ability : null
+// eslint-disable-next-line no-nested-ternary
+const existingAbility = userInfo ? userInfo.ability ? userInfo.ability : null : null
 
 export default new Ability(existingAbility || initialAbility)

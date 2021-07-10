@@ -1,5 +1,15 @@
 export default [
   {
+    path: '/redirect-to-dashboard',
+    name: 'redirect-to-dashboard',
+    component: () => import('@/views/pages/authentication/RefreshLogin.vue'),
+    meta: {
+      layout: 'full',
+      resource: 'Auth',
+      action: 'read',
+    },
+  },
+  {
     path: '/callback',
     name: 'auth-callback',
     component: () => import('@/views/pages/authentication/Callback.vue'),

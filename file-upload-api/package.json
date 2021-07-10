@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "start": "nodemon -r esm src/server.js"
+    "start": "nodemon -r esm server.js"
   },
   "dependencies": {
     "axios": "^0.21.1",

@@ -35,12 +35,12 @@ class AuthService extends EventEmitter {
   // Handles the callback request from Auth0
   handleAuthentication() {
     return new Promise((resolve, reject) => {
-      webAuth.parseHash((err, authResult) => {
+      webAuth.parseHash(async (err, authResult) => {
         if (err) {
           // alert(`${err.error}. Detailed error can be found in console.`)
           reject(err)
         } else {
-          this.localLogin(authResult)
+          await this.localLogin(authResult)
           resolve(authResult.idToken)
         }
       })
@@ -54,10 +54,10 @@ class AuthService extends EventEmitter {
 
     // Convert the JWT expiry time from seconds to milliseconds
     this.tokenExpiry = new Date(this.profile.exp * 1000)
-    localStorage.setItem(tokenExpiryKey, this.tokenExpiry)
-    localStorage.setItem(localStorageKey, 'true')
+    await localStorage.setItem(tokenExpiryKey, this.tokenExpiry)
+    await localStorage.setItem(localStorageKey, 'true')
 
-    store.commit('user/UPDATE_USER_INFO', {
+    await store.commit('user/UPDATE_USER_INFO', {
       ability: [{
         action: 'manage',
         subject: 'all',
@@ -76,6 +76,10 @@ class AuthService extends EventEmitter {
       loggedIn: true,
       profile: authResult.idTokenPayload,
       state: authResult.appState || {},
+      ability: [{
+        action: 'manage',
+        subject: 'all',
+      }],
       role: this.profile['https://hasura.io/jwt/claims']['x-hasura-default-role'],
     })
   }
@@ -99,10 +103,6 @@ class AuthService extends EventEmitter {
   }
 
   logOut() {
-    localStorage.removeItem(localStorageKey)
-    localStorage.removeItem(tokenExpiryKey)
-    localStorage.removeItem('userInfo')
-
     this.idToken = null
     this.tokenExpiry = null
     this.profile = null
@@ -110,8 +110,17 @@ class AuthService extends EventEmitter {
     webAuth.logout({
       returnTo: window.location.origin + process.env.BASE_URL,
     })
+    localStorage.removeItem(localStorageKey)
+    localStorage.removeItem(tokenExpiryKey)
+    localStorage.removeItem('userInfo')
 
-    this.emit(loginEvent, { loggedIn: false })
+    this.emit(loginEvent, {
+      loggedIn: false,
+      ability: [{
+        action: 'read',
+        subject: 'Auth',
+      }],
+    })
   }
 
   // eslint-disable-next-line class-methods-use-this
