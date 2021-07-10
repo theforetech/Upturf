@@ -39,7 +39,7 @@ export default {
     // if (await this.$auth.isAuthenticated()) await this.$router.push('/').then(() => { window.location.reload() })
   },
   methods: {
-    handleLoginEvent(data) {
+    async handleLoginEvent(data) {
       // await sleep(3000)
       this.$ability.update(data.ability)
       this.$router.push(getHomeRouteForLoggedInUser(data.role)).then(() => {

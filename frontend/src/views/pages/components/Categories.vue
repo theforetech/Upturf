@@ -24,6 +24,7 @@
 import { BCol, BRow } from 'bootstrap-vue'
 
 import store from '@/store/index'
+// eslint-disable-next-line no-unused-vars
 import gql from 'graphql-tag'
 // import TurfCard from '../../card/card-advance/TurfCard.vue'
 import SportCard from '../../card/card-advance/SportCard.vue'
@@ -64,22 +65,22 @@ export default {
       //   },
       // ],
       sportCategories: [
-        {
-          img: 'http://localhost:8080/images/sports/Badminton.png',
-          name: 'Badminton',
-        },
-        {
-          img: 'http://localhost:8080/images/sports/Football.png',
-          name: 'Football',
-        },
-        {
-          img: 'http://localhost:8080/images/sports/Basketball.png',
-          name: 'Basketball',
-        },
-        {
-          img: 'http://localhost:8080/images/sports/Rugby.png',
-          name: 'Rugby',
-        },
+        // {
+        //   img: 'http://localhost:8080/images/sports/Badminton.png',
+        //   name: 'Badminton',
+        // },
+        // {
+        //   img: 'http://localhost:8080/images/sports/Football.png',
+        //   name: 'Football',
+        // },
+        // {
+        //   img: 'http://localhost:8080/images/sports/Basketball.png',
+        //   name: 'Basketball',
+        // },
+        // {
+        //   img: 'http://localhost:8080/images/sports/Rugby.png',
+        //   name: 'Rugby',
+        // },
       ],
       downImg: require('@/assets/images/pages/error.svg'),
     }
@@ -94,6 +95,9 @@ export default {
       return this.downImg
     },
   },
+  mounted() {
+    this.getSports()
+  },
   methods: {
     async getSports() {
       const result = await this.$apollo.query({
@@ -102,10 +106,16 @@ export default {
             disabled
             id
             name
+            images {
+                url
+            }
           }
         }`,
       })
-      console.log(result)
+      this.sportCategories = result.data.sport.filter(sport => sport.images.length > 0).map(sport => ({
+        name: sport.name,
+        img: sport.images[0].url,
+      }))
     },
   },
 }

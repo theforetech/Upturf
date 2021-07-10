@@ -8,7 +8,6 @@ export const canNavigate = to => to.matched.some(route => {
   const existingAbility = userInfo ? userInfo.ability : null
 
   const ability = new Ability(existingAbility || initialAbility)
-  console.log(ability)
   return ability.can(route.meta.action || 'read', route.meta.resource)
 })
 

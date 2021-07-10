@@ -4,6 +4,9 @@ import VueCompositionAPI from '@vue/composition-api'
 
 import i18n from '@/libs/i18n'
 import VueApollo from 'vue-apollo'
+import { ApolloClient } from 'apollo-client'
+import { createHttpLink } from 'apollo-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 import router from './router'
 import store from './store'
 import App from './App.vue'
@@ -29,7 +32,7 @@ import '@/firebase/firebaseConfig'
 // Auth0 Plugin
 import AuthPlugin from './plugins/auth'
 
-const { apolloClient } = require('./apollo')
+// const { apolloClient } = require('./apollo')
 
 Vue.use(VueApollo)
 Vue.use(AuthPlugin)
@@ -50,6 +53,34 @@ require('@core/scss/core.scss')
 
 // import assets styles
 require('@/assets/scss/style.scss')
+
+const getHeaders = () => {
+  const headers = {}
+  const token = window.localStorage.getItem('apollo-token')
+  if (token) {
+    headers.authorization = `Bearer ${token}`
+  }
+  return headers
+}
+
+// HTTP connection to the API
+const httpLink = createHttpLink({
+  // You should use an absolute URL here
+  uri: 'http://34.69.217.204:8080/v1/graphql',
+  fetch,
+  headers: getHeaders(),
+})
+
+// Create the apollo client
+const apolloClient = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache({
+    addTypename: true,
+  }),
+  defaultOptions: {
+    fetchPolicy: 'no-cache',
+  },
+})
 
 const apolloProvider = new VueApollo({
   defaultClient: apolloClient,

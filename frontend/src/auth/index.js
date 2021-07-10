@@ -48,7 +48,6 @@ class AuthService extends EventEmitter {
   }
 
   async localLogin(authResult) {
-    console.log(authResult)
     this.idToken = authResult.idToken
     this.profile = authResult.idTokenPayload
 
@@ -56,6 +55,7 @@ class AuthService extends EventEmitter {
     this.tokenExpiry = new Date(this.profile.exp * 1000)
     await localStorage.setItem(tokenExpiryKey, this.tokenExpiry)
     await localStorage.setItem(localStorageKey, 'true')
+    await localStorage.setItem('apollo-token', authResult.idToken)
 
     await store.commit('user/UPDATE_USER_INFO', {
       ability: [{
@@ -91,11 +91,11 @@ class AuthService extends EventEmitter {
         // return reject("Not logged in");
       }
 
-      webAuth.checkSession({}, (err, authResult) => {
+      webAuth.checkSession({}, async (err, authResult) => {
         if (err) {
           // reject(err);
         } else {
-          this.localLogin(authResult)
+          await this.localLogin(authResult)
           resolve(authResult)
         }
       })
@@ -113,9 +113,11 @@ class AuthService extends EventEmitter {
     localStorage.removeItem(localStorageKey)
     localStorage.removeItem(tokenExpiryKey)
     localStorage.removeItem('userInfo')
+    localStorage.removeItem('apollo-token')
 
     this.emit(loginEvent, {
       loggedIn: false,
+      idToken: null,
       ability: [{
         action: 'read',
         subject: 'Auth',
