@@ -67,6 +67,7 @@ export default {
         },
       ],
       downImg: require('@/assets/images/pages/error.svg'),
+      menuHidden: this.$store.state.appConfig.layout.menu.hidden,
     }
   },
   computed: {
@@ -78,6 +79,12 @@ export default {
       }
       return this.downImg
     },
+  },
+  created() {
+    this.$store.commit('appConfig/UPDATE_NAV_MENU_HIDDEN', true)
+  },
+  destroyed() {
+    this.$store.commit('appConfig/UPDATE_NAV_MENU_HIDDEN', this.menuHidden)
   },
 }
 </script>
