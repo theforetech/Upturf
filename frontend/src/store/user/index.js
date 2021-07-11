@@ -43,9 +43,9 @@ export default {
   getters: {},
   mutations: {
     // Updates user info in state and localstorage
-    UPDATE_USER_INFO(state, payload) {
+    async UPDATE_USER_INFO(state, payload) {
       // Get Data localStorage
-      const userInfo = JSON.parse(localStorage.getItem('userInfo')) || state.AppActiveUser
+      const userInfo = await JSON.parse(await localStorage.getItem('userInfo')) || state.AppActiveUser
 
       // eslint-disable-next-line no-restricted-syntax
       for (const property of Object.keys(payload)) {
@@ -58,7 +58,7 @@ export default {
         }
       }
       // Store data in localStorage
-      localStorage.setItem('userInfo', JSON.stringify(userInfo))
+      await localStorage.setItem('userInfo', JSON.stringify(userInfo))
     },
   },
   actions: {

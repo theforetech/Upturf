@@ -5,14 +5,15 @@
     img-alt="card img"
     class="mb-3 sportCard radial-gradient"
     title-tag="h1"
-    style="border-radius:1rem;"
+    style="border-radius:1rem; cursor: pointer;"
+    @click="goToSportPage"
   >
-    <template
-      #footer
-      class="sport-title"
-    >
-      {{ sportTitle }}
-    </template>
+    <!--    <template-->
+    <!--      #footer-->
+    <!--      class="sport-title"-->
+    <!--    >-->
+    <!--      {{ sportTitle }}-->
+    <!--    </template>-->
   </b-card>
 
 </template>
@@ -21,7 +22,8 @@
 .sportCard>.card-img{
   /*border-radius: 50%;*/
   aspect-ratio: 1 / 1;
-  padding:1rem 0.5rem 0rem 0.5rem;
+  /*padding:1rem 0.5rem 0rem 0.5rem;*/
+  padding: 15%;
 }
 .card-footer{
   font-size: 2.0rem;
@@ -84,6 +86,11 @@ export default {
     sportImage: {
       type: String,
       default: '',
+    },
+  },
+  methods: {
+    goToSportPage() {
+      this.$router.push(`/sport/${this.name}`)
     },
   },
 }

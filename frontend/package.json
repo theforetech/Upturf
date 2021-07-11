@@ -29,6 +29,7 @@
     "bootstrap": "4.6.0",
     "bootstrap-vue": "2.21.1",
     "chart.js": "2.9.4",
+    "common-js": "^0.3.8",
     "core-js": "3.8.1",
     "echarts": "4.8.0",
     "firebase": "^8.5.0",
@@ -86,6 +87,7 @@
     "eslint-plugin-vue": "6.2.2",
     "sass": "^1.30.0",
     "sass-loader": "^10.1.0",
+    "speed-measure-webpack-plugin": "^1.5.0",
     "vue-template-compiler": "^2.6.11"
   }
 }

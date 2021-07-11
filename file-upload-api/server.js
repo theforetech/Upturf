@@ -25,7 +25,7 @@ cloudinary.config({
 
 const uploadToCloud = async (filePath, name) => {
   try {
-    const destination = "../resources/uploads/minified/" + name;
+    const destination = "./resources/uploads/minified/" + name;
     const source = await tinified.fromFile(filePath);
     await source.toFile(destination)
     console.log("Filename : " + name);
@@ -48,14 +48,12 @@ const fileUpload = async (req, res, next) => {
     let { name, type, base64str, sportID, turfID, userID } = req.body.input;
     if (base64str === undefined || base64str === null) {
       return res.status(400).json({
-        message: 'No file provided',
-        status: 'error'
+        message: 'No file provided'
       })
     }
     if (sportID === undefined && turfID === undefined && userID === undefined) {
       return res.status(400).json({
-        message: 'Please add an entity to assign the image to',
-        status: 'error'
+        message: 'Please add an entity to assign the image to'
       })
     }
     type = type === undefined ? null : type
@@ -64,12 +62,14 @@ const fileUpload = async (req, res, next) => {
     userID = userID === undefined ? null : userID
     name = name === undefined ? null : name.split('.')[0].split(' ').join('') + '-' + moment().format('DDMMYYYYhhmmss') + path.extname(name)
     let fileBuffer = Buffer.from(base64str, 'base64');
-    await fs.writeFileSync("../resources/uploads/" + name, fileBuffer, 'base64');
+    await fs.writeFileSync("./resources/uploads/" + name, fileBuffer, 'base64');
 
-    const resp = await uploadToCloud("../resources/uploads/" + name, name)
+    const resp = await uploadToCloud("./resources/uploads/" + name, name)
     console.log(resp)
     if (resp.status === 'error') {
-      return res.status(400).json(resp)
+      return res.status(400).json({
+        message: "Upload error"
+      })
     }
 
     // insert into db
@@ -88,7 +88,7 @@ const fileUpload = async (req, res, next) => {
 
     // execute the parent mutation in Hasura
     require('axios')({
-      url: 'http://34.69.217.204:8080/v1/graphql',
+      url: 'http://graphql-engine:8080/v1/graphql',
       method: 'post',
       data: {
         query: HASURA_MUTATION,
@@ -99,7 +99,12 @@ const fileUpload = async (req, res, next) => {
         }
       })
       .then(resp => {
-        return res.json(resp.data.data);
+        if ('errors' in resp.data) {
+          return res.status(400).json({
+            message: resp.data.errors[0].message
+          })
+        }
+        return res.json(resp.data.data.insert_images_one);
       })
       .catch(err => {
         return res.status(400).json({

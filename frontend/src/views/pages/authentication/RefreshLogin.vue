@@ -22,30 +22,23 @@
 
 <script>
 import VuexyLogo from '@core/layouts/components/Logo.vue'
-import { getHomeRouteForLoggedInUser } from '@/auth/utils'
+// import { getHomeRouteForLoggedInUser } from '@/auth/utils'
 
 // eslint-disable-next-line no-unused-vars
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
+// function sleep(ms) {
+//   return new Promise(resolve => setTimeout(resolve, ms))
+// }
 export default {
-  name: 'Callback',
+  name: 'RefreshLogin',
   components: {
     VuexyLogo,
   },
-  async created() {
-    await this.$auth.handleAuthentication()
-    // await sleep(3000)
-    // if (await this.$auth.isAuthenticated()) await this.$router.push('/').then(() => { window.location.reload() })
-  },
-  methods: {
-    async handleLoginEvent(data) {
-      // await sleep(3000)
-      this.$ability.update(data.ability)
-      this.$router.push(getHomeRouteForLoggedInUser(data.role)).then(() => {
-        window.location.reload()
-      })
-    },
+  created() {
+    if (this.$auth.isAuthenticated()) {
+      this.$router.push('/')
+    } else {
+      window.location.reload()
+    }
   },
 }
 </script>
