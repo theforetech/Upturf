@@ -51,7 +51,7 @@
             >
               <b-form-input
                 id="full-name"
-                v-model="userData.fullName"
+                v-model="userInfo.displayName"
                 autofocus
                 :state="getValidationState(validationContext)"
                 trim
@@ -76,7 +76,7 @@
             >
               <b-form-input
                 id="username"
-                v-model="userData.username"
+                v-model="userInfo.username"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -99,7 +99,7 @@
             >
               <b-form-input
                 id="email"
-                v-model="userData.email"
+                v-model="userInfo.email"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -122,7 +122,7 @@
             >
               <b-form-input
                 id="contact"
-                v-model="userData.contact"
+                v-model="userInfo.contact"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -145,7 +145,7 @@
             >
               <b-form-input
                 id="company"
-                v-model="userData.company"
+                v-model="userInfo.company"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -168,7 +168,7 @@
               :state="getValidationState(validationContext)"
             >
               <v-select
-                v-model="userData.country"
+                v-model="userInfo.country"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 :options="countries"
                 :clearable="false"
@@ -192,7 +192,7 @@
               :state="getValidationState(validationContext)"
             >
               <v-select
-                v-model="userData.role"
+                v-model="userInfo.role"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 :options="roleOptions"
                 :reduce="val => val.value"
@@ -217,7 +217,7 @@
               :state="getValidationState(validationContext)"
             >
               <v-select
-                v-model="userData.currentPlan"
+                v-model="userInfo.currentPlan"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 :options="planOptions"
                 :reduce="val => val.value"
@@ -324,13 +324,13 @@ export default {
       contact: '',
     }
 
-    const userData = ref(JSON.parse(JSON.stringify(blankUserData)))
+    const userInfo = ref(JSON.parse(JSON.stringify(blankUserData)))
     const resetuserData = () => {
-      userData.value = JSON.parse(JSON.stringify(blankUserData))
+      userInfo.value = JSON.parse(JSON.stringify(blankUserData))
     }
 
     const onSubmit = () => {
-      store.dispatch('app-user/addUser', userData.value)
+      store.dispatch('app-user/addUser', userInfo.value)
         .then(() => {
           emit('refetch-data')
           emit('update:is-add-new-user-sidebar-active', false)
@@ -344,7 +344,7 @@ export default {
     } = formValidation(resetuserData)
 
     return {
-      userData,
+      userInfo,
       onSubmit,
 
       refFormObserver,

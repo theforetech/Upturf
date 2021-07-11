@@ -1,5 +1,25 @@
 export default [
   {
+    path: '/redirect-to-dashboard',
+    name: 'redirect-to-dashboard',
+    component: () => import('@/views/pages/authentication/RefreshLogin.vue'),
+    meta: {
+      layout: 'full',
+      resource: 'Auth',
+      action: 'read',
+    },
+  },
+  {
+    path: '/callback',
+    name: 'auth-callback',
+    component: () => import('@/views/pages/authentication/Callback.vue'),
+    meta: {
+      layout: 'full',
+      resource: 'Auth',
+      action: 'read',
+    },
+  },
+  {
     path: '/error-404',
     name: 'error-404',
     component: () => import('@/views/error/Error404.vue'),
@@ -7,6 +27,14 @@ export default [
       layout: 'full',
       resource: 'Auth',
       action: 'read',
+    },
+  },
+  {
+    path: '/profile-form',
+    name: 'profile-form',
+    component: () => import('@/views/pages/forms/profile-form.vue'),
+    meta: {
+      layout: 'full',
     },
   },
   {
@@ -171,6 +199,57 @@ export default [
       ],
     },
   },
+  {
+    path: '/pages/components/turf-page',
+    name: 'pages-profile',
+    component: () => import('@/views/pages/components/Turf-page/TurfPage'),
+    meta: {
+      pageTitle: 'Turf Page',
+      breadcrumb: [
+        {
+          text: 'Pages',
+        },
+        {
+          text: 'Turf Page',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: '/pages/components/categories',
+    name: 'pages-categories',
+    component: () => import('@/views/pages/components/Categories'),
+    meta: {
+      pageTitle: 'Category',
+      breadcrumb: [
+        {
+          text: 'Pages',
+        },
+        {
+          text: 'Category',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: '/pages/components/turfs',
+    name: 'pages-turfs',
+    component: () => import('@/views/pages/components/Turfs'),
+    meta: {
+      pageTitle: 'Turfs',
+      breadcrumb: [
+        {
+          text: 'Pages',
+        },
+        {
+          text: 'Turfs',
+          active: true,
+        },
+      ],
+    },
+  },
 
   {
     path: '/pages/faq',
@@ -314,23 +393,6 @@ export default [
         },
         {
           text: 'Edit',
-          active: true,
-        },
-      ],
-    },
-  },
-  {
-    path: '/turfs/add',
-    name: 'add-turf',
-    component: () => import('@/views/pages/turf/add-turf.vue'),
-    meta: {
-      pageTitle: 'Add Turf',
-      breadcrumb: [
-        {
-          text: 'Turfs',
-        },
-        {
-          text: 'New',
           active: true,
         },
       ],

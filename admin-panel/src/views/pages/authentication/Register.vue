@@ -275,8 +275,8 @@ export default {
               console.log(response.data)
               useJwt.setToken(response.data.accessToken)
               useJwt.setRefreshToken(response.data.refreshToken)
-              localStorage.setItem('userData', JSON.stringify(response.data.userData))
-              this.$ability.update(response.data.userData.ability)
+              localStorage.setItem('userInfo', JSON.stringify(response.data.userInfo))
+              this.$ability.update(response.data.userInfo.ability)
               this.$router.push('/')
             })
             .catch(error => {

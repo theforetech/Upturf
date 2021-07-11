@@ -7,20 +7,17 @@
     <template #button-content>
       <div class="d-sm-flex d-none user-nav">
         <p class="user-name font-weight-bolder mb-0">
-          {{ userData.fullName || userData.username }}
+          {{ userInfo.displayName || userInfo.username }}
         </p>
-        <span class="user-status">{{ userData.role }}</span>
+        <!--        <span class="user-status">{{ userInfo.role }}</span>-->
       </div>
       <b-avatar
         size="40"
-        :src="userData.avatar"
+        :src="userInfo.photoURL"
         variant="light-primary"
-        badge
-        class="badge-minimal"
-        badge-variant="success"
       >
         <feather-icon
-          v-if="!userData.fullName"
+          v-if="!userInfo.displayName"
           icon="UserIcon"
           size="22"
         />
@@ -125,7 +122,6 @@ import {
   BNavItemDropdown, BDropdownItem, BDropdownDivider, BAvatar,
 } from 'bootstrap-vue'
 import { initialAbility } from '@/libs/acl/config'
-import useJwt from '@/auth/jwt/useJwt'
 import { avatarText } from '@core/utils/filter'
 
 export default {
@@ -137,25 +133,26 @@ export default {
   },
   data() {
     return {
-      userData: JSON.parse(localStorage.getItem('userData')),
+      userInfo: JSON.parse(localStorage.getItem('userInfo')),
       avatarText,
     }
   },
   methods: {
     logout() {
-      // Remove userData from localStorage
-      // ? You just removed token from localStorage. If you like, you can also make API call to backend to blacklist used token
-      localStorage.removeItem(useJwt.jwtConfig.storageTokenKeyName)
-      localStorage.removeItem(useJwt.jwtConfig.storageRefreshTokenKeyName)
-
-      // Remove userData from localStorage
-      localStorage.removeItem('userData')
-
       // Reset ability
       this.$ability.update(initialAbility)
-
-      // Redirect to login page
-      this.$router.push({ name: 'auth-login' })
+      this.$auth.logOut()
+      // // Remove userInfo from localStorage
+      // // ? You just removed token from localStorage. If you like, you can also make API call to backend to blacklist used token
+      // localStorage.removeItem(useJwt.jwtConfig.storageTokenKeyName)
+      // localStorage.removeItem(useJwt.jwtConfig.storageRefreshTokenKeyName)
+      //
+      // // Remove userInfo from localStorage
+      // localStorage.removeItem('userInfo')
+      //
+      //
+      // // Redirect to login page
+      // this.$router.push({ name: 'auth-login' })
     },
   },
 }

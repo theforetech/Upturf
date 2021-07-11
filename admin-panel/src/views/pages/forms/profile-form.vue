@@ -4,14 +4,12 @@
       color="#7367F0"
       :title="null"
       :subtitle="null"
-      layout="vertical"
       finish-button-text="Submit"
       back-button-text="Previous"
-      class="vertical-steps steps-transparent mb-3"
+      class="steps-transparent mb-3"
       @on-complete="formSubmitted"
     >
-
-      <!-- account details tab -->
+      <!-- account detail tab -->
       <tab-content
         title="Account Details"
         icon="feather icon-file-text"
@@ -30,22 +28,22 @@
           </b-col>
           <b-col md="6">
             <b-form-group
-              label="Turf Name"
-              label-for="vi-name"
+              label="Username"
+              label-for="i-username"
             >
               <b-form-input
-                id="vi-name"
-                placeholder="Turf Name"
+                id="i-username"
+                placeholder="johndoe"
               />
             </b-form-group>
           </b-col>
           <b-col md="6">
             <b-form-group
               label="Email"
-              label-for="vi-email"
+              label-for="i-email"
             >
               <b-form-input
-                id="vi-email"
+                id="i-email"
                 type="email"
                 placeholder="john.doe@email.com"
               />
@@ -54,10 +52,10 @@
           <b-col md="6">
             <b-form-group
               label="Password"
-              label-for="vi-password"
+              label-for="i-password"
             >
               <b-form-input
-                id="vi-password"
+                id="i-password"
                 type="password"
                 placeholder="Password"
               />
@@ -66,10 +64,10 @@
           <b-col md="6">
             <b-form-group
               label="Confirm Password"
-              label-for="vi-c-password"
+              label-for="i-c-password"
             >
               <b-form-input
-                id="vi-c-password"
+                id="i-c-password"
                 type="password"
                 placeholder="Re-type Password"
               />
@@ -78,7 +76,7 @@
         </b-row>
       </tab-content>
 
-      <!-- personal details tab -->
+      <!-- personal details -->
       <tab-content
         title="Personal Info"
         icon="feather icon-user"
@@ -95,11 +93,11 @@
           </b-col>
           <b-col md="6">
             <b-form-group
+              label-for="i-first-name"
               label="First Name"
-              label-for="vi-first-name"
             >
               <b-form-input
-                id="vi-first-name"
+                id="i-first-name"
                 placeholder="John"
               />
             </b-form-group>
@@ -107,10 +105,10 @@
           <b-col md="6">
             <b-form-group
               label="Last Name"
-              label-for="vi-last-name"
+              label-for="i-last-name"
             >
               <b-form-input
-                id="vi-last-name"
+                id="i-last-name"
                 placeholder="Doe"
               />
             </b-form-group>
@@ -118,10 +116,10 @@
           <b-col md="6">
             <b-form-group
               label="Country"
-              label-for="vi-country"
+              label-for="i-country"
             >
               <v-select
-                id="vi-country"
+                id="i-country"
                 v-model="selectedContry"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 :options="countryName"
@@ -133,14 +131,14 @@
           <b-col md="6">
             <b-form-group
               label="Language"
-              label-for="vi-language"
+              label-for="i-language"
             >
               <v-select
-                id="vi-language"
+                id="i-language"
                 v-model="selectedLanguage"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :selectable="option => ! option.value.includes('select_value')"
                 :options="languageName"
+                :selectable="option => ! option.value.includes('select_value')"
                 label="text"
               />
             </b-form-group>
@@ -166,10 +164,10 @@
           <b-col md="6">
             <b-form-group
               label="Address"
-              label-for="vi-address"
+              label-for="i-address"
             >
               <b-form-input
-                id="vi-address"
+                id="i-address"
                 placeholder="98 Borough bridge Road, Birmingham"
               />
             </b-form-group>
@@ -177,10 +175,10 @@
           <b-col md="6">
             <b-form-group
               label="Landmark"
-              label-for="vi-landmark"
+              label-for="i-landmark"
             >
               <b-form-input
-                id="vi-landmark"
+                id="i-landmark"
                 placeholder="Borough bridge"
               />
             </b-form-group>
@@ -188,21 +186,21 @@
           <b-col md="6">
             <b-form-group
               label="Pincode"
-              label-for="vi-pincode"
+              label-for="i-pincode"
             >
               <b-form-input
-                id="vi-pincode"
+                id="i-pincode"
                 placeholder="658921"
               />
             </b-form-group>
           </b-col>
           <b-col md="6">
             <b-form-group
+              label-for="i-city"
               label="City"
-              label-for="vi-city"
             >
               <b-form-input
-                id="vi-city"
+                id="i-city"
                 placeholder="Birmingham"
               />
             </b-form-group>
@@ -228,10 +226,10 @@
           <b-col md="6">
             <b-form-group
               label="Twitter"
-              label-for="vi-twitter"
+              label-for="i-twitter"
             >
               <b-form-input
-                id="vi-twitter"
+                id="i-twitter"
                 placeholder="https://twitter.com/abc"
               />
             </b-form-group>
@@ -239,10 +237,10 @@
           <b-col md="6">
             <b-form-group
               label="Facebook"
-              label-for="vi-facebook"
+              label-for="i-facebook"
             >
               <b-form-input
-                id="vi-facebook"
+                id="i-facebook"
                 placeholder="https://facebook.com/abc"
               />
             </b-form-group>
@@ -250,10 +248,10 @@
           <b-col md="6">
             <b-form-group
               label="Google+"
-              label-for="vi-google-plus"
+              label-for="i-google-plus"
             >
               <b-form-input
-                id="vi-google-plus"
+                id="i-google-plus"
                 placeholder="https://plus.google.com/abc"
               />
             </b-form-group>
@@ -261,10 +259,10 @@
           <b-col md="6">
             <b-form-group
               label="LinkedIn"
-              label-for="vi-linked-in"
+              label-for="i-linked-in"
             >
               <b-form-input
-                id="vi-linked-in"
+                id="i-linked-in"
                 placeholder="https://linkedin.com/abc"
               />
             </b-form-group>
@@ -279,6 +277,7 @@
 <script>
 import { FormWizard, TabContent } from 'vue-form-wizard'
 import vSelect from 'vue-select'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 import {
   BRow,
@@ -286,8 +285,7 @@ import {
   BFormGroup,
   BFormInput,
 } from 'bootstrap-vue'
-import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
-import { codeIconInfo } from '../../../forms/form-wizard/code'
+import { codeIconInfo } from '../../forms/form-wizard/code'
 
 export default {
   components: {

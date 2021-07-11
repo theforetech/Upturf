@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     loginRoute() {
-      const user = JSON.parse(localStorage.getItem('userData'))
+      const user = this.$store.state.user.AppActiveUser
       return getHomeRouteForLoggedInUser(user ? user.role : null)
     },
   },

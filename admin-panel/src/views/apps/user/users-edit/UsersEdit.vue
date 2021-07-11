@@ -1,10 +1,10 @@
 <template>
-  <component :is="userData === undefined ? 'div' : 'b-card'">
+  <component :is="userInfo === undefined ? 'div' : 'b-card'">
 
     <!-- Alert: No item found -->
     <b-alert
       variant="danger"
-      :show="userData === undefined"
+      :show="userInfo === undefined"
     >
       <h4 class="alert-heading">
         Error fetching user data
@@ -22,7 +22,7 @@
     </b-alert>
 
     <b-tabs
-      v-if="userData"
+      v-if="userInfo"
       pills
     >
 
@@ -37,7 +37,7 @@
           <span class="d-none d-sm-inline">Account</span>
         </template>
         <user-edit-tab-account
-          :user-data="userData"
+          :user-data="userInfo"
           class="mt-2 pt-75"
         />
       </b-tab>
@@ -96,7 +96,7 @@ export default {
     UserEditTabSocial,
   },
   setup() {
-    const userData = ref(null)
+    const userInfo = ref(null)
 
     const USER_APP_STORE_MODULE_NAME = 'app-user'
 
@@ -109,15 +109,15 @@ export default {
     })
 
     store.dispatch('app-user/fetchUser', { id: router.currentRoute.params.id })
-      .then(response => { userData.value = response.data })
+      .then(response => { userInfo.value = response.data })
       .catch(error => {
         if (error.response.status === 404) {
-          userData.value = undefined
+          userInfo.value = undefined
         }
       })
 
     return {
-      userData,
+      userInfo,
     }
   },
 }

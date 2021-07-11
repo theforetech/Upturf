@@ -4,7 +4,7 @@
     <!-- Alert: No item found -->
     <b-alert
       variant="danger"
-      :show="userData === undefined"
+      :show="userInfo === undefined"
     >
       <h4 class="alert-heading">
         Error fetching user data
@@ -21,7 +21,7 @@
       </div>
     </b-alert>
 
-    <template v-if="userData">
+    <template v-if="userInfo">
       <!-- First Row -->
       <b-row>
         <b-col
@@ -30,7 +30,7 @@
           lg="8"
           md="7"
         >
-          <user-view-user-info-card :user-data="userData" />
+          <user-view-user-info-card :user-data="userInfo" />
         </b-col>
         <b-col
           cols="12"
@@ -93,7 +93,7 @@ export default {
     InvoiceList,
   },
   setup() {
-    const userData = ref(null)
+    const userInfo = ref(null)
 
     const USER_APP_STORE_MODULE_NAME = 'app-user'
 
@@ -106,15 +106,15 @@ export default {
     })
 
     store.dispatch('app-user/fetchUser', { id: router.currentRoute.params.id })
-      .then(response => { userData.value = response.data })
+      .then(response => { userInfo.value = response.data })
       .catch(error => {
         if (error.response.status === 404) {
-          userData.value = undefined
+          userInfo.value = undefined
         }
       })
 
     return {
-      userData,
+      userInfo,
     }
   },
 }
