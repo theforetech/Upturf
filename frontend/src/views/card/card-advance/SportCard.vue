@@ -42,7 +42,7 @@
   /Linear gradient... */
   background:
       radial-gradient(
-          at center, #A5DBD8,#A5DBD8
+          at center, #f8f8f8,#fff
       );
 }
 .card-body{
