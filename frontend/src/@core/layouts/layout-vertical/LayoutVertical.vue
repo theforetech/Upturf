@@ -68,7 +68,6 @@
       </component>
     </transition>
     <!--/ Content -->
-
     <!-- Footer -->
     <footer
       class="footer footer-light"
@@ -79,20 +78,79 @@
       </slot>
     </footer>
     <!-- /Footer -->
+    <b-navbar
+      variant="faded"
+      type="dark"
+      fixed="bottom"
+      class="appbar"
+    >
+      <b-row
+        cols="5"
+        cols-sm="5"
+        cols-md="5"
+        cols-lg="5"
+      >
+        <b-col
+          v-for="x in navbarItems"
+          :key="x.name"
+          class="pr-1"
+        >
+          <b-button
+            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+            variant="outline-primary"
+            class="btn-icon rounded-circle w-100"
+          >
+            <feather-icon
+              :icon="x.icon"
+              size="24"
+              class="feather-icon"
+            />
+            <span class="btn-name">
+              {{ x.name }}
+            </span>
+          </b-button>
+        </b-col>
+      </b-row>
+
+    </b-navbar>
 
     <slot name="customizer" />
   </div>
 </template>
+<style scoped>
+.appbar{
+  background-color: #FCFCFC;
+  height: 6rem;
+  box-shadow: 0 -5px 5px -5px rgba(0,0,0,0.3);
+}
+.btn-icon{
+  height: 6rem;
+  width: 6rem;
+  border: transparent solid 1px!important;
+  padding: 0!important;
+}
+.feather-icon{
+  margin-bottom: 0.7rem;
+}
+.btn-name{
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+</style>
 
 <script>
 import { onUnmounted } from '@vue/composition-api'
 import AppNavbarVerticalLayout from '@core/layouts/components/app-navbar/AppNavbarVerticalLayout.vue'
 import AppFooter from '@core/layouts/components/AppFooter.vue'
 import useAppConfig from '@core/app-config/useAppConfig'
-import { BNavbar } from 'bootstrap-vue'
+import {
+  BNavbar, BButton, BCol, BRow,
+} from 'bootstrap-vue'
 import LayoutContentRendererDefault from '@core/layouts/components/layout-content-renderer/LayoutContentRendererDefault.vue'
 import LayoutContentRendererLeft from '@core/layouts/components/layout-content-renderer/LayoutContentRendererLeft.vue'
 import LayoutContentRendererLeftDetached from '@core/layouts/components/layout-content-renderer/LayoutContentRendererLeftDetached.vue'
+import Ripple from 'vue-ripple-directive'
 import VerticalNavMenu from './components/vertical-nav-menu/VerticalNavMenu.vue'
 import useVerticalLayout from './useVerticalLayout'
 import mixinVerticalLayout from './mixinVerticalLayout'
@@ -104,9 +162,15 @@ export default {
     AppFooter,
     VerticalNavMenu,
     BNavbar,
+    BButton,
+    BRow,
+    BCol,
     LayoutContentRendererLeftDetached,
     LayoutContentRendererLeft,
     LayoutContentRendererDefault,
+  },
+  directives: {
+    Ripple,
   },
   mixins: [mixinVerticalLayout],
   computed: {
@@ -141,6 +205,28 @@ export default {
     })
 
     return {
+      navbarItems: [
+        {
+          name: 'Explore',
+          icon: 'SearchIcon',
+        },
+        {
+          name: 'Wishlist',
+          icon: 'HeartIcon',
+        },
+        {
+          name: 'Turfs',
+          icon: 'DribbbleIcon',
+        },
+        {
+          name: 'Bookings',
+          icon: 'BookIcon',
+        },
+        {
+          name: 'Profile',
+          icon: 'UserIcon',
+        },
+      ],
       isVerticalMenuActive,
       toggleVerticalMenuActive,
       isVerticalMenuCollapsed,
@@ -157,7 +243,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss">
-@import "~@core/scss/base/themes/bordered-layout.scss";
-</style>
