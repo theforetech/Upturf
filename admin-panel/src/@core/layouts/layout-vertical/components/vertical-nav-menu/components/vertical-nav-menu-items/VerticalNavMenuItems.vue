@@ -2,7 +2,7 @@
   <ul>
     <component
       :is="resolveNavItemComponent(item)"
-      v-for="item in items"
+      v-for="item in roleItems"
       :key="item.header || item.title"
       :item="item"
     />
@@ -26,6 +26,11 @@ export default {
     items: {
       type: Array,
       required: true,
+    },
+  },
+  computed: {
+    roleItems() {
+      return this.items.filter(item => item.role === this.$store.state.user.AppActiveUser.role)
     },
   },
   setup() {
