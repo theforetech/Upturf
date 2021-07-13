@@ -45,16 +45,18 @@ router.beforeEach(async (to, _, next) => {
 
   if (!canNavigate(to)) {
     // Redirect to login if not logged in
-    if (!isLoggedIn) return next({ name: 'auth-login' })
+    if (!isLoggedIn) return next({ name: 'auth-login', query: { redirect: to.path } })
 
     // If logged in => not authorized
     return next({ name: 'redirect-to-dashboard' })
   }
-
   // Redirect if logged in
+  if (to.query.redirect && isLoggedIn) {
+    return next(to.query.redirect)
+  }
   if (to.meta.redirectIfLoggedIn && isLoggedIn) {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-    next(getHomeRouteForLoggedInUser(userInfo ? userInfo.userRole : null))
+    return next(getHomeRouteForLoggedInUser(userInfo ? userInfo.userRole : null))
   }
   return next()
 })

@@ -35,9 +35,15 @@ export default {
   },
   created() {
     if (this.$auth.isAuthenticated()) {
+      if (this.$store.state.app.redirectAfterLogin) {
+        const url = this.$store.state.app.redirectAfterLogin
+        this.$store.commit('app/UPDATE_REDIRECT', null)
+        this.$router.push(url)
+        return
+      }
       this.$router.push('/')
     } else {
-      window.location.reload()
+      this.$router.push({ name: 'auth-control' })
     }
   },
 }
