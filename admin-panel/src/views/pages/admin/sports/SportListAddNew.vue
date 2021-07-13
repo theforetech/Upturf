@@ -100,9 +100,12 @@ import { required, alphaNum, email } from '@validations'
 import Ripple from 'vue-ripple-directive'
 import countries from '@/@fake-db/data/other/countries'
 import gql from 'graphql-tag'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default {
   components: {
+    // eslint-disable-next-line vue/no-unused-components
+    ToastificationContent,
     BSidebar,
     BForm,
     // BFormFile,
@@ -197,9 +200,26 @@ export default {
                     }`,
               data,
             })
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Success',
+                icon: 'CheckIcon',
+                text: 'Added sport successfully!',
+                variant: 'success',
+              },
+            })
             this.$emit('refetch-data', true)
           } catch (e) {
-            console.error(e)
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Error updating sport',
+                icon: 'XCircleIcon',
+                text: e,
+                variant: 'danger',
+              },
+            })
           }
         },
       })
