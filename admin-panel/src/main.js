@@ -57,9 +57,11 @@ require('@/assets/scss/style.scss')
 const getHeaders = () => {
   const headers = {}
   const token = window.localStorage.getItem('apollo-token')
+  console.log(token)
   if (token) {
     headers.authorization = `Bearer ${token}`
   }
+  console.log(headers)
   return headers
 }
 
