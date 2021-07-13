@@ -179,14 +179,18 @@ export default {
             variant: 'warning',
           },
         })
-        this.$router.push(getHomeRouteForLoggedInUser(this.$store.state.user.AppActiveUser.userRole))
+        this.$router.push(this.$route.query.redirect || getHomeRouteForLoggedInUser(this.$store.state.user.AppActiveUser.userRole))
         return false
       }
       return true
     },
     loginAuth0() {
       if (!this.checkLogin()) return
-      this.$auth.login({ target: this.$route.query.to })
+      if (this.$route.query.redirect) {
+        this.$auth.login(this.$route.query.redirect)
+        return
+      }
+      this.$auth.login('no-redirect')
     },
   },
 }

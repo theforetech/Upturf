@@ -22,8 +22,12 @@
 
 <script>
 import VuexyLogo from '@core/layouts/components/Logo.vue'
+// eslint-disable-next-line no-unused-vars
 import { getHomeRouteForLoggedInUser } from '@/auth/utils'
 
+import {
+  BLink,
+} from 'bootstrap-vue'
 // eslint-disable-next-line no-unused-vars
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
@@ -31,6 +35,7 @@ function sleep(ms) {
 export default {
   name: 'Callback',
   components: {
+    BLink,
     VuexyLogo,
   },
   async created() {
@@ -42,9 +47,18 @@ export default {
     async handleLoginEvent(data) {
       // await sleep(3000)
       this.$ability.update(data.ability)
-      this.$router.push(getHomeRouteForLoggedInUser(data.role)).then(() => {
-        window.location.reload()
-      })
+      if (data.state && data.state !== 'no-redirect') {
+        this.$store.commit('app/UPDATE_REDIRECT', data.state)
+        if (this.$auth.isAuthenticated()) {
+          this.$router.push(data.state || getHomeRouteForLoggedInUser(data.role)).then(() => {
+            window.location.reload()
+          })
+        }
+      } else if (this.$auth.isAuthenticated()) {
+        this.$router.push(getHomeRouteForLoggedInUser(data.role)).then(() => {
+          window.location.reload()
+        })
+      }
     },
   },
 }

@@ -135,6 +135,7 @@ import {
 } from 'bootstrap-vue'
 import store from '@/store/index'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+// eslint-disable-next-line no-unused-vars
 import { getHomeRouteForLoggedInUser } from '@/auth/utils'
 
 export default {
@@ -179,14 +180,18 @@ export default {
             variant: 'warning',
           },
         })
-        this.$router.push(getHomeRouteForLoggedInUser(this.$store.state.user.AppActiveUser.userRole))
+        this.$router.push(this.$route.query.redirect || getHomeRouteForLoggedInUser(this.$store.state.user.AppActiveUser.userRole))
         return false
       }
       return true
     },
     loginAuth0() {
       if (!this.checkLogin()) return
-      this.$auth.login({ target: this.$route.query.to })
+      if (this.$route.query.redirect) {
+        this.$auth.login(this.$route.query.redirect)
+        return
+      }
+      this.$auth.login('no-redirect')
     },
   },
 }

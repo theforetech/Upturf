@@ -5,6 +5,7 @@ export default {
   state: {
     windowWidth: 0,
     shallShowOverlay: false,
+    redirectAfterLogin: null,
   },
   getters: {
     currentBreakPoint: state => {
@@ -17,6 +18,9 @@ export default {
     },
   },
   mutations: {
+    UPDATE_REDIRECT(state, val) {
+      state.redirectAfterLogin = val
+    },
     UPDATE_WINDOW_WIDTH(state, val) {
       state.windowWidth = val
     },

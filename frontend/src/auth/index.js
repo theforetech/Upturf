@@ -26,9 +26,9 @@ class AuthService extends EventEmitter {
 
   // Starts the user login flow
   // eslint-disable-next-line class-methods-use-this
-  login(customState) {
+  login(redirect) {
     webAuth.authorize({
-      appState: customState,
+      state: redirect,
     })
   }
 
@@ -75,7 +75,7 @@ class AuthService extends EventEmitter {
     this.emit(loginEvent, {
       loggedIn: true,
       profile: authResult.idTokenPayload,
-      state: authResult.appState || {},
+      state: authResult.state || null,
       ability: [{
         action: 'manage',
         subject: 'all',
