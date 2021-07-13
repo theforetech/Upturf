@@ -93,12 +93,11 @@
         <b-col
           v-for="x in navbarItems"
           :key="x.name"
-          class="pr-1"
         >
           <b-button
-            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-            variant="outline-primary"
-            class="btn-icon rounded-circle w-100"
+            v-ripple.400="'rgba(2, 2, 2, 0.2)'"
+            variant="flat-primary"
+            class="btn-icon rounded-circle active"
           >
             <feather-icon
               :icon="x.icon"
@@ -120,19 +119,36 @@
   background-color: #FCFCFC;
   height: 6rem;
   box-shadow: 0 -5px 5px -5px rgba(0,0,0,0.3);
+  visibility: hidden;
+  overflow: hidden;
+
+}
+@media screen and (max-width: 600px) {
+  .appbar{
+    visibility: visible;
+  }
 }
 .btn-icon{
-  height: 6rem;
-  width: 6rem;
-  border: transparent solid 1px!important;
   padding: 0!important;
+  height: 10rem;
+  box-sizing: content-box!important;
+}
+.btn-icon:active{
+  background-color: #fff!important;
+}
+.btn-icon.active{
+  background-color: #fff!important;
 }
 .feather-icon{
   margin-bottom: 0.7rem;
+  color: #4B485A;
+  width: 100%;
 }
 .btn-name{
   font-size: 0.8rem;
   text-align: center;
+  color: #4B485A;
+  clear: both;
 }
 </style>
 
