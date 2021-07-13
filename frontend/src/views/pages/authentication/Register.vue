@@ -272,7 +272,6 @@ export default {
             role: 'admin',
           })
             .then(response => {
-              console.log(response.data)
               useJwt.setToken(response.data.accessToken)
               useJwt.setRefreshToken(response.data.refreshToken)
               localStorage.setItem('userInfo', JSON.stringify(response.data.userInfo))

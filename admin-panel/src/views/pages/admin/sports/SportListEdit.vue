@@ -155,6 +155,7 @@
 </template>
 
 <script>
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import {
   BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton,
   BFormFile, BRow, BCol,
@@ -167,6 +168,8 @@ import gql from 'graphql-tag'
 
 export default {
   components: {
+    // eslint-disable-next-line vue/no-unused-components
+    ToastificationContent,
     BRow,
     BCol,
     BSidebar,
@@ -235,12 +238,6 @@ export default {
       const { file } = this
       const fileData2 = await this.getBase64(file)
       const fileData = fileData2.split('base64,')[1]
-      console.log({
-        fileData,
-        id: this.sportData.id,
-        name: file.name,
-        type: file.type,
-      })
       await this.$apollo.mutate({
         mutation: gql`mutation test($id: Int, $base64str: String!, $name: String!, $type: String!) {
           uploadFile(base64str: $base64str, name: $name, type: $type, sportID: $id) {
@@ -295,9 +292,26 @@ export default {
                     }`,
               data,
             })
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Success',
+                icon: 'CheckIcon',
+                text: 'Uploaded image successfully!',
+                variant: 'success',
+              },
+            })
             this.$emit('refetch-data', true)
           } catch (e) {
-            console.error(e)
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Error uploading image',
+                icon: 'XCircleIcon',
+                text: e,
+                variant: 'danger',
+              },
+            })
           }
         },
       })
@@ -364,9 +378,26 @@ export default {
                     }`,
               data,
             })
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Success',
+                icon: 'CheckIcon',
+                text: 'Deleted image successfully!',
+                variant: 'success',
+              },
+            })
             this.$emit('refetch-data', true)
           } catch (e) {
-            console.error(e)
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Error deleting image',
+                icon: 'XCircleIcon',
+                text: e,
+                variant: 'danger',
+              },
+            })
           }
         },
       })
@@ -434,8 +465,25 @@ export default {
             })
             await this.getSports()
           } catch (e) {
-            console.error(e)
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Error updating sport',
+                icon: 'XCircleIcon',
+                text: e,
+                variant: 'danger',
+              },
+            })
           }
+        },
+      })
+      this.$toast({
+        component: ToastificationContent,
+        props: {
+          title: 'Success',
+          icon: 'CheckIcon',
+          text: 'Updated sport successfully!',
+          variant: 'success',
         },
       })
       this.resetForm()

@@ -1,16 +1,29 @@
 version: '3.6'
 services:
+  caddy:
+    image: caddy:2.4.3-alpine
+    restart: always
+    command: caddy reverse-proxy --from https://backend.surfaturf.theforetech.co:443 --to http://graphql-engine:8080
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - caddy:/data
+    depends_on:
+      - graphql-engine
   postgres:
     image: postgres:12
     restart: always
+    container_name: postgres
     volumes:
     - /var/lib/hasura_postgres:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: postgrespassword
   graphql-engine:
     image: hasura/graphql-engine:v2.0.0-beta.2
-    ports:
-      - "8080:8080"
+    container_name: graphql-engine
+#    ports:
+#      - "8080:8080"
     depends_on:
     - "postgres"
     - "storage"
@@ -28,9 +41,11 @@ services:
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
   storage:
     image: surfaturf/file-upload-api:latest
+    container_name: storage
     restart: always
     environment:
       HASURA_SECRET: SurfATurf
 #volumes:
 #  db_data:/var/lib/hasura_postgres
-
+volumes:
+  caddy:

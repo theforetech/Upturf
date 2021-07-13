@@ -66,7 +66,7 @@ const getHeaders = () => {
 // HTTP connection to the API
 const httpLink = createHttpLink({
   // You should use an absolute URL here
-  uri: 'http://34.69.217.204:8080/v1/graphql',
+  uri: 'https://backend.surfaturf.theforetech.co/v1/graphql',
   fetch,
   headers: getHeaders(),
 })
@@ -77,9 +77,9 @@ const apolloClient = new ApolloClient({
   cache: new InMemoryCache({
     addTypename: true,
   }),
-  // defaultOptions: {
-  //   fetchPolicy: 'no-cache',
-  // },
+  defaultOptions: {
+    fetchPolicy: 'no-cache',
+  },
 })
 
 const apolloProvider = new VueApollo({

@@ -192,6 +192,7 @@
 </template>
 
 <script>
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import {
   BCard, BRow, BCol, BFormInput, BButton, BTable, BMedia, BAvatar, BLink,
   BBadge, BDropdown, BDropdownItem,
@@ -203,6 +204,8 @@ import SportListEdit from './SportListEdit.vue'
 
 export default {
   components: {
+    // eslint-disable-next-line vue/no-unused-components
+    ToastificationContent,
     SportListAddNew,
     SportListEdit,
     BCard,
@@ -334,16 +337,41 @@ export default {
                     }`,
               data,
             })
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Success',
+                icon: 'CheckIcon',
+                text: `Deleted ${item.name} successfully!`,
+                variant: 'success',
+              },
+            })
             await this.getSports()
           } catch (e) {
-            console.error(e)
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: `Error deleting ${item.name}!`,
+                icon: 'XCircleIcon',
+                text: e,
+                variant: 'danger',
+              },
+            })
           }
         },
       })
     },
     async changeStatus(item) {
       if (item.disabled && item.img === '') {
-        // show popup error
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Error',
+            icon: 'XCircleIcon',
+            text: `Please add an image before enabling ${item.name}`,
+            variant: 'danger',
+          },
+        })
         return
       }
       await this.$apollo.mutate({
@@ -404,9 +432,26 @@ export default {
                     }`,
               data,
             })
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Success',
+                icon: 'CheckIcon',
+                text: `${(item.disabled ? 'Enabled ' : 'Disabled ') + item.name} successfully!`,
+                variant: 'success',
+              },
+            })
             await this.getSports()
           } catch (e) {
-            console.error(e)
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: `Error ${(item.disabled ? 'enabling ' : 'disabling ') + item.name}!`,
+                icon: 'XCircleIcon',
+                text: e,
+                variant: 'danger',
+              },
+            })
           }
         },
       })

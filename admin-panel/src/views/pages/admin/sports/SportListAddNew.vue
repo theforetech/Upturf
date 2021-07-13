@@ -64,39 +64,6 @@
             </b-form-group>
           </validation-provider>
 
-          <!--          &lt;!&ndash; Username &ndash;&gt;-->
-          <!--          <validation-provider-->
-          <!--            #default="validationContext"-->
-          <!--            name="Image Url"-->
-          <!--            rules="required|url"-->
-          <!--          >-->
-          <!--            <b-form-group-->
-          <!--              label="Image"-->
-          <!--              label-for="img"-->
-          <!--            >-->
-          <!--              <b-form-input-->
-          <!--                id="img"-->
-          <!--                v-model="sportData.img"-->
-          <!--                :state="getValidationState(validationContext)"-->
-          <!--                trim-->
-          <!--                disabled-->
-          <!--              />-->
-
-          <!--              <b-form-invalid-feedback>-->
-          <!--                {{ validationContext.errors[0] }}-->
-          <!--              </b-form-invalid-feedback>-->
-          <!--            </b-form-group>-->
-          <!--          </validation-provider>-->
-          <!--          <template v-show="sportData.img === ''">-->
-          <!--            <h5 class="mb-1">-->
-          <!--              Upload Image-->
-          <!--            </h5>-->
-          <!--            <b-form-file-->
-          <!--              v-model="file"-->
-          <!--              accept="image/jpeg, image/png"-->
-          <!--              @change="uploadFile"-->
-          <!--            />-->
-          <!--          </template>-->
           <!-- Form Actions -->
           <div class="d-flex mt-2">
             <b-button
@@ -133,9 +100,12 @@ import { required, alphaNum, email } from '@validations'
 import Ripple from 'vue-ripple-directive'
 import countries from '@/@fake-db/data/other/countries'
 import gql from 'graphql-tag'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default {
   components: {
+    // eslint-disable-next-line vue/no-unused-components
+    ToastificationContent,
     BSidebar,
     BForm,
     // BFormFile,
@@ -182,9 +152,6 @@ export default {
         name: '',
         img: '',
       }
-    },
-    uploadFile() {
-      console.log(this.file)
     },
     async onSubmit() {
       await this.$apollo.mutate({
@@ -233,9 +200,26 @@ export default {
                     }`,
               data,
             })
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Success',
+                icon: 'CheckIcon',
+                text: 'Added sport successfully!',
+                variant: 'success',
+              },
+            })
             this.$emit('refetch-data', true)
           } catch (e) {
-            console.error(e)
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Error updating sport',
+                icon: 'XCircleIcon',
+                text: e,
+                variant: 'danger',
+              },
+            })
           }
         },
       })
