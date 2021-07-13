@@ -18,10 +18,7 @@
 
     <!-- Left Col -->
     <div class="bookmark-wrapper align-items-center flex-grow-1">
-      <search-bar style="" />
-
-      <!-- Bookmarks Container -->
-      <bookmarks class="d-none d-lg-flex" />
+      <search-bar />
     </div>
 
     <b-navbar-nav class="nav align-items-center ml-auto">
