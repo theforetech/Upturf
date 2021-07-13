@@ -23,26 +23,26 @@
     <!--/ Navbar -->
 
     <!-- Vertical Nav Menu -->
-    <vertical-nav-menu
-      v-if="!isNavMenuHidden"
-      :is-vertical-menu-active="isVerticalMenuActive"
-      :toggle-vertical-menu-active="toggleVerticalMenuActive"
-    >
-      <template #header="slotProps">
-        <slot
-          name="vertical-menu-header"
-          v-bind="slotProps"
-        />
-      </template>
-    </vertical-nav-menu>
+    <!--    <vertical-nav-menu-->
+    <!--      v-if="!isNavMenuHidden"-->
+    <!--      :is-vertical-menu-active="isVerticalMenuActive"-->
+    <!--      :toggle-vertical-menu-active="toggleVerticalMenuActive"-->
+    <!--    >-->
+    <!--      <template #header="slotProps">-->
+    <!--        <slot-->
+    <!--          name="vertical-menu-header"-->
+    <!--          v-bind="slotProps"-->
+    <!--        />-->
+    <!--      </template>-->
+    <!--    </vertical-nav-menu>-->
     <!-- /Vertical Nav Menu -->
 
     <!-- Vertical Nav Menu Overlay -->
-    <div
-      class="sidenav-overlay"
-      :class="overlayClasses"
-      @click="isVerticalMenuActive = false"
-    />
+    <!--    <div-->
+    <!--      class="sidenav-overlay"-->
+    <!--      :class="overlayClasses"-->
+    <!--      @click="isVerticalMenuActive = false"-->
+    <!--    />-->
     <!-- /Vertical Nav Menu Overlay -->
 
     <!-- Content -->
@@ -111,9 +111,7 @@
           </b-button>
         </b-col>
       </b-row>
-
     </b-navbar>
-
     <slot name="customizer" />
   </div>
 </template>
@@ -136,7 +134,14 @@
   font-size: 0.8rem;
   text-align: center;
 }
+</style>
 
+<style>
+@media (max-width: 576px) {
+  .header-navbar {
+    width: 100%!important;
+  }
+}
 </style>
 
 <script>

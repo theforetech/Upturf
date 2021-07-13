@@ -1,12 +1,11 @@
 import { ref, watch, computed } from '@vue/composition-api'
 import store from '@/store'
-import { title } from '@core/utils/filter'
 
 // Notification
 import { useToast } from 'vue-toastification/composition'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
-export default function useUsersList() {
+export default function useSportsList() {
   // Use toast
   const toast = useToast()
 
@@ -14,15 +13,8 @@ export default function useUsersList() {
 
   // Table Handlers
   const tableColumns = [
-    { key: 'user', sortable: true },
-    { key: 'email', sortable: true },
-    { key: 'role', sortable: true },
-    {
-      key: 'currentPlan',
-      label: 'Plan',
-      formatter: title,
-      sortable: true,
-    },
+    { key: 'photo', sortable: true },
+    { key: 'name', sortable: true },
     { key: 'status', sortable: true },
     { key: 'actions' },
   ]
@@ -68,7 +60,6 @@ export default function useUsersList() {
       })
       .then(response => {
         const { users, total } = response.data
-
         callback(users)
         totalUsers.value = total
       })

@@ -2,7 +2,7 @@ export default [
   {
     path: '/sports',
     name: 'sports',
-    component: () => import('@/views/pages/admin/sports/UsersList.vue'),
+    component: () => import('@/views/pages/admin/sports/SportList.vue'),
     meta: {
       resource: 'Auth',
       action: 'read',
