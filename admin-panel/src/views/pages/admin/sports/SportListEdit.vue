@@ -235,12 +235,6 @@ export default {
       const { file } = this
       const fileData2 = await this.getBase64(file)
       const fileData = fileData2.split('base64,')[1]
-      console.log({
-        fileData,
-        id: this.sportData.id,
-        name: file.name,
-        type: file.type,
-      })
       await this.$apollo.mutate({
         mutation: gql`mutation test($id: Int, $base64str: String!, $name: String!, $type: String!) {
           uploadFile(base64str: $base64str, name: $name, type: $type, sportID: $id) {

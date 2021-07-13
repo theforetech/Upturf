@@ -102,7 +102,7 @@ export default {
     async getSports() {
       const result = await this.$apollo.query({
         query: gql`query {
-            sport {
+          sport(where: {disabled: {_eq: false}}) {
             disabled
             id
             name

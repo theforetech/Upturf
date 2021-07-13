@@ -64,39 +64,6 @@
             </b-form-group>
           </validation-provider>
 
-          <!--          &lt;!&ndash; Username &ndash;&gt;-->
-          <!--          <validation-provider-->
-          <!--            #default="validationContext"-->
-          <!--            name="Image Url"-->
-          <!--            rules="required|url"-->
-          <!--          >-->
-          <!--            <b-form-group-->
-          <!--              label="Image"-->
-          <!--              label-for="img"-->
-          <!--            >-->
-          <!--              <b-form-input-->
-          <!--                id="img"-->
-          <!--                v-model="sportData.img"-->
-          <!--                :state="getValidationState(validationContext)"-->
-          <!--                trim-->
-          <!--                disabled-->
-          <!--              />-->
-
-          <!--              <b-form-invalid-feedback>-->
-          <!--                {{ validationContext.errors[0] }}-->
-          <!--              </b-form-invalid-feedback>-->
-          <!--            </b-form-group>-->
-          <!--          </validation-provider>-->
-          <!--          <template v-show="sportData.img === ''">-->
-          <!--            <h5 class="mb-1">-->
-          <!--              Upload Image-->
-          <!--            </h5>-->
-          <!--            <b-form-file-->
-          <!--              v-model="file"-->
-          <!--              accept="image/jpeg, image/png"-->
-          <!--              @change="uploadFile"-->
-          <!--            />-->
-          <!--          </template>-->
           <!-- Form Actions -->
           <div class="d-flex mt-2">
             <b-button
@@ -182,9 +149,6 @@ export default {
         name: '',
         img: '',
       }
-    },
-    uploadFile() {
-      console.log(this.file)
     },
     async onSubmit() {
       await this.$apollo.mutate({
