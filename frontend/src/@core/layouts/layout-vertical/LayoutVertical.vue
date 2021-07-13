@@ -23,26 +23,26 @@
     <!--/ Navbar -->
 
     <!-- Vertical Nav Menu -->
-    <!--    <vertical-nav-menu-->
-    <!--      v-if="!isNavMenuHidden"-->
-    <!--      :is-vertical-menu-active="isVerticalMenuActive"-->
-    <!--      :toggle-vertical-menu-active="toggleVerticalMenuActive"-->
-    <!--    >-->
-    <!--      <template #header="slotProps">-->
-    <!--        <slot-->
-    <!--          name="vertical-menu-header"-->
-    <!--          v-bind="slotProps"-->
-    <!--        />-->
-    <!--      </template>-->
-    <!--    </vertical-nav-menu>-->
+    <vertical-nav-menu
+      v-if="!isNavMenuHidden"
+      :is-vertical-menu-active="isVerticalMenuActive"
+      :toggle-vertical-menu-active="toggleVerticalMenuActive"
+    >
+      <template #header="slotProps">
+        <slot
+          name="vertical-menu-header"
+          v-bind="slotProps"
+        />
+      </template>
+    </vertical-nav-menu>
     <!-- /Vertical Nav Menu -->
 
     <!-- Vertical Nav Menu Overlay -->
-    <!--    <div-->
-    <!--      class="sidenav-overlay"-->
-    <!--      :class="overlayClasses"-->
-    <!--      @click="isVerticalMenuActive = false"-->
-    <!--    />-->
+    <div
+      class="sidenav-overlay"
+      :class="overlayClasses"
+      @click="isVerticalMenuActive = false"
+    />
     <!-- /Vertical Nav Menu Overlay -->
 
     <!-- Content -->
@@ -81,7 +81,7 @@
     <b-navbar
       variant="faded"
       type="dark"
-      fixed="bottom"
+      fixed="b"
       class="appbar"
     >
       <b-row
@@ -119,15 +119,15 @@
   background-color: #FCFCFC;
   height: 6rem;
   box-shadow: 0 -5px 5px -5px rgba(0,0,0,0.3);
-  visibility: hidden;
+  /*visibility: hidden;*/
   overflow: hidden;
 
 }
-@media screen and (max-width: 600px) {
-  .appbar{
-    visibility: visible;
-  }
-}
+/*@media screen and (max-width: 600px) {*/
+/*  .appbar{*/
+/*    visibility: visible;*/
+/*  }*/
+/*}*/
 .btn-icon{
   padding: 0!important;
   height: 10rem;

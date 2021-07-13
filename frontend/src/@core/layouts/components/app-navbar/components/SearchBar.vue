@@ -1,5 +1,8 @@
 <template>
-  <li class="nav-item nav-search">
+  <li
+    class="nav-item nav-search"
+    style="list-style-type: none;"
+  >
 
     <!-- Icon -->
     <a
