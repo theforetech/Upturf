@@ -1,7 +1,9 @@
 <template>
   <div :class="contentWidth === 'boxed' ? 'container p-0' : null">
     <router-view />
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav
+      class="navbar navbar-expand-lg navbar-light bg-light"
+    >
       <a
         class="navbar-brand"
         href="#"

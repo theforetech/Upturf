@@ -30,12 +30,21 @@ tag
 tagVariant
 
 */
+import admin from './admin'
+import vendor from './vendor'
+// eslint-disable-next-line no-unused-vars
 import dashboard from './dashboard'
+// eslint-disable-next-line no-unused-vars
 import appsAndPages from './apps-and-pages'
+// eslint-disable-next-line no-unused-vars
 import others from './others'
+// eslint-disable-next-line no-unused-vars
 import chartsAndMaps from './charts-and-maps'
+// eslint-disable-next-line no-unused-vars
 import uiElements from './ui-elements'
+// eslint-disable-next-line no-unused-vars
 import formAndTable from './forms-and-table'
 
 // Array of sections
-export default [...dashboard, ...appsAndPages, ...uiElements, ...formAndTable, ...chartsAndMaps, ...others]
+// export default [...admin, ...vendor, ...dashboard, ...appsAndPages, ...uiElements, ...formAndTable, ...chartsAndMaps, ...others]
+export default [...admin, ...vendor]

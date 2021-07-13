@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { ToastPlugin, ModalPlugin } from 'bootstrap-vue'
-import VueCompositionAPI from '@vue/composition-api'
+import VueCompositionAPI, { provide } from '@vue/composition-api'
 
 import i18n from '@/libs/i18n'
 import VueApollo from 'vue-apollo'
@@ -77,9 +77,9 @@ const apolloClient = new ApolloClient({
   cache: new InMemoryCache({
     addTypename: true,
   }),
-  defaultOptions: {
-    fetchPolicy: 'no-cache',
-  },
+  // defaultOptions: {
+  //   fetchPolicy: 'no-cache',
+  // },
 })
 
 const apolloProvider = new VueApollo({
@@ -97,5 +97,9 @@ new Vue({
   store,
   i18n,
   apolloProvider,
+  setup() {
+    provide('backend', backend)
+    provide('apollo', apolloProvider)
+  },
   render: h => h(App),
 }).$mount('#app')
