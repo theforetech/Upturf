@@ -77,9 +77,9 @@ const apolloClient = new ApolloClient({
   cache: new InMemoryCache({
     addTypename: true,
   }),
-  // defaultOptions: {
-  //   fetchPolicy: 'no-cache',
-  // },
+  defaultOptions: {
+    fetchPolicy: 'no-cache',
+  },
 })
 
 const apolloProvider = new VueApollo({
