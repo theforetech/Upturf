@@ -36,7 +36,6 @@
 import {
   BNavbarNav,
 } from 'bootstrap-vue'
-import Bookmarks from './components/Bookmarks.vue'
 // import Locale from './components/Locale.vue'
 import SearchBar from './components/SearchBar.vue'
 import DarkToggler from './components/DarkToggler.vue'
@@ -49,7 +48,6 @@ export default {
 
     // Navbar Components
     BNavbarNav,
-    Bookmarks,
     SearchBar,
     DarkToggler,
     NotificationDropdown,
