@@ -19,6 +19,7 @@ type bookings {
     booking_status: Boolean!
     contact_name: String!
     contact_phone: String!
+    created_at: timestamptz
     "An object relationship"
     facility: facilities!
     facility_id: Int!
@@ -61,6 +62,7 @@ type bookings {
     split_amount: Int!
     split_members: Int!
     split_payment: Boolean!
+    updated_at: timestamptz
     "An object relationship"
     user: user!
     user_id: String!
@@ -99,6 +101,7 @@ type bookings_avg_fields {
 type bookings_max_fields {
     contact_name: String
     contact_phone: String
+    created_at: timestamptz
     facility_id: Int
     id: uuid
     reservation_date: date
@@ -107,6 +110,7 @@ type bookings_max_fields {
     slot_id: bigint
     split_amount: Int
     split_members: Int
+    updated_at: timestamptz
     user_id: String
 }
 
@@ -114,6 +118,7 @@ type bookings_max_fields {
 type bookings_min_fields {
     contact_name: String
     contact_phone: String
+    created_at: timestamptz
     facility_id: Int
     id: uuid
     reservation_date: date
@@ -122,6 +127,7 @@ type bookings_min_fields {
     slot_id: bigint
     split_amount: Int
     split_members: Int
+    updated_at: timestamptz
     user_id: String
 }
 
@@ -2478,10 +2484,16 @@ type user_profile_mutation_response {
 
 "columns and relationships of \"vendor\""
 type vendor {
+    about: String
     address: String!
+    birthDate: date!
+    city: String!
+    company: String!
+    country: String!
     name: String!
-    payment_details: String!
+    payment_details: String
     phone_number: String!
+    state: String!
     "An array relationship"
     turfs(
         "distinct select on columns"
@@ -2511,6 +2523,7 @@ type vendor {
     "An object relationship"
     user: user!
     user_id: String!
+    website: String
 }
 
 "aggregated selection of \"vendor\""
@@ -2528,20 +2541,34 @@ type vendor_aggregate_fields {
 
 "aggregate max on columns"
 type vendor_max_fields {
+    about: String
     address: String
+    birthDate: date
+    city: String
+    company: String
+    country: String
     name: String
     payment_details: String
     phone_number: String
+    state: String
     user_id: String
+    website: String
 }
 
 "aggregate min on columns"
 type vendor_min_fields {
+    about: String
     address: String
+    birthDate: date
+    city: String
+    company: String
+    country: String
     name: String
     payment_details: String
     phone_number: String
+    state: String
     user_id: String
+    website: String
 }
 
 "response of any mutation on the table \"vendor\""
@@ -2567,6 +2594,8 @@ enum bookings_select_column {
     "column name"
     contact_phone
     "column name"
+    created_at
+    "column name"
     facility_id
     "column name"
     id
@@ -2586,6 +2615,8 @@ enum bookings_select_column {
     split_members
     "column name"
     split_payment
+    "column name"
+    updated_at
     "column name"
     user_id
 }
@@ -2599,6 +2630,8 @@ enum bookings_update_column {
     "column name"
     contact_phone
     "column name"
+    created_at
+    "column name"
     facility_id
     "column name"
     id
@@ -2618,6 +2651,8 @@ enum bookings_update_column {
     split_members
     "column name"
     split_payment
+    "column name"
+    updated_at
     "column name"
     user_id
 }
@@ -2992,7 +3027,17 @@ enum vendor_constraint {
 "select columns of table \"vendor\""
 enum vendor_select_column {
     "column name"
+    about
+    "column name"
     address
+    "column name"
+    birthDate
+    "column name"
+    city
+    "column name"
+    company
+    "column name"
+    country
     "column name"
     name
     "column name"
@@ -3000,13 +3045,27 @@ enum vendor_select_column {
     "column name"
     phone_number
     "column name"
+    state
+    "column name"
     user_id
+    "column name"
+    website
 }
 
 "update columns of table \"vendor\""
 enum vendor_update_column {
     "column name"
+    about
+    "column name"
     address
+    "column name"
+    birthDate
+    "column name"
+    city
+    "column name"
+    company
+    "column name"
+    country
     "column name"
     name
     "column name"
@@ -3014,7 +3073,11 @@ enum vendor_update_column {
     "column name"
     phone_number
     "column name"
+    state
+    "column name"
     user_id
+    "column name"
+    website
 }
 
 "Boolean expression to compare columns of type \"Boolean\". All fields are combined with logical 'AND'."
@@ -3127,6 +3190,7 @@ input bookings_bool_exp {
     booking_status: Boolean_comparison_exp
     contact_name: String_comparison_exp
     contact_phone: String_comparison_exp
+    created_at: timestamptz_comparison_exp
     facility: facilities_bool_exp
     facility_id: Int_comparison_exp
     id: uuid_comparison_exp
@@ -3141,6 +3205,7 @@ input bookings_bool_exp {
     split_amount: Int_comparison_exp
     split_members: Int_comparison_exp
     split_payment: Boolean_comparison_exp
+    updated_at: timestamptz_comparison_exp
     user: user_bool_exp
     user_id: String_comparison_exp
 }
@@ -3158,6 +3223,7 @@ input bookings_insert_input {
     booking_status: Boolean
     contact_name: String
     contact_phone: String
+    created_at: timestamptz
     facility: facilities_obj_rel_insert_input
     facility_id: Int
     id: uuid
@@ -3172,6 +3238,7 @@ input bookings_insert_input {
     split_amount: Int
     split_members: Int
     split_payment: Boolean
+    updated_at: timestamptz
     user: user_obj_rel_insert_input
     user_id: String
 }
@@ -3180,6 +3247,7 @@ input bookings_insert_input {
 input bookings_max_order_by {
     contact_name: order_by
     contact_phone: order_by
+    created_at: order_by
     facility_id: order_by
     id: order_by
     reservation_date: order_by
@@ -3188,6 +3256,7 @@ input bookings_max_order_by {
     slot_id: order_by
     split_amount: order_by
     split_members: order_by
+    updated_at: order_by
     user_id: order_by
 }
 
@@ -3195,6 +3264,7 @@ input bookings_max_order_by {
 input bookings_min_order_by {
     contact_name: order_by
     contact_phone: order_by
+    created_at: order_by
     facility_id: order_by
     id: order_by
     reservation_date: order_by
@@ -3203,6 +3273,7 @@ input bookings_min_order_by {
     slot_id: order_by
     split_amount: order_by
     split_members: order_by
+    updated_at: order_by
     user_id: order_by
 }
 
@@ -3225,6 +3296,7 @@ input bookings_order_by {
     booking_status: order_by
     contact_name: order_by
     contact_phone: order_by
+    created_at: order_by
     facility: facilities_order_by
     facility_id: order_by
     id: order_by
@@ -3239,6 +3311,7 @@ input bookings_order_by {
     split_amount: order_by
     split_members: order_by
     split_payment: order_by
+    updated_at: order_by
     user: user_order_by
     user_id: order_by
 }
@@ -3253,6 +3326,7 @@ input bookings_set_input {
     booking_status: Boolean
     contact_name: String
     contact_phone: String
+    created_at: timestamptz
     facility_id: Int
     id: uuid
     payment_status: payment_status_enum_enum
@@ -3263,6 +3337,7 @@ input bookings_set_input {
     split_amount: Int
     split_members: Int
     split_payment: Boolean
+    updated_at: timestamptz
     user_id: String
 }
 
@@ -3515,6 +3590,19 @@ input facilities_variance_order_by {
     price: order_by
     sport_id: order_by
     turf_id: order_by
+}
+
+"Boolean expression to compare columns of type \"float8\". All fields are combined with logical 'AND'."
+input float8_comparison_exp {
+    _eq: float8
+    _gt: float8
+    _gte: float8
+    _in: [float8!]
+    _is_null: Boolean
+    _lt: float8
+    _lte: float8
+    _neq: float8
+    _nin: [float8!]
 }
 
 "order by aggregate values of table \"images\""
@@ -4271,6 +4359,7 @@ input turf_bool_exp {
     images: images_bool_exp
     name: String_comparison_exp
     pincode: Int_comparison_exp
+    rating: float8_comparison_exp
     ratings: rating_bool_exp
     state: String_comparison_exp
     vendor_id: String_comparison_exp
@@ -4343,6 +4432,7 @@ input turf_order_by {
     images_aggregate: images_aggregate_order_by
     name: order_by
     pincode: order_by
+    rating: order_by
     ratings_aggregate: rating_aggregate_order_by
     state: order_by
     vendor_id: order_by
@@ -4555,24 +4645,38 @@ input vendor_bool_exp {
     _and: [vendor_bool_exp!]
     _not: vendor_bool_exp
     _or: [vendor_bool_exp!]
+    about: String_comparison_exp
     address: String_comparison_exp
+    birthDate: date_comparison_exp
+    city: String_comparison_exp
+    company: String_comparison_exp
+    country: String_comparison_exp
     name: String_comparison_exp
     payment_details: String_comparison_exp
     phone_number: String_comparison_exp
+    state: String_comparison_exp
     turfs: turf_bool_exp
     user: user_bool_exp
     user_id: String_comparison_exp
+    website: String_comparison_exp
 }
 
 "input type for inserting data into table \"vendor\""
 input vendor_insert_input {
+    about: String
     address: String
+    birthDate: date
+    city: String
+    company: String
+    country: String
     name: String
     payment_details: String
     phone_number: String
+    state: String
     turfs: turf_arr_rel_insert_input
     user: user_obj_rel_insert_input
     user_id: String
+    website: String
 }
 
 "input type for inserting object relation for remote table \"vendor\""
@@ -4591,13 +4695,20 @@ input vendor_on_conflict {
 
 "Ordering options when selecting data from \"vendor\"."
 input vendor_order_by {
+    about: order_by
     address: order_by
+    birthDate: order_by
+    city: order_by
+    company: order_by
+    country: order_by
     name: order_by
     payment_details: order_by
     phone_number: order_by
+    state: order_by
     turfs_aggregate: turf_aggregate_order_by
     user: user_order_by
     user_id: order_by
+    website: order_by
 }
 
 "primary key columns input for table: vendor"
@@ -4607,11 +4718,18 @@ input vendor_pk_columns_input {
 
 "input type for updating data in table \"vendor\""
 input vendor_set_input {
+    about: String
     address: String
+    birthDate: date
+    city: String
+    company: String
+    country: String
     name: String
     payment_details: String
     phone_number: String
+    state: String
     user_id: String
+    website: String
 }
 
 

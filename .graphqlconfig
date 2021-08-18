@@ -4,7 +4,7 @@
   "extensions": {
     "endpoints": {
       "Default GraphQL Endpoint": {
-        "url": "http://34.69.217.204:8080/v1/graphql",
+        "url": "https://backend.surfaturf.theforetech.co/v1/graphql",
         "headers": {
           "user-agent": "JS GraphQL",
           "x-hasura-admin-secret": "SurfATurf"

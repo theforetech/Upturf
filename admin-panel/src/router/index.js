@@ -5,8 +5,9 @@ import VueRouter from 'vue-router'
 import { canNavigate } from '@/libs/acl/routeProtection'
 import { getHomeRouteForLoggedInUser } from '@/auth/utils'
 import AuthService from '@/auth'
+import { doesProfileExist } from './userProfileCheck'
 import admin from './routes/admin'
-// import vendor from './routes/vendor'
+import vendor from './routes/vendor'
 import apps from './routes/apps'
 import dashboard from './routes/dashboard'
 import uiElements from './routes/ui-elements/index'
@@ -26,6 +27,7 @@ const router = new VueRouter({
   routes: [
     { path: '/', redirect: { name: 'dashboard-ecommerce' } },
     ...admin,
+    ...vendor,
     ...apps,
     ...dashboard,
     ...pages,
@@ -50,6 +52,12 @@ router.beforeEach(async (to, _, next) => {
     // If logged in => not authorized
     return next({ name: 'redirect-to-dashboard' })
   }
+  // Check if profile is fetched after login
+  // const profile = await doesProfileExist()
+  if (isLoggedIn && to.name !== 'vendor-create-profile' && !await doesProfileExist()) {
+    return next({ name: 'vendor-create-profile' })
+  }
+
   // Redirect if logged in
   if (to.query.redirect && isLoggedIn) {
     return next(to.query.redirect)

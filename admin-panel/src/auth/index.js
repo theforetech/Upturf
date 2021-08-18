@@ -114,6 +114,7 @@ class AuthService extends EventEmitter {
     localStorage.removeItem(localStorageKey)
     localStorage.removeItem(tokenExpiryKey)
     localStorage.removeItem('userInfo')
+    localStorage.removeItem('userProfile')
     localStorage.removeItem('apollo-token')
 
     this.emit(loginEvent, {
