@@ -204,13 +204,20 @@ export default [
     name: 'pages-profile',
     component: () => import('@/views/pages/components/Turf-page/TurfPage'),
     meta: {
-      pageTitle: 'Turf Page',
+      layout: 'full',
+    },
+  },
+  {
+    path: '/pages/components/home',
+    name: 'home',
+    component: () => import('@/views/pages/components/Home'),
+    meta: {
       breadcrumb: [
         {
           text: 'Pages',
         },
         {
-          text: 'Turf Page',
+          text: 'Home',
           active: true,
         },
       ],
