@@ -22,6 +22,7 @@
             variant="primary"
             size="sm"
             class="mb-75 mr-75"
+            :disabled="disabled"
             @click="$refs.refInputEl.$el.click()"
           >
             Upload
@@ -42,6 +43,7 @@
             variant="outline-secondary"
             size="sm"
             class="mb-75 mr-75"
+            :disabled="disabled"
           >
             Reset
           </b-button>
@@ -88,7 +90,7 @@
               <label>This field is required</label>
               <validation-provider
                 #default="{ errors }"
-                rules="required|min:2|alpha"
+                rules="required|min:2"
                 name="First Name"
               >
                 <b-form-input
@@ -96,6 +98,7 @@
                   name="name"
                   :state="errors.length > 0 ? false:null"
                   placeholder="Name"
+                  :disabled="disabled"
                   @keyup="$emit('update', optionsLocal);"
                 />
                 <small class="text-danger">{{ errors[0] }}</small>
@@ -118,6 +121,7 @@
                   name="company"
                   :state="errors.length > 0 ? false:null"
                   placeholder="Company name"
+                  :disabled="disabled"
                   @keyup="$emit('update', optionsLocal);"
                 />
                 <small class="text-danger">{{ errors[0] }}</small>
@@ -175,6 +179,7 @@ export default {
     return {
       optionsLocal: JSON.parse(JSON.stringify(this.generalData)),
       profileFile: null,
+      disabled: false,
       required,
       confirmed,
       password,
@@ -192,7 +197,14 @@ export default {
   },
   methods: {
     resetForm() {
+      this.disabled = false
       this.optionsLocal = JSON.parse(JSON.stringify(this.generalData))
+    },
+    enableForm() {
+      this.disabled = false
+    },
+    disableForm() {
+      this.disabled = true
     },
   },
   setup() {

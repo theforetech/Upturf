@@ -99,7 +99,7 @@
         </template>
 
         <!-- Column: Status -->
-        <template #cell(status)="data">
+        <template #cell(disabled)="data">
           <b-badge
             pill
             :variant="`light-${resolveUserStatusVariant(data.item.disabled)}`"

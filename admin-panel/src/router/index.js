@@ -44,7 +44,13 @@ const router = new VueRouter({
 
 router.beforeEach(async (to, _, next) => {
   const isLoggedIn = AuthService.isAuthenticated()
-
+  // eslint-disable-next-line no-constant-condition
+  if (to.name !== 'auth-login' && AuthService.isExpired()) {
+    // eslint-disable-next-line no-unused-vars,consistent-return
+    const res = await AuthService.renewTokens().catch(async () => {
+      await AuthService.logOut()
+    })
+  }
   if (!canNavigate(to)) {
     // Redirect to login if not logged in
     if (!isLoggedIn) return next({ name: 'auth-login', query: { redirect: to.path } })

@@ -14,6 +14,7 @@
                 id="bio-area"
                 v-model="localOptions.bio"
                 rows="4"
+                :disabled="disabled"
                 placeholder="About you..."
                 @change="$emit('update', localOptions);"
               />
@@ -38,6 +39,7 @@
                   class="form-control"
                   name="date"
                   placeholder="Birth date"
+                  :disabled="disabled"
                   :config="flatPickrOptions"
                   @on-change="$emit('update', localOptions);"
                 />
@@ -66,6 +68,7 @@
                   :raw="false"
                   :state="errors.length > 0 ? false:null"
                   :options="clevePhone"
+                  :disabled="disabled"
                   placeholder="Phone number"
                   @change="$emit('update', localOptions);"
                 />
@@ -90,6 +93,7 @@
                   id="website"
                   v-model="localOptions.website"
                   :state="errors.length > 0 ? false:null"
+                  :disabled="disabled"
                   placeholder="Website address"
                   @keyup="$emit('update', localOptions);"
                 />
@@ -133,9 +137,10 @@
                   id="stateList"
                   v-model="localOptions.state"
                   :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                  label="title"
+                  label="name"
                   :state="errors.length > 0 ? false:null"
-                  :options="countryOption"
+                  :options="states"
+                  :disabled="disabled"
                   @option:selected="$emit('update', localOptions);"
                 />
                 <small class="text-danger">{{ errors[0] }}</small>
@@ -160,8 +165,9 @@
                   id="cityList"
                   v-model="localOptions.city"
                   :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                  label="title"
-                  :options="countryOption"
+                  label="name"
+                  :disabled="disabled || localOptions.state === ''"
+                  :options="cities"
                   :state="errors.length > 0 ? false:null"
                   @option:selected="$emit('update', localOptions);"
                 />
@@ -186,6 +192,7 @@
                 <b-form-input
                   id="address"
                   v-model="localOptions.address"
+                  :disabled="disabled"
                   placeholder="Address"
                   :state="errors.length > 0 ? false:null"
                   @keyup="$emit('update', localOptions);"
@@ -216,6 +223,7 @@ import { ValidationProvider, ValidationObserver } from 'vee-validate'
 // } from '@validations'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'cleave.js/dist/addons/cleave-phone.us'
+import { State, City } from 'country-state-city'
 import {
   alpha, alphaDash,
   between,
@@ -258,6 +266,7 @@ export default {
   },
   data() {
     return {
+      disabled: false,
       countryOption: ['India'],
       localOptions: JSON.parse(JSON.stringify(this.informationData)),
       clevePhone: {
@@ -282,8 +291,30 @@ export default {
       codeType,
     }
   },
+  computed: {
+    states() {
+      if (this.localOptions.country === null || this.localOptions.country === '') {
+        return []
+      }
+      console.log(City)
+      return State.getStatesOfCountry('IN')
+    },
+    cities() {
+      if (this.localOptions.state === null || this.localOptions.state === '') {
+        return []
+      }
+      return City.getCitiesOfState('IN', this.localOptions.state.isoCode)
+    },
+  },
   methods: {
+    enableForm() {
+      this.disabled = false
+    },
+    disableForm() {
+      this.disabled = true
+    },
     resetForm() {
+      this.disabled = false
       this.localOptions = JSON.parse(JSON.stringify(this.informationData))
     },
   },

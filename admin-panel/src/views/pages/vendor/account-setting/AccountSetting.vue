@@ -107,10 +107,16 @@
                 v-ripple.400="'rgba(255, 255, 255, 0.15)'"
                 variant="primary"
                 class="mt-2 mr-1"
-                :disabled="!emailConfirm"
+                :disabled="!emailConfirm || submitting"
                 @click="submitForm"
               >
-                Create Profile
+                <template v-if="submitting">
+                  <b-spinner small />
+                  Loading...
+                </template>
+                <template v-else>
+                  Create Profile
+                </template>
               </b-button>
               <b-button
                 v-ripple.400="'rgba(186, 191, 199, 0.15)'"
@@ -154,7 +160,6 @@
             <!--            />-->
           </b-col>
         </b-row>
-
       </div>
     </div>
   </div>
@@ -162,7 +167,7 @@
 
 <script>
 import {
-  BImg, BRow, BCol, BButton, BAlert,
+  BImg, BRow, BCol, BButton, BAlert, BSpinner,
 } from 'bootstrap-vue'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import Ripple from 'vue-ripple-directive'
@@ -178,6 +183,7 @@ export default {
     // eslint-disable-next-line vue/no-unused-components
     ToastificationContent,
     BButton,
+    BSpinner,
     BAlert,
     VuexyLogo,
     BRow,
@@ -206,9 +212,13 @@ export default {
         },
       },
       emailConfirm: true,
+      submitting: false,
     }
   },
   beforeMount() {
+    if (this.$store.state.user.AppActiveUser.userProfile !== null) {
+      this.$router.push('/')
+    }
     this.formData.general.username = this.$store.state.user.AppActiveUser.uid
     this.formData.general.email = this.$store.state.user.AppActiveUser.email || null
     if (this.$store.state.user.AppActiveUser.emailVerified !== undefined && !this.$store.state.user.AppActiveUser.emailVerified) {
@@ -222,7 +232,9 @@ export default {
       const form1 = await this.$refs.accountGeneral.$refs.form1.validate()
       const form2 = await this.$refs.accountInformation.$refs.form2.validate()
       if (form1 && form2) {
-        alert('SUBMIT')
+        this.submitting = true
+        this.$refs.accountGeneral.disableForm()
+        this.$refs.accountInformation.disableForm()
         await this.$apollo.mutate({
           mutation: gql`mutation test($name: String!, $address: String!, $phone_number: String!, $birthDate: date!, $company: String!, $city: String!, $country: String!, $state: String!, $about: String, $website: String) {
           insert_vendor_one(object: {address: $address, name: $name, phone_number: $phone_number, birthDate: $birthDate, about: $about, city: $city, company: $company, country: $country, state: $state, website: $website}) {
@@ -244,8 +256,8 @@ export default {
             about: this.formData.info.bio,
             country: this.formData.info.country,
             birthDate: this.formData.info.dob,
-            state: this.formData.info.state,
-            city: this.formData.info.city,
+            state: this.formData.info.state.name,
+            city: this.formData.info.city.name,
             address: this.formData.info.address,
             website: this.formData.info.website,
             phone_number: this.formData.info.phone,
@@ -270,7 +282,6 @@ export default {
                     }
                 }`,
               })
-              console.log(data)
               data.vendor.splice(0, 0, insert_vendor_one)
               await cache.writeQuery({
                 query: gql`query {
@@ -298,8 +309,15 @@ export default {
                   variant: 'success',
                 },
               })
+              this.submitting = false
+              this.$refs.accountGeneral.resetForm()
+              this.$refs.accountInformation.resetForm()
               // Redirect
+              await this.$router.push('/')
             } catch (e) {
+              this.submitting = false
+              this.$refs.accountGeneral.enableForm()
+              this.$refs.accountInformation.enableForm()
               this.$toast({
                 component: ToastificationContent,
                 props: {
@@ -311,6 +329,33 @@ export default {
               })
             }
           },
+          error(error) {
+            this.submitting = false
+            this.$refs.accountGeneral.enableForm()
+            this.$refs.accountInformation.enableForm()
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Error updating profile',
+                icon: 'XCircleIcon',
+                text: JSON.stringify(error.message),
+                variant: 'danger',
+              },
+            })
+          },
+        }).catch(e => {
+          this.submitting = false
+          this.$refs.accountGeneral.enableForm()
+          this.$refs.accountInformation.enableForm()
+          this.$toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Error updating profile',
+              icon: 'XCircleIcon',
+              text: e,
+              variant: 'danger',
+            },
+          })
         })
       }
     },

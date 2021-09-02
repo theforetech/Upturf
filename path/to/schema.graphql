@@ -2201,6 +2201,7 @@ type turf {
         where: rating_bool_exp
     ): rating_aggregate!
     state: String!
+    status: Boolean!
     vendor_id: String!
     "An object relationship"
     vendor_profile: vendor!
@@ -2927,6 +2928,8 @@ enum turf_select_column {
     "column name"
     state
     "column name"
+    status
+    "column name"
     vendor_id
 }
 
@@ -2944,6 +2947,8 @@ enum turf_update_column {
     pincode
     "column name"
     state
+    "column name"
+    status
     "column name"
     vendor_id
 }
@@ -4362,6 +4367,7 @@ input turf_bool_exp {
     rating: float8_comparison_exp
     ratings: rating_bool_exp
     state: String_comparison_exp
+    status: Boolean_comparison_exp
     vendor_id: String_comparison_exp
     vendor_profile: vendor_bool_exp
 }
@@ -4383,6 +4389,7 @@ input turf_insert_input {
     pincode: Int
     ratings: rating_arr_rel_insert_input
     state: String
+    status: Boolean
     vendor_id: String
     vendor_profile: vendor_obj_rel_insert_input
 }
@@ -4435,6 +4442,7 @@ input turf_order_by {
     rating: order_by
     ratings_aggregate: rating_aggregate_order_by
     state: order_by
+    status: order_by
     vendor_id: order_by
     vendor_profile: vendor_order_by
 }
@@ -4452,6 +4460,7 @@ input turf_set_input {
     name: String
     pincode: Int
     state: String
+    status: Boolean
     vendor_id: String
 }
 
