@@ -93,15 +93,16 @@
         <b-col
           v-for="x in navbarItems"
           :key="x.name"
+          style="padding: 0!important;"
         >
           <b-button
-            v-ripple.400="'rgba(2, 2, 2, 0.2)'"
+            v-ripple.200="'rgba(2, 2, 2, 0.2)'"
             variant="flat-primary"
-            class="btn-icon rounded-circle active"
+            class="btn-icon rounded-circle"
           >
             <feather-icon
               :icon="x.icon"
-              size="24"
+              size="23"
               class="feather-icon"
             />
             <span class="btn-name">
@@ -117,11 +118,10 @@
 <style scoped>
 .appbar{
   background-color: #FCFCFC;
-  height: 6rem;
+  height: 4.5rem;
   box-shadow: 0 -5px 5px -5px rgba(0,0,0,0.3);
   visibility: hidden;
   overflow: hidden;
-
 }
 @media screen and (max-width: 600px) {
   .appbar{
@@ -129,15 +129,7 @@
   }
 }
 .btn-icon{
-  padding: 0!important;
   height: 10rem;
-  box-sizing: content-box!important;
-}
-.btn-icon:active{
-  background-color: #fff!important;
-}
-.btn-icon.active{
-  background-color: #fff!important;
 }
 .feather-icon{
   margin-bottom: 0.7rem;
@@ -148,17 +140,16 @@
   font-size: 0.8rem;
   text-align: center;
   color: #4B485A;
-  clear: both;
 }
 </style>
 
-<style>
-@media (max-width: 576px) {
-  .header-navbar {
-    width: 100%!important;
-  }
-}
-</style>
+<!--<style>-->
+<!--@media (max-width: 576px) {-->
+<!--  .header-navbar {-->
+<!--    width: 100%!important;-->
+<!--  }-->
+<!--}-->
+<!--</style>-->
 
 <script>
 import { onUnmounted } from '@vue/composition-api'

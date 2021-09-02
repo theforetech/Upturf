@@ -10,6 +10,21 @@
       fade
       style="transform: scale(1.025);"
     >
+      <div style="position:absolute;z-index: 2;width: 100%;margin-top: 15px; ">
+        <b-button
+          v-ripple.400="'rgba(0, 0, 0, 0.15)'"
+          variant="gradient-secondary"
+          class="btn-wishlist"
+          style="float: right;aspect-ratio:1/1;border-radius:50%;padding:0.5rem;background-image: linear-gradient(47deg, #fff, #f8f8f8)!important;margin-right:1rem;box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );"
+        >
+          <feather-icon
+            icon="HeartIcon"
+            size="18"
+            class="text-danger"
+          />
+        </b-button>
+      </div>
+
       <b-carousel-slide
         v-for="y in cardImage"
         :key="y"
@@ -55,6 +70,26 @@
           <span>{{ street }}</span>
         </div>
       </div>
+      <div
+        style="padding-top: 2.5rem !important;"
+      >
+        <b-row align-h="center">
+          <b-col
+            v-for="x in sports"
+            :key="x"
+            cols="1"
+            style="padding: 0px"
+          >
+            <b-img
+
+              :src="x"
+              alt="browser img"
+              class="mr-1"
+              width="23"
+            />
+          </b-col>
+        </b-row></div>
+
     </template>
     <b-card-text />
   </b-card>
@@ -80,8 +115,9 @@
 </style>
 <script>
 import {
-  BCard, BCardText, BCarousel, BCarouselSlide, BBadge,
+  BCard, BCardText, BCarousel, BCarouselSlide, BBadge, BImg, BRow, BCol, BButton,
 } from 'bootstrap-vue'
+import Ripple from 'vue-ripple-directive'
 
 export default {
   components: {
@@ -90,7 +126,14 @@ export default {
     BCarousel,
     BCarouselSlide,
     BBadge,
+    BImg,
+    BRow,
+    BCol,
+    BButton,
 
+  },
+  directives: {
+    Ripple,
   },
   props: {
     cardTitle: {
@@ -118,6 +161,16 @@ export default {
       default: () => [{}],
     },
   },
+  data() {
+    return {
+      wishlist: false,
+    }
+  },
+  methods: {
+    toggleWishlist() {
+      this.wishlist = !this.wishlist
+    },
+  },
 }
 
 </script>
@@ -138,7 +191,7 @@ export default {
   /*background-color: transparent;*/
   padding-left: 10px;
   padding-right: 20px;
-
+  padding-bottom: 8px;
 }
 .turf-title {
   font-size: 1.1rem;
