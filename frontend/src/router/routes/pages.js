@@ -246,7 +246,23 @@ export default [
       ],
     },
   },
-
+  {
+    path: '/pages/components/booking',
+    name: 'pages-turfs',
+    component: () => import('@/views/pages/components/booking/Booking'),
+    meta: {
+      pageTitle: 'Booking',
+      breadcrumb: [
+        {
+          text: 'Pages',
+        },
+        {
+          text: 'Booking',
+          active: true,
+        },
+      ],
+    },
+  },
   {
     path: '/pages/faq',
     name: 'pages-faq',
