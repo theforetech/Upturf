@@ -227,6 +227,14 @@ export default {
       if (status === true) return 'success'
       return 'primary'
     },
+    refetchData() {
+      const vm = this
+      setTimeout(() => {
+        vm.getTurfs().then(() => {
+          vm.updateFn()
+        })
+      }, 1500)
+    },
     async getTurfs() {
       const result = await this.$apollo.query({
         query: gql`query {
@@ -305,7 +313,6 @@ export default {
       perPageOptions,
       searchQuery,
       refUserListTable,
-      refetchData,
 
       // UI
       resolveUserRoleVariant,
@@ -330,7 +337,6 @@ export default {
       perPageOptions,
       searchQuery,
       refUserListTable,
-      refetchData,
 
       // Filter
       avatarText,

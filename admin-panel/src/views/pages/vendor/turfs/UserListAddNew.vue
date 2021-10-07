@@ -35,7 +35,7 @@
         <!-- Form -->
         <b-form
           class="p-2"
-          @submit.prevent="handleSubmit(onSubmit)"
+          @submit.prevent="handleSubmit(submit)"
           @reset.prevent="resetForm"
         >
 
@@ -261,7 +261,7 @@ export default {
                       }
                     }`,
             })
-            data.sport.splice(0, 0, insert_turf_one)
+            data.turf.splice(0, 0, insert_turf_one)
             await cache.writeQuery({
               query: gql`query {
                       turf {
@@ -302,7 +302,7 @@ export default {
               props: {
                 title: 'Error adding turf',
                 icon: 'XCircleIcon',
-                text: e,
+                text: e.message,
                 variant: 'danger',
               },
             })
