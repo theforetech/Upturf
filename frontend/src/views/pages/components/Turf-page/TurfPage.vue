@@ -86,7 +86,7 @@
       </b-row>
       <b-row
         align-h="center"
-        style="padding: 1rem 1rem 1rem 1rem"
+        style="padding: 1rem 1rem 1rem 1rem; "
       >
         <b-col
           v-for="x in navbarItems"
@@ -227,6 +227,7 @@
 }
 .btn-icon{
   width:100%;
+  aspect-ratio:1/1;
 }
 .feather-icon{
   color: #4B485A;
