@@ -180,23 +180,23 @@ export default {
       kb: [],
       sportCategories: [
         {
-          img: 'http://localhost:8080/images/sports/Badminton.png',
+          img: '/images/sports/Badminton.png',
           name: 'Badminton',
         },
         {
-          img: 'http://localhost:8080/images/sports/Football.png',
+          img: '/images/sports/Football.png',
           name: 'Football',
         },
         {
-          img: 'http://localhost:8080/images/sports/Basketball.png',
+          img: '/images/sports/Basketball.png',
           name: 'Basketball',
         },
         {
-          img: 'http://localhost:8080/images/sports/Rugby.png',
+          img: '/images/sports/Rugby.png',
           name: 'Rugby',
         },
         {
-          img: 'http://localhost:8080/images/sports/Rugby.png',
+          img: '/images/sports/Rugby.png',
           name: 'Swimming',
         },
       ],
@@ -204,36 +204,36 @@ export default {
       // sportCategories: [],
       places: [
         {
-          img: 'http://localhost:8080/images/places/delhi.jpg',
-          link: 'http://google.com',
+          img: '/images/places/delhi.jpg',
+          link: '#',
           place: 'New Delhi',
           state: 'Delhi',
 
         },
         {
-          img: 'http://localhost:8080/images/places/gurgaon.jpg',
-          link: 'http://google.com',
+          img: '/images/places/gurgaon.jpg',
+          link: '#',
           place: 'Gurgaon',
           state: 'Haryana',
 
         },
         {
-          img: 'http://localhost:8080/images/places/bangalore.jpg',
-          link: 'http://google.com',
+          img: '/images/places/bangalore.jpg',
+          link: '#',
           place: 'Bangalore',
           state: 'Karnataka',
 
         },
         {
-          img: 'http://localhost:8080/images/places/mumbai.jpg',
-          link: 'http://google.com',
+          img: '/images/places/mumbai.jpg',
+          link: '#',
           place: 'Mumbai',
           state: 'Maharashtra',
 
         },
         {
-          img: 'http://localhost:8080/images/places/kolkata.jpg',
-          link: 'http://google.com',
+          img: '/images/places/kolkata.jpg',
+          link: '#',
           place: 'Kolkata',
           state: 'West Bengal',
 
@@ -241,31 +241,31 @@ export default {
       ],
       turfs: [
         {
-          img: ['http://localhost:8080/images/turfs/turf1.jpeg', 'http://localhost:8080/images/turfs/turf2.jpg',
+          img: ['/images/turfs/turf1.jpeg', '/images/turfs/turf2.jpg',
           ],
           name: 'Shubham Sports Complex',
           cost: 2,
           rating: 1,
           street: 'Charmwood Village, Faridabad',
-          sports: ['http://localhost:8080/images/sports/Badminton.png', 'http://localhost:8080/images/sports/Football.png', 'http://localhost:8080/images/sports/Rugby.png', 'http://localhost:8080/images/sports/Basketball.png'],
+          sports: ['/images/sports/Badminton.png', '/images/sports/Football.png', '/images/sports/Rugby.png', '/images/sports/Basketball.png'],
         },
         {
-          img: ['http://localhost:8080/images/turfs/turf1.jpeg', 'http://localhost:8080/images/turfs/turf2.jpg',
+          img: ['/images/turfs/turf1.jpeg', '/images/turfs/turf2.jpg',
           ],
           name: 'Mohan Bagaan',
           cost: 1,
           rating: 5,
           street: 'Grandeur, Allahbad',
-          sports: ['http://localhost:8080/images/sports/Football.png', 'http://localhost:8080/images/sports/Rugby.png', 'http://localhost:8080/images/sports/Basketball.png'],
+          sports: ['/images/sports/Football.png', '/images/sports/Rugby.png', '/images/sports/Basketball.png'],
         },
         {
-          img: ['http://localhost:8080/images/turfs/turf1.jpeg', 'http://localhost:8080/images/turfs/turf2.jpg',
+          img: ['/images/turfs/turf1.jpeg', '/images/turfs/turf2.jpg',
           ],
-          name: 'Mere ghar ke piche',
+          name: 'Sports Point',
           cost: 3,
           rating: 2.5,
           street: 'Gomti Nagar, Lucknow',
-          sports: ['http://localhost:8080/images/sports/Badminton.png', 'http://localhost:8080/images/sports/Football.png'],
+          sports: ['/images/sports/Badminton.png', '/images/sports/Football.png'],
         },
       ],
       // eslint-disable-next-line global-require

@@ -1,5 +1,5 @@
 const vars = {
-  backend: 'https://backend.surfaturf.theforetech.co/v1/graphql',
+  backend: 'https://backend.upturf.in/v1/graphql',
 }
 
 // eslint-disable-next-line import/prefer-default-export

@@ -20,7 +20,7 @@
       <div class="my-1">
         <b-form-radio
           v-model="selected"
-          name="vuexy-radio"
+          name="SurfATurf-radio"
           value="default"
           inline
         >
@@ -28,7 +28,7 @@
         </b-form-radio>
         <b-form-radio
           v-model="selected"
-          name="vuexy-radio"
+          name="SurfATurf-radio"
           value="right"
           inline
         >
@@ -36,7 +36,7 @@
         </b-form-radio>
         <b-form-radio
           v-model="selected"
-          name="vuexy-radio"
+          name="SurfATurf-radio"
           value="center"
           inline
         >
@@ -44,7 +44,7 @@
         </b-form-radio>
         <b-form-radio
           v-model="selected"
-          name="vuexy-radio"
+          name="SurfATurf-radio"
           value="fill"
           inline
         >

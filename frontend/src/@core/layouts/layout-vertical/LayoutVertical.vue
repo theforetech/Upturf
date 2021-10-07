@@ -99,6 +99,7 @@
             v-ripple.200="'rgba(2, 2, 2, 0.2)'"
             variant="flat-primary"
             class="btn-icon rounded-circle"
+            @click="navigateTo(x.route)"
           >
             <feather-icon
               :icon="x.icon"
@@ -193,6 +194,13 @@ export default {
       return 'layout-content-renderer-default'
     },
   },
+  methods: {
+    navigateTo(route) {
+      this.$router.push({
+        name: route,
+      })
+    },
+  },
   setup() {
     const {
       routerTransition, navbarBackgroundColor, navbarType, footerType, isNavMenuHidden,
@@ -221,22 +229,27 @@ export default {
         {
           name: 'Explore',
           icon: 'SearchIcon',
+          route: 'pages-categories',
         },
         {
           name: 'Wishlist',
           icon: 'HeartIcon',
+          route: '',
         },
         {
           name: 'Turfs',
           icon: 'DribbbleIcon',
+          route: 'pages-turfs',
         },
         {
           name: 'Bookings',
           icon: 'BookIcon',
+          route: '',
         },
         {
           name: 'Profile',
           icon: 'UserIcon',
+          route: '',
         },
       ],
       isVerticalMenuActive,

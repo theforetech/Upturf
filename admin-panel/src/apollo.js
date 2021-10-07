@@ -7,7 +7,7 @@ import VueApollo from 'vue-apollo'
 // HTTP connection to the API
 const httpLink = createHttpLink({
   // You should use an absolute URL here
-  uri: 'https://backend.surfaturf.theforetech.co/v1/graphql',
+  uri: 'https://backend.upturf.in/v1/graphql',
 })
 
 const authMiddleware = new ApolloLink((operation, forward) => {

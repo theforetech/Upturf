@@ -10,7 +10,7 @@
           <span>Please check the </span>
           <b-link
             class="alert-link"
-            href="https://pixinvent.com/demo/vuexy-vuejs-admin-dashboard-template/documentation/guide/layout/page-layout-examples.html#boxed-content"
+            href="https://pixinvent.com/demo/SurfATurf-vuejs-admin-dashboard-template/documentation/guide/layout/page-layout-examples.html#boxed-content"
             target="_blank"
           >Boxed Layout documentation</b-link>
           <span> for more details.</span>

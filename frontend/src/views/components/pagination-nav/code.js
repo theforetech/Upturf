@@ -31,7 +31,7 @@ export const codeAlignment = `
     <div class="my-1">
       <b-form-radio
         v-model="selected"
-        name="vuexy-radio"
+        name="SurfATurf-radio"
         value="default"
         inline
       >
@@ -39,7 +39,7 @@ export const codeAlignment = `
       </b-form-radio>
       <b-form-radio
         v-model="selected"
-        name="vuexy-radio"
+        name="SurfATurf-radio"
         value="right"
         inline
       >
@@ -47,7 +47,7 @@ export const codeAlignment = `
       </b-form-radio>
       <b-form-radio
         v-model="selected"
-        name="vuexy-radio"
+        name="SurfATurf-radio"
         value="center"
         inline
       >
@@ -55,7 +55,7 @@ export const codeAlignment = `
       </b-form-radio>
       <b-form-radio
         v-model="selected"
-        name="vuexy-radio"
+        name="SurfATurf-radio"
         value="fill"
         inline
       >

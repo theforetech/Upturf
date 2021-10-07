@@ -200,31 +200,20 @@ export default [
     },
   },
   {
-    path: '/pages/components/turf-page',
-    name: 'pages-profile',
+    path: '/turf/:id',
+    name: 'pages-turf',
     component: () => import('@/views/pages/components/Turf-page/TurfPage'),
     meta: {
       layout: 'full',
     },
   },
   {
-    path: '/pages/components/home',
+    path: '/',
     name: 'home',
     component: () => import('@/views/pages/components/Home'),
-    meta: {
-      breadcrumb: [
-        {
-          text: 'Pages',
-        },
-        {
-          text: 'Home',
-          active: true,
-        },
-      ],
-    },
   },
   {
-    path: '/pages/components/categories',
+    path: '/categories',
     name: 'pages-categories',
     component: () => import('@/views/pages/components/Categories'),
     meta: {
@@ -241,7 +230,7 @@ export default [
     },
   },
   {
-    path: '/pages/components/turfs',
+    path: '/turfs',
     name: 'pages-turfs',
     component: () => import('@/views/pages/components/Turfs'),
     meta: {

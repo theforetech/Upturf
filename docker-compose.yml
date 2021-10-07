@@ -3,7 +3,7 @@ services:
   caddy:
     image: caddy:2.4.3-alpine
     restart: always
-    command: caddy reverse-proxy --from https://backend.surfaturf.theforetech.co:443 --to http://graphql-engine:8080
+    command: caddy reverse-proxy --from https://backend.upturf.in:443 --to http://graphql-engine:8080
     ports:
       - 80:80
       - 443:443
