@@ -18,21 +18,36 @@
       />
     </b-carousel>
     <template #footer>
-      <div style="background-color: #3b4253!important;">
-        <h1 class="turf-title w-75">
-          {{ cardTitle }}
-        </h1>
-        <b-badge
-          variant="success"
-          class="badge"
+      <router-link
+        v-slot="{ navigate }"
+        to="/turf/1"
+        custom
+      >
+        <div
+          style="background-color: #3b4253!important;"
+          @click="navigate"
         >
-          <span>{{ rating }}</span>  <feather-icon
-            icon="StarIcon"
-            class="star-icon"
-          />
+          <h1
+            class="turf-title w-75"
+          >
+            <b-button
+              href="#"
+              variant="primary"
+            >
+              {{ cardTitle }}</b-button>
+          </h1>
+          <b-badge
+            variant="success"
+            class="badge"
+          >
+            <span>{{ rating }}</span>  <feather-icon
+              icon="StarIcon"
+              class="star-icon"
+            />
           <!--          /><i class="fas fa-star" />-->
-        </b-badge>
-      </div>
+          </b-badge>
+        </div>
+      </router-link>
       <div style="background-color: #3b4253!important; margin-top: 2.5rem;">
         <h1
           class="turf-title w-25"
@@ -116,6 +131,11 @@ export default {
     sports: {
       type: Array,
       default: () => [{}],
+    },
+  },
+  methods: {
+    navigateTo() {
+      this.$router.push({ name: 'pages-turf', params: { id: this.cardTitle } })
     },
   },
 }

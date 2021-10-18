@@ -41,29 +41,31 @@ export default {
     return {
       turfs: [
         {
-          img: ['http://localhost:8080/images/turfs/turf1.jpeg', 'http://localhost:8080/images/turfs/turf2.jpg',
+          img: ['/images/turfs/turf1.jpeg', '/images/turfs/turf2.jpg',
           ],
           name: 'Shubham Sports Complex',
           cost: 2,
           rating: 1,
           street: 'Charmwood Village, Faridabad',
+          sports: ['/images/sports/Badminton.png', '/images/sports/Football.png', '/images/sports/Rugby.png', '/images/sports/Basketball.png'],
         },
         {
-          img: ['http://localhost:8080/images/turfs/turf1.jpeg', 'http://localhost:8080/images/turfs/turf2.jpg',
+          img: ['/images/turfs/turf1.jpeg', '/images/turfs/turf2.jpg',
           ],
           name: 'Mohan Bagaan',
           cost: 1,
           rating: 5,
           street: 'Grandeur, Allahbad',
+          sports: ['/images/sports/Football.png', '/images/sports/Rugby.png', '/images/sports/Basketball.png'],
         },
         {
-          img: ['http://localhost:8080/images/turfs/turf1.jpeg', 'http://localhost:8080/images/turfs/turf2.jpg',
+          img: ['/images/turfs/turf1.jpeg', '/images/turfs/turf2.jpg',
           ],
-          name: 'Mere ghar ke piche',
+          name: 'Sports Point',
           cost: 3,
           rating: 2.5,
           street: 'Gomti Nagar, Lucknow',
-
+          sports: ['/images/sports/Badminton.png', '/images/sports/Football.png'],
         },
       ],
       downImg: require('@/assets/images/pages/error.svg'),

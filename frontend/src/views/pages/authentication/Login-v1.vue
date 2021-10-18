@@ -5,15 +5,15 @@
       <!-- Login v1 -->
       <b-card class="mb-0">
         <b-link class="brand-logo">
-          <vuexy-logo />
+          <Vuexy-logo />
 
           <h2 class="brand-text text-primary ml-1">
-            Vuexy
+            SurfATurf
           </h2>
         </b-link>
 
         <b-card-title class="mb-1">
-          Welcome to Vuexy! 👋
+          Welcome to SurfATurf! 👋
         </b-card-title>
         <b-card-text class="mb-2">
           Please sign-in to your account and start the adventure

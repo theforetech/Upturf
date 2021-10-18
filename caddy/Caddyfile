@@ -1,0 +1,6 @@
+backend.upturf.in {
+    reverse_proxy graphql-engine:8080
+}
+payments.upturf.in {
+    reverse_proxy razorpay:8000
+}

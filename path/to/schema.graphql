@@ -19,6 +19,7 @@ type bookings {
     booking_status: Boolean!
     contact_name: String!
     contact_phone: String!
+    created_at: timestamptz
     "An object relationship"
     facility: facilities!
     facility_id: Int!
@@ -61,6 +62,7 @@ type bookings {
     split_amount: Int!
     split_members: Int!
     split_payment: Boolean!
+    updated_at: timestamptz
     "An object relationship"
     user: user!
     user_id: String!
@@ -99,6 +101,7 @@ type bookings_avg_fields {
 type bookings_max_fields {
     contact_name: String
     contact_phone: String
+    created_at: timestamptz
     facility_id: Int
     id: uuid
     reservation_date: date
@@ -107,6 +110,7 @@ type bookings_max_fields {
     slot_id: bigint
     split_amount: Int
     split_members: Int
+    updated_at: timestamptz
     user_id: String
 }
 
@@ -114,6 +118,7 @@ type bookings_max_fields {
 type bookings_min_fields {
     contact_name: String
     contact_phone: String
+    created_at: timestamptz
     facility_id: Int
     id: uuid
     reservation_date: date
@@ -122,6 +127,7 @@ type bookings_min_fields {
     slot_id: bigint
     split_amount: Int
     split_members: Int
+    updated_at: timestamptz
     user_id: String
 }
 
@@ -217,9 +223,12 @@ type facilities {
         "filter the rows returned"
         where: bookings_bool_exp
     ): bookings_aggregate!
+    end_time: time
     id: Int!
-    name: String!
+    max_players: Int!
+    name: String
     price: Int!
+    slot_size: Int
     "An array relationship"
     slots(
         "distinct select on columns"
@@ -249,9 +258,13 @@ type facilities {
     "An object relationship"
     sport: sport!
     sport_id: Int!
+    start_time: time
+    status: Int!
     "An object relationship"
     turf: turf!
     turf_id: bigint!
+    type: String
+    weekendPrice: Int
 }
 
 "aggregated selection of \"facilities\""
@@ -278,27 +291,41 @@ type facilities_aggregate_fields {
 "aggregate avg on columns"
 type facilities_avg_fields {
     id: Float
+    max_players: Float
     price: Float
+    slot_size: Float
     sport_id: Float
+    status: Float
     turf_id: Float
+    weekendPrice: Float
 }
 
 "aggregate max on columns"
 type facilities_max_fields {
     id: Int
+    max_players: Int
     name: String
     price: Int
+    slot_size: Int
     sport_id: Int
+    status: Int
     turf_id: bigint
+    type: String
+    weekendPrice: Int
 }
 
 "aggregate min on columns"
 type facilities_min_fields {
     id: Int
+    max_players: Int
     name: String
     price: Int
+    slot_size: Int
     sport_id: Int
+    status: Int
     turf_id: bigint
+    type: String
+    weekendPrice: Int
 }
 
 "response of any mutation on the table \"facilities\""
@@ -312,57 +339,85 @@ type facilities_mutation_response {
 "aggregate stddev on columns"
 type facilities_stddev_fields {
     id: Float
+    max_players: Float
     price: Float
+    slot_size: Float
     sport_id: Float
+    status: Float
     turf_id: Float
+    weekendPrice: Float
 }
 
 "aggregate stddev_pop on columns"
 type facilities_stddev_pop_fields {
     id: Float
+    max_players: Float
     price: Float
+    slot_size: Float
     sport_id: Float
+    status: Float
     turf_id: Float
+    weekendPrice: Float
 }
 
 "aggregate stddev_samp on columns"
 type facilities_stddev_samp_fields {
     id: Float
+    max_players: Float
     price: Float
+    slot_size: Float
     sport_id: Float
+    status: Float
     turf_id: Float
+    weekendPrice: Float
 }
 
 "aggregate sum on columns"
 type facilities_sum_fields {
     id: Int
+    max_players: Int
     price: Int
+    slot_size: Int
     sport_id: Int
+    status: Int
     turf_id: bigint
+    weekendPrice: Int
 }
 
 "aggregate var_pop on columns"
 type facilities_var_pop_fields {
     id: Float
+    max_players: Float
     price: Float
+    slot_size: Float
     sport_id: Float
+    status: Float
     turf_id: Float
+    weekendPrice: Float
 }
 
 "aggregate var_samp on columns"
 type facilities_var_samp_fields {
     id: Float
+    max_players: Float
     price: Float
+    slot_size: Float
     sport_id: Float
+    status: Float
     turf_id: Float
+    weekendPrice: Float
 }
 
 "aggregate variance on columns"
 type facilities_variance_fields {
     id: Float
+    max_players: Float
     price: Float
+    slot_size: Float
     sport_id: Float
+    status: Float
     turf_id: Float
+    weekendPrice: Float
 }
 
 "columns and relationships of \"images\""
@@ -2109,8 +2164,15 @@ type subscription_root {
 
 "columns and relationships of \"turf\""
 type turf {
-    address: String!
+    about: String
+    address: String
     city: String!
+    contactEmail: String
+    contactName: String
+    contactPhone: bigint
+    country: String
+    created_at: timestamptz
+    facebook: String
     "An array relationship"
     facilities(
         "distinct select on columns"
@@ -2137,6 +2199,10 @@ type turf {
         "filter the rows returned"
         where: facilities_bool_exp
     ): facilities_aggregate!
+    gMapsBusinessLink: String
+    gMapsLat: String
+    gMapsLon: String
+    google: String
     id: bigint!
     "An array relationship"
     images(
@@ -2164,6 +2230,7 @@ type turf {
         "filter the rows returned"
         where: images_bool_exp
     ): images_aggregate!
+    instagram: String
     name: String!
     pincode: Int!
     "A computed field, executes function \"turf_rating\""
@@ -2194,7 +2261,10 @@ type turf {
         "filter the rows returned"
         where: rating_bool_exp
     ): rating_aggregate!
-    state: String!
+    state: String
+    status: Boolean!
+    twitter: String
+    updated_at: timestamptz
     vendor_id: String!
     "An object relationship"
     vendor_profile: vendor!
@@ -2223,29 +2293,58 @@ type turf_aggregate_fields {
 
 "aggregate avg on columns"
 type turf_avg_fields {
+    contactPhone: Float
     id: Float
     pincode: Float
 }
 
 "aggregate max on columns"
 type turf_max_fields {
+    about: String
     address: String
     city: String
+    contactEmail: String
+    contactName: String
+    contactPhone: bigint
+    country: String
+    created_at: timestamptz
+    facebook: String
+    gMapsBusinessLink: String
+    gMapsLat: String
+    gMapsLon: String
+    google: String
     id: bigint
+    instagram: String
     name: String
     pincode: Int
     state: String
+    twitter: String
+    updated_at: timestamptz
     vendor_id: String
 }
 
 "aggregate min on columns"
 type turf_min_fields {
+    about: String
     address: String
     city: String
+    contactEmail: String
+    contactName: String
+    contactPhone: bigint
+    country: String
+    created_at: timestamptz
+    facebook: String
+    gMapsBusinessLink: String
+    gMapsLat: String
+    gMapsLon: String
+    google: String
     id: bigint
+    instagram: String
     name: String
     pincode: Int
     state: String
+    twitter: String
+    updated_at: timestamptz
     vendor_id: String
 }
 
@@ -2259,42 +2358,49 @@ type turf_mutation_response {
 
 "aggregate stddev on columns"
 type turf_stddev_fields {
+    contactPhone: Float
     id: Float
     pincode: Float
 }
 
 "aggregate stddev_pop on columns"
 type turf_stddev_pop_fields {
+    contactPhone: Float
     id: Float
     pincode: Float
 }
 
 "aggregate stddev_samp on columns"
 type turf_stddev_samp_fields {
+    contactPhone: Float
     id: Float
     pincode: Float
 }
 
 "aggregate sum on columns"
 type turf_sum_fields {
+    contactPhone: bigint
     id: bigint
     pincode: Int
 }
 
 "aggregate var_pop on columns"
 type turf_var_pop_fields {
+    contactPhone: Float
     id: Float
     pincode: Float
 }
 
 "aggregate var_samp on columns"
 type turf_var_samp_fields {
+    contactPhone: Float
     id: Float
     pincode: Float
 }
 
 "aggregate variance on columns"
 type turf_variance_fields {
+    contactPhone: Float
     id: Float
     pincode: Float
 }
@@ -2478,10 +2584,16 @@ type user_profile_mutation_response {
 
 "columns and relationships of \"vendor\""
 type vendor {
+    about: String
     address: String!
+    birthDate: date!
+    city: String!
+    company: String!
+    country: String!
     name: String!
-    payment_details: String!
+    payment_details: String
     phone_number: String!
+    state: String!
     "An array relationship"
     turfs(
         "distinct select on columns"
@@ -2511,6 +2623,7 @@ type vendor {
     "An object relationship"
     user: user!
     user_id: String!
+    website: String
 }
 
 "aggregated selection of \"vendor\""
@@ -2528,20 +2641,34 @@ type vendor_aggregate_fields {
 
 "aggregate max on columns"
 type vendor_max_fields {
+    about: String
     address: String
+    birthDate: date
+    city: String
+    company: String
+    country: String
     name: String
     payment_details: String
     phone_number: String
+    state: String
     user_id: String
+    website: String
 }
 
 "aggregate min on columns"
 type vendor_min_fields {
+    about: String
     address: String
+    birthDate: date
+    city: String
+    company: String
+    country: String
     name: String
     payment_details: String
     phone_number: String
+    state: String
     user_id: String
+    website: String
 }
 
 "response of any mutation on the table \"vendor\""
@@ -2567,6 +2694,8 @@ enum bookings_select_column {
     "column name"
     contact_phone
     "column name"
+    created_at
+    "column name"
     facility_id
     "column name"
     id
@@ -2586,6 +2715,8 @@ enum bookings_select_column {
     split_members
     "column name"
     split_payment
+    "column name"
+    updated_at
     "column name"
     user_id
 }
@@ -2599,6 +2730,8 @@ enum bookings_update_column {
     "column name"
     contact_phone
     "column name"
+    created_at
+    "column name"
     facility_id
     "column name"
     id
@@ -2619,6 +2752,8 @@ enum bookings_update_column {
     "column name"
     split_payment
     "column name"
+    updated_at
+    "column name"
     user_id
 }
 
@@ -2631,29 +2766,57 @@ enum facilities_constraint {
 "select columns of table \"facilities\""
 enum facilities_select_column {
     "column name"
+    end_time
+    "column name"
     id
+    "column name"
+    max_players
     "column name"
     name
     "column name"
     price
     "column name"
+    slot_size
+    "column name"
     sport_id
     "column name"
+    start_time
+    "column name"
+    status
+    "column name"
     turf_id
+    "column name"
+    type
+    "column name"
+    weekendPrice
 }
 
 "update columns of table \"facilities\""
 enum facilities_update_column {
     "column name"
+    end_time
+    "column name"
     id
+    "column name"
+    max_players
     "column name"
     name
     "column name"
     price
     "column name"
+    slot_size
+    "column name"
     sport_id
     "column name"
+    start_time
+    "column name"
+    status
+    "column name"
     turf_id
+    "column name"
+    type
+    "column name"
+    weekendPrice
 }
 
 "unique or primary key constraints on table \"images\""
@@ -2880,17 +3043,47 @@ enum turf_constraint {
 "select columns of table \"turf\""
 enum turf_select_column {
     "column name"
+    about
+    "column name"
     address
     "column name"
     city
     "column name"
+    contactEmail
+    "column name"
+    contactName
+    "column name"
+    contactPhone
+    "column name"
+    country
+    "column name"
+    created_at
+    "column name"
+    facebook
+    "column name"
+    gMapsBusinessLink
+    "column name"
+    gMapsLat
+    "column name"
+    gMapsLon
+    "column name"
+    google
+    "column name"
     id
+    "column name"
+    instagram
     "column name"
     name
     "column name"
     pincode
     "column name"
     state
+    "column name"
+    status
+    "column name"
+    twitter
+    "column name"
+    updated_at
     "column name"
     vendor_id
 }
@@ -2898,17 +3091,47 @@ enum turf_select_column {
 "update columns of table \"turf\""
 enum turf_update_column {
     "column name"
+    about
+    "column name"
     address
     "column name"
     city
     "column name"
+    contactEmail
+    "column name"
+    contactName
+    "column name"
+    contactPhone
+    "column name"
+    country
+    "column name"
+    created_at
+    "column name"
+    facebook
+    "column name"
+    gMapsBusinessLink
+    "column name"
+    gMapsLat
+    "column name"
+    gMapsLon
+    "column name"
+    google
+    "column name"
     id
+    "column name"
+    instagram
     "column name"
     name
     "column name"
     pincode
     "column name"
     state
+    "column name"
+    status
+    "column name"
+    twitter
+    "column name"
+    updated_at
     "column name"
     vendor_id
 }
@@ -2992,7 +3215,17 @@ enum vendor_constraint {
 "select columns of table \"vendor\""
 enum vendor_select_column {
     "column name"
+    about
+    "column name"
     address
+    "column name"
+    birthDate
+    "column name"
+    city
+    "column name"
+    company
+    "column name"
+    country
     "column name"
     name
     "column name"
@@ -3000,13 +3233,27 @@ enum vendor_select_column {
     "column name"
     phone_number
     "column name"
+    state
+    "column name"
     user_id
+    "column name"
+    website
 }
 
 "update columns of table \"vendor\""
 enum vendor_update_column {
     "column name"
+    about
+    "column name"
     address
+    "column name"
+    birthDate
+    "column name"
+    city
+    "column name"
+    company
+    "column name"
+    country
     "column name"
     name
     "column name"
@@ -3014,7 +3261,11 @@ enum vendor_update_column {
     "column name"
     phone_number
     "column name"
+    state
+    "column name"
     user_id
+    "column name"
+    website
 }
 
 "Boolean expression to compare columns of type \"Boolean\". All fields are combined with logical 'AND'."
@@ -3127,6 +3378,7 @@ input bookings_bool_exp {
     booking_status: Boolean_comparison_exp
     contact_name: String_comparison_exp
     contact_phone: String_comparison_exp
+    created_at: timestamptz_comparison_exp
     facility: facilities_bool_exp
     facility_id: Int_comparison_exp
     id: uuid_comparison_exp
@@ -3141,6 +3393,7 @@ input bookings_bool_exp {
     split_amount: Int_comparison_exp
     split_members: Int_comparison_exp
     split_payment: Boolean_comparison_exp
+    updated_at: timestamptz_comparison_exp
     user: user_bool_exp
     user_id: String_comparison_exp
 }
@@ -3158,6 +3411,7 @@ input bookings_insert_input {
     booking_status: Boolean
     contact_name: String
     contact_phone: String
+    created_at: timestamptz
     facility: facilities_obj_rel_insert_input
     facility_id: Int
     id: uuid
@@ -3172,6 +3426,7 @@ input bookings_insert_input {
     split_amount: Int
     split_members: Int
     split_payment: Boolean
+    updated_at: timestamptz
     user: user_obj_rel_insert_input
     user_id: String
 }
@@ -3180,6 +3435,7 @@ input bookings_insert_input {
 input bookings_max_order_by {
     contact_name: order_by
     contact_phone: order_by
+    created_at: order_by
     facility_id: order_by
     id: order_by
     reservation_date: order_by
@@ -3188,6 +3444,7 @@ input bookings_max_order_by {
     slot_id: order_by
     split_amount: order_by
     split_members: order_by
+    updated_at: order_by
     user_id: order_by
 }
 
@@ -3195,6 +3452,7 @@ input bookings_max_order_by {
 input bookings_min_order_by {
     contact_name: order_by
     contact_phone: order_by
+    created_at: order_by
     facility_id: order_by
     id: order_by
     reservation_date: order_by
@@ -3203,6 +3461,7 @@ input bookings_min_order_by {
     slot_id: order_by
     split_amount: order_by
     split_members: order_by
+    updated_at: order_by
     user_id: order_by
 }
 
@@ -3225,6 +3484,7 @@ input bookings_order_by {
     booking_status: order_by
     contact_name: order_by
     contact_phone: order_by
+    created_at: order_by
     facility: facilities_order_by
     facility_id: order_by
     id: order_by
@@ -3239,6 +3499,7 @@ input bookings_order_by {
     split_amount: order_by
     split_members: order_by
     split_payment: order_by
+    updated_at: order_by
     user: user_order_by
     user_id: order_by
 }
@@ -3253,6 +3514,7 @@ input bookings_set_input {
     booking_status: Boolean
     contact_name: String
     contact_phone: String
+    created_at: timestamptz
     facility_id: Int
     id: uuid
     payment_status: payment_status_enum_enum
@@ -3263,6 +3525,7 @@ input bookings_set_input {
     split_amount: Int
     split_members: Int
     split_payment: Boolean
+    updated_at: timestamptz
     user_id: String
 }
 
@@ -3360,9 +3623,13 @@ input facilities_arr_rel_insert_input {
 "order by avg() on columns of table \"facilities\""
 input facilities_avg_order_by {
     id: order_by
+    max_players: order_by
     price: order_by
+    slot_size: order_by
     sport_id: order_by
+    status: order_by
     turf_id: order_by
+    weekendPrice: order_by
 }
 
 "Boolean expression to filter rows from the table \"facilities\". All fields are combined with a logical 'AND'."
@@ -3371,53 +3638,81 @@ input facilities_bool_exp {
     _not: facilities_bool_exp
     _or: [facilities_bool_exp!]
     bookings: bookings_bool_exp
+    end_time: time_comparison_exp
     id: Int_comparison_exp
+    max_players: Int_comparison_exp
     name: String_comparison_exp
     price: Int_comparison_exp
+    slot_size: Int_comparison_exp
     slots: slots_bool_exp
     sport: sport_bool_exp
     sport_id: Int_comparison_exp
+    start_time: time_comparison_exp
+    status: Int_comparison_exp
     turf: turf_bool_exp
     turf_id: bigint_comparison_exp
+    type: String_comparison_exp
+    weekendPrice: Int_comparison_exp
 }
 
 "input type for incrementing numeric columns in table \"facilities\""
 input facilities_inc_input {
     id: Int
+    max_players: Int
     price: Int
+    slot_size: Int
     sport_id: Int
+    status: Int
     turf_id: bigint
+    weekendPrice: Int
 }
 
 "input type for inserting data into table \"facilities\""
 input facilities_insert_input {
     bookings: bookings_arr_rel_insert_input
+    end_time: time
     id: Int
+    max_players: Int
     name: String
     price: Int
+    slot_size: Int
     slots: slots_arr_rel_insert_input
     sport: sport_obj_rel_insert_input
     sport_id: Int
+    start_time: time
+    status: Int
     turf: turf_obj_rel_insert_input
     turf_id: bigint
+    type: String
+    weekendPrice: Int
 }
 
 "order by max() on columns of table \"facilities\""
 input facilities_max_order_by {
     id: order_by
+    max_players: order_by
     name: order_by
     price: order_by
+    slot_size: order_by
     sport_id: order_by
+    status: order_by
     turf_id: order_by
+    type: order_by
+    weekendPrice: order_by
 }
 
 "order by min() on columns of table \"facilities\""
 input facilities_min_order_by {
     id: order_by
+    max_players: order_by
     name: order_by
     price: order_by
+    slot_size: order_by
     sport_id: order_by
+    status: order_by
     turf_id: order_by
+    type: order_by
+    weekendPrice: order_by
 }
 
 "input type for inserting object relation for remote table \"facilities\""
@@ -3437,14 +3732,21 @@ input facilities_on_conflict {
 "Ordering options when selecting data from \"facilities\"."
 input facilities_order_by {
     bookings_aggregate: bookings_aggregate_order_by
+    end_time: order_by
     id: order_by
+    max_players: order_by
     name: order_by
     price: order_by
+    slot_size: order_by
     slots_aggregate: slots_aggregate_order_by
     sport: sport_order_by
     sport_id: order_by
+    start_time: order_by
+    status: order_by
     turf: turf_order_by
     turf_id: order_by
+    type: order_by
+    weekendPrice: order_by
 }
 
 "primary key columns input for table: facilities"
@@ -3454,67 +3756,102 @@ input facilities_pk_columns_input {
 
 "input type for updating data in table \"facilities\""
 input facilities_set_input {
+    end_time: time
     id: Int
+    max_players: Int
     name: String
     price: Int
+    slot_size: Int
     sport_id: Int
+    start_time: time
+    status: Int
     turf_id: bigint
+    type: String
+    weekendPrice: Int
 }
 
 "order by stddev() on columns of table \"facilities\""
 input facilities_stddev_order_by {
     id: order_by
+    max_players: order_by
     price: order_by
+    slot_size: order_by
     sport_id: order_by
+    status: order_by
     turf_id: order_by
+    weekendPrice: order_by
 }
 
 "order by stddev_pop() on columns of table \"facilities\""
 input facilities_stddev_pop_order_by {
     id: order_by
+    max_players: order_by
     price: order_by
+    slot_size: order_by
     sport_id: order_by
+    status: order_by
     turf_id: order_by
+    weekendPrice: order_by
 }
 
 "order by stddev_samp() on columns of table \"facilities\""
 input facilities_stddev_samp_order_by {
     id: order_by
+    max_players: order_by
     price: order_by
+    slot_size: order_by
     sport_id: order_by
+    status: order_by
     turf_id: order_by
+    weekendPrice: order_by
 }
 
 "order by sum() on columns of table \"facilities\""
 input facilities_sum_order_by {
     id: order_by
+    max_players: order_by
     price: order_by
+    slot_size: order_by
     sport_id: order_by
+    status: order_by
     turf_id: order_by
+    weekendPrice: order_by
 }
 
 "order by var_pop() on columns of table \"facilities\""
 input facilities_var_pop_order_by {
     id: order_by
+    max_players: order_by
     price: order_by
+    slot_size: order_by
     sport_id: order_by
+    status: order_by
     turf_id: order_by
+    weekendPrice: order_by
 }
 
 "order by var_samp() on columns of table \"facilities\""
 input facilities_var_samp_order_by {
     id: order_by
+    max_players: order_by
     price: order_by
+    slot_size: order_by
     sport_id: order_by
+    status: order_by
     turf_id: order_by
+    weekendPrice: order_by
 }
 
 "order by variance() on columns of table \"facilities\""
 input facilities_variance_order_by {
     id: order_by
+    max_players: order_by
     price: order_by
+    slot_size: order_by
     sport_id: order_by
+    status: order_by
     turf_id: order_by
+    weekendPrice: order_by
 }
 
 "order by aggregate values of table \"images\""
@@ -4218,6 +4555,19 @@ input sport_set_input {
     name: String
 }
 
+"Boolean expression to compare columns of type \"time\". All fields are combined with logical 'AND'."
+input time_comparison_exp {
+    _eq: time
+    _gt: time
+    _gte: time
+    _in: [time!]
+    _is_null: Boolean
+    _lt: time
+    _lte: time
+    _neq: time
+    _nin: [time!]
+}
+
 "Boolean expression to compare columns of type \"timestamptz\". All fields are combined with logical 'AND'."
 input timestamptz_comparison_exp {
     _eq: timestamptz
@@ -4255,6 +4605,7 @@ input turf_arr_rel_insert_input {
 
 "order by avg() on columns of table \"turf\""
 input turf_avg_order_by {
+    contactPhone: order_by
     id: order_by
     pincode: order_by
 }
@@ -4264,59 +4615,118 @@ input turf_bool_exp {
     _and: [turf_bool_exp!]
     _not: turf_bool_exp
     _or: [turf_bool_exp!]
+    about: String_comparison_exp
     address: String_comparison_exp
     city: String_comparison_exp
+    contactEmail: String_comparison_exp
+    contactName: String_comparison_exp
+    contactPhone: bigint_comparison_exp
+    country: String_comparison_exp
+    created_at: timestamptz_comparison_exp
+    facebook: String_comparison_exp
     facilities: facilities_bool_exp
+    gMapsBusinessLink: String_comparison_exp
+    gMapsLat: String_comparison_exp
+    gMapsLon: String_comparison_exp
+    google: String_comparison_exp
     id: bigint_comparison_exp
     images: images_bool_exp
+    instagram: String_comparison_exp
     name: String_comparison_exp
     pincode: Int_comparison_exp
     ratings: rating_bool_exp
     state: String_comparison_exp
+    status: Boolean_comparison_exp
+    twitter: String_comparison_exp
+    updated_at: timestamptz_comparison_exp
     vendor_id: String_comparison_exp
     vendor_profile: vendor_bool_exp
 }
 
 "input type for incrementing numeric columns in table \"turf\""
 input turf_inc_input {
+    contactPhone: bigint
     id: bigint
     pincode: Int
 }
 
 "input type for inserting data into table \"turf\""
 input turf_insert_input {
+    about: String
     address: String
     city: String
+    contactEmail: String
+    contactName: String
+    contactPhone: bigint
+    country: String
+    created_at: timestamptz
+    facebook: String
     facilities: facilities_arr_rel_insert_input
+    gMapsBusinessLink: String
+    gMapsLat: String
+    gMapsLon: String
+    google: String
     id: bigint
     images: images_arr_rel_insert_input
+    instagram: String
     name: String
     pincode: Int
     ratings: rating_arr_rel_insert_input
     state: String
+    status: Boolean
+    twitter: String
+    updated_at: timestamptz
     vendor_id: String
     vendor_profile: vendor_obj_rel_insert_input
 }
 
 "order by max() on columns of table \"turf\""
 input turf_max_order_by {
+    about: order_by
     address: order_by
     city: order_by
+    contactEmail: order_by
+    contactName: order_by
+    contactPhone: order_by
+    country: order_by
+    created_at: order_by
+    facebook: order_by
+    gMapsBusinessLink: order_by
+    gMapsLat: order_by
+    gMapsLon: order_by
+    google: order_by
     id: order_by
+    instagram: order_by
     name: order_by
     pincode: order_by
     state: order_by
+    twitter: order_by
+    updated_at: order_by
     vendor_id: order_by
 }
 
 "order by min() on columns of table \"turf\""
 input turf_min_order_by {
+    about: order_by
     address: order_by
     city: order_by
+    contactEmail: order_by
+    contactName: order_by
+    contactPhone: order_by
+    country: order_by
+    created_at: order_by
+    facebook: order_by
+    gMapsBusinessLink: order_by
+    gMapsLat: order_by
+    gMapsLon: order_by
+    google: order_by
     id: order_by
+    instagram: order_by
     name: order_by
     pincode: order_by
     state: order_by
+    twitter: order_by
+    updated_at: order_by
     vendor_id: order_by
 }
 
@@ -4336,15 +4746,30 @@ input turf_on_conflict {
 
 "Ordering options when selecting data from \"turf\"."
 input turf_order_by {
+    about: order_by
     address: order_by
     city: order_by
+    contactEmail: order_by
+    contactName: order_by
+    contactPhone: order_by
+    country: order_by
+    created_at: order_by
+    facebook: order_by
     facilities_aggregate: facilities_aggregate_order_by
+    gMapsBusinessLink: order_by
+    gMapsLat: order_by
+    gMapsLon: order_by
+    google: order_by
     id: order_by
     images_aggregate: images_aggregate_order_by
+    instagram: order_by
     name: order_by
     pincode: order_by
     ratings_aggregate: rating_aggregate_order_by
     state: order_by
+    status: order_by
+    twitter: order_by
+    updated_at: order_by
     vendor_id: order_by
     vendor_profile: vendor_order_by
 }
@@ -4356,53 +4781,75 @@ input turf_pk_columns_input {
 
 "input type for updating data in table \"turf\""
 input turf_set_input {
+    about: String
     address: String
     city: String
+    contactEmail: String
+    contactName: String
+    contactPhone: bigint
+    country: String
+    created_at: timestamptz
+    facebook: String
+    gMapsBusinessLink: String
+    gMapsLat: String
+    gMapsLon: String
+    google: String
     id: bigint
+    instagram: String
     name: String
     pincode: Int
     state: String
+    status: Boolean
+    twitter: String
+    updated_at: timestamptz
     vendor_id: String
 }
 
 "order by stddev() on columns of table \"turf\""
 input turf_stddev_order_by {
+    contactPhone: order_by
     id: order_by
     pincode: order_by
 }
 
 "order by stddev_pop() on columns of table \"turf\""
 input turf_stddev_pop_order_by {
+    contactPhone: order_by
     id: order_by
     pincode: order_by
 }
 
 "order by stddev_samp() on columns of table \"turf\""
 input turf_stddev_samp_order_by {
+    contactPhone: order_by
     id: order_by
     pincode: order_by
 }
 
 "order by sum() on columns of table \"turf\""
 input turf_sum_order_by {
+    contactPhone: order_by
     id: order_by
     pincode: order_by
 }
 
 "order by var_pop() on columns of table \"turf\""
 input turf_var_pop_order_by {
+    contactPhone: order_by
     id: order_by
     pincode: order_by
 }
 
 "order by var_samp() on columns of table \"turf\""
 input turf_var_samp_order_by {
+    contactPhone: order_by
     id: order_by
     pincode: order_by
 }
 
 "order by variance() on columns of table \"turf\""
 input turf_variance_order_by {
+    contactPhone: order_by
     id: order_by
     pincode: order_by
 }
@@ -4555,24 +5002,38 @@ input vendor_bool_exp {
     _and: [vendor_bool_exp!]
     _not: vendor_bool_exp
     _or: [vendor_bool_exp!]
+    about: String_comparison_exp
     address: String_comparison_exp
+    birthDate: date_comparison_exp
+    city: String_comparison_exp
+    company: String_comparison_exp
+    country: String_comparison_exp
     name: String_comparison_exp
     payment_details: String_comparison_exp
     phone_number: String_comparison_exp
+    state: String_comparison_exp
     turfs: turf_bool_exp
     user: user_bool_exp
     user_id: String_comparison_exp
+    website: String_comparison_exp
 }
 
 "input type for inserting data into table \"vendor\""
 input vendor_insert_input {
+    about: String
     address: String
+    birthDate: date
+    city: String
+    company: String
+    country: String
     name: String
     payment_details: String
     phone_number: String
+    state: String
     turfs: turf_arr_rel_insert_input
     user: user_obj_rel_insert_input
     user_id: String
+    website: String
 }
 
 "input type for inserting object relation for remote table \"vendor\""
@@ -4591,13 +5052,20 @@ input vendor_on_conflict {
 
 "Ordering options when selecting data from \"vendor\"."
 input vendor_order_by {
+    about: order_by
     address: order_by
+    birthDate: order_by
+    city: order_by
+    company: order_by
+    country: order_by
     name: order_by
     payment_details: order_by
     phone_number: order_by
+    state: order_by
     turfs_aggregate: turf_aggregate_order_by
     user: user_order_by
     user_id: order_by
+    website: order_by
 }
 
 "primary key columns input for table: vendor"
@@ -4607,11 +5075,18 @@ input vendor_pk_columns_input {
 
 "input type for updating data in table \"vendor\""
 input vendor_set_input {
+    about: String
     address: String
+    birthDate: date
+    city: String
+    company: String
+    country: String
     name: String
     payment_details: String
     phone_number: String
+    state: String
     user_id: String
+    website: String
 }
 
 
@@ -4622,6 +5097,8 @@ scalar date
 scalar float8
 
 scalar json
+
+scalar time
 
 scalar timestamptz
 

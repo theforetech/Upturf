@@ -66,19 +66,19 @@ export default {
       // ],
       sportCategories: [
         // {
-        //   img: 'http://localhost:8080/images/sports/Badminton.png',
+        //   img: '/images/sports/Badminton.png',
         //   name: 'Badminton',
         // },
         // {
-        //   img: 'http://localhost:8080/images/sports/Football.png',
+        //   img: '/images/sports/Football.png',
         //   name: 'Football',
         // },
         // {
-        //   img: 'http://localhost:8080/images/sports/Basketball.png',
+        //   img: '/images/sports/Basketball.png',
         //   name: 'Basketball',
         // },
         // {
-        //   img: 'http://localhost:8080/images/sports/Rugby.png',
+        //   img: '/images/sports/Rugby.png',
         //   name: 'Rugby',
         // },
       ],

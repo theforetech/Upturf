@@ -16,7 +16,7 @@ export default [
     title: 'Turfs',
     icon: 'MapIcon',
     role: 'vendor',
-    route: 'apps-e-commerce-shop',
+    route: 'vendor-turfs',
   },
   {
     title: 'Facilities',

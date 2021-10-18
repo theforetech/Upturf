@@ -33,7 +33,10 @@
       />
     </b-carousel>
     <template #footer>
-      <div style="background-color: #3b4253!important;">
+      <div
+        style="background-color: #3b4253!important;"
+        @click="navigateTo"
+      >
         <h1 class="turf-title w-75">
           {{ cardTitle }}
         </h1>
@@ -170,12 +173,15 @@ export default {
     toggleWishlist() {
       this.wishlist = !this.wishlist
     },
+    navigateTo() {
+      this.$router.push({ name: 'pages-turf', params: { id: '2' } })
+    },
   },
 }
 
 </script>
 <style scoped>
-@import url('http://fonts.cdnfonts.com/css/airbnb-cereal-app');
+@import url('https://fonts.cdnfonts.com/css/airbnb-cereal-app');
 .turf-card>.card-body{
   padding: 0;
   border-radius: 1.5rem;

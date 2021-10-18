@@ -1,16 +1,14 @@
 import Vue from 'vue'
 import { ToastPlugin, ModalPlugin } from 'bootstrap-vue'
 import VueCompositionAPI, { provide } from '@vue/composition-api'
+import * as VueGoogleMaps from 'vue2-google-maps'
 
 import i18n from '@/libs/i18n'
 import VueApollo from 'vue-apollo'
-import { ApolloClient } from 'apollo-client'
-import { createHttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import VueGmaps from 'vue-gmaps'
 import router from './router'
 import store from './store'
 import App from './App.vue'
-
 // Global Components
 import './global-components'
 
@@ -36,6 +34,16 @@ import AuthPlugin from './plugins/auth'
 
 Vue.use(VueApollo)
 Vue.use(AuthPlugin)
+Vue.use(VueGoogleMaps, {
+  load: {
+    // key: 'AIzaSyBs6lyDuSkz2G1X4oNlpwg4yohUVIauB4s',
+  },
+  installComponents: true,
+})
+
+Vue.use(VueGmaps, {
+  // key: 'AIzaSyBs6lyDuSkz2G1X4oNlpwg4yohUVIauB4s',
+})
 
 // BSV Plugin Registration
 Vue.use(ToastPlugin)
@@ -54,39 +62,19 @@ require('@core/scss/core.scss')
 // import assets styles
 require('@/assets/scss/style.scss')
 
-const getHeaders = () => {
-  const headers = {}
-  const token = window.localStorage.getItem('apollo-token')
-  console.log(token)
-  if (token) {
-    headers.authorization = `Bearer ${token}`
-  }
-  console.log(headers)
-  return headers
-}
+// const getHeaders = () => {
+//   const headers = {}
+//   const token = window.localStorage.getItem('apollo-token')
+//   // console.log(token)
+//   if (token) {
+//     headers.authorization = `Bearer ${token}`
+//   }
+//   // console.log(headers)
+//   return headers
+// }
 
 // HTTP connection to the API
-const httpLink = createHttpLink({
-  // You should use an absolute URL here
-  uri: 'https://backend.surfaturf.theforetech.co/v1/graphql',
-  fetch,
-  headers: getHeaders(),
-})
-
-// Create the apollo client
-const apolloClient = new ApolloClient({
-  link: httpLink,
-  cache: new InMemoryCache({
-    addTypename: true,
-  }),
-  defaultOptions: {
-    fetchPolicy: 'no-cache',
-  },
-})
-
-const apolloProvider = new VueApollo({
-  defaultClient: apolloClient,
-})
+const { apolloProvider } = require('./apollo')
 
 Vue.config.productionTip = false
 

@@ -3,30 +3,30 @@ services:
   caddy:
     image: caddy:2.4.3-alpine
     restart: always
-    command: caddy reverse-proxy --from https://backend.surfaturf.theforetech.co:443 --to http://graphql-engine:8080
     ports:
       - 80:80
       - 443:443
     volumes:
-      - caddy:/data
+      - /home/anmol150srivastava/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - /home/anmol150srivastava/caddy/data:/data
+      - /home/anmol150srivastava/caddy/config:/config
     depends_on:
       - graphql-engine
+      - razorpay
   postgres:
     image: postgres:12
     restart: always
     container_name: postgres
     volumes:
-    - /var/lib/hasura_postgres:/var/lib/postgresql/data
+      - /var/lib/hasura_postgres:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: postgrespassword
   graphql-engine:
     image: hasura/graphql-engine:v2.0.0-beta.2
     container_name: graphql-engine
-#    ports:
-#      - "8080:8080"
     depends_on:
-    - "postgres"
-    - "storage"
+      - "postgres"
+      - "storage"
     restart: always
     environment:
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
@@ -42,6 +42,18 @@ services:
   storage:
     image: surfaturf/file-upload-api:latest
     container_name: storage
+    restart: always
+    environment:
+      HASURA_SECRET: SurfATurf
+  triggers:
+    image: surfaturf/triggers:latest
+    container_name: triggers
+    restart: always
+    environment:
+      HASURA_SECRET: SurfATurf
+  razorpay:
+    image: surfaturf/razorpay:latest
+    container_name: razorpay
     restart: always
     environment:
       HASURA_SECRET: SurfATurf

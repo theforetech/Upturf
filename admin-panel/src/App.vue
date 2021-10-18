@@ -24,6 +24,7 @@ import useAppConfig from '@core/app-config/useAppConfig'
 import { useWindowSize, useCssVar } from '@vueuse/core'
 
 import store from '@/store'
+// import gql from 'graphql-tag'
 
 const LayoutVertical = () => import('@/layouts/vertical/LayoutVertical.vue')
 const LayoutHorizontal = () => import('@/layouts/horizontal/LayoutHorizontal.vue')
@@ -70,6 +71,27 @@ export default {
     // Set RTL
     const { isRTL } = $themeConfig.layout
     document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr')
+  },
+  async beforeMount() {
+    // if (this.$store.state.user.AppActiveUser.userProfile === undefined || this.$store.state.user.AppActiveUser.userProfile === null) {
+    //   const result = await this.$apollo.query({
+    //     query: gql`query {
+    //       vendor {
+    //         phone_number
+    //         payment_details
+    //         name
+    //         address
+    //       }
+    //     }`,
+    //   })
+    //   if (result.data !== undefined && result.data.vendor !== undefined && result.data.vendor !== null) {
+    //     if (result.data.vendor.length === 0) {
+    //       console.log('Needs profile')
+    //     } else {
+    //       console.log(result)
+    //     }
+    //   }
+    // }
   },
   setup() {
     const { skin, skinClasses } = useAppConfig()

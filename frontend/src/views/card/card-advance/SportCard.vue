@@ -6,7 +6,7 @@
     class="mb-3 sportCard radial-gradient"
     title-tag="h1"
     style="border-radius:1rem; cursor: pointer;"
-    @click="goToSportPage"
+    @click="navigateTo"
   >
     <!--    <template-->
     <!--      #footer-->
@@ -89,8 +89,10 @@ export default {
     },
   },
   methods: {
-    goToSportPage() {
-      this.$router.push(`/sport/${this.name}`)
+    navigateTo() {
+      // TODO remove this
+      this.$router.push({ name: 'pages-turfs' })
+      // this.$router.push(`/sport/${this.name}`)
     },
   },
 }

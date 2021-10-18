@@ -21,6 +21,7 @@
             variant="gradient-secondary"
             class="btn-wishlist"
             style="float: left;aspect-ratio:1/1;border-radius:50%;padding:0.5rem;margin-left:1rem;background-color:#dbdbdb!important;"
+            @click="navigateBack"
           >
             <feather-icon
               icon="ArrowLeftIcon"
@@ -145,7 +146,7 @@
         </b-card-header>
 
         <!-- body -->
-        <b-card-body>
+        <b-card-body style="padding-bottom: 50px;">
           <VueSlickCarousel
             ref="carousel"
             v-bind="settings"
@@ -299,30 +300,30 @@ export default {
           facilityName: 'Football',
           facilityType: '5 v 5',
           cost: '500',
-          img: 'http://localhost:8080/images/sports/Football.png',
+          img: '/images/sports/Football.png',
         },
         {
           facilityName: 'Basketball',
           facilityType: '3 v 3',
           cost: '1200',
-          img: 'http://localhost:8080/images/sports/Basketball.png',
+          img: '/images/sports/Basketball.png',
         },
         {
           facilityName: 'Badminton',
           facilityType: '2 v 2',
           cost: '350',
-          img: 'http://localhost:8080/images/sports/Badminton.png',
+          img: '/images/sports/Badminton.png',
         },
         {
           facilityName: 'Rugby',
           facilityType: '5 v 5',
           cost: '220',
-          img: 'http://localhost:8080/images/sports/Rugby.png',
+          img: '/images/sports/Rugby.png',
         },
       ],
       turf: {
         title: 'Ramagya Sport Academy',
-        images: ['http://localhost:8080/images/turfs/turf1.jpeg', 'http://localhost:8080/images/turfs/turf2.jpg',
+        images: ['/images/turfs/turf1.jpeg', '/images/turfs/turf2.jpg',
         ],
         desc: 'Located in the heart of Faridabad, Ramagya Spots Area has one of the best facilities when it comes to football turfs. All COVID-19 Safety norms are followed in this complex.',
         avgRating: 3.5,
@@ -332,19 +333,19 @@ export default {
         sports: [
           {
             name: 'Badminton',
-            img: 'http://localhost:8080/images/sports/Badminton.png',
+            img: '/images/sports/Badminton.png',
           },
           {
             name: 'Football',
-            img: 'http://localhost:8080/images/sports/Football.png',
+            img: '/images/sports/Football.png',
           },
           {
             name: 'Rugby',
-            img: 'http://localhost:8080/images/sports/Rugby.png',
+            img: '/images/sports/Rugby.png',
           },
           {
             name: 'Basketball',
-            img: 'http://localhost:8080/images/sports/Basketball.png',
+            img: '/images/sports/Basketball.png',
           },
 
         ],
@@ -353,9 +354,12 @@ export default {
       profileData: { },
       settings: {
         arrow: false,
+        dots: true,
         focusOnSelect: true,
         speed: 500,
-        infinite: false,
+        autoplay: true,
+        autoplaySpeed: 2500,
+        infinite: true,
         slidesToShow: 1,
         slidesToScroll: 1,
         draggable: true,
@@ -363,23 +367,23 @@ export default {
       },
       amenities: [
         {
-          img: 'http://localhost:8080/images/amenities/ac2.png',
+          img: '/images/amenities/ac2.png',
           name: 'Full Airconditioned Courts',
         },
         {
-          img: 'http://localhost:8080/images/amenities/cafe.png',
+          img: '/images/amenities/cafe.png',
           name: 'Inhouse Cafe',
         },
         {
-          img: 'http://localhost:8080/images/amenities/fl.png',
+          img: '/images/amenities/fl.png',
           name: 'Flood Lights',
         },
         {
-          img: 'http://localhost:8080/images/amenities/dw.png',
+          img: '/images/amenities/dw.png',
           name: 'Clean and Safe drinking water',
         },
         {
-          img: 'http://localhost:8080/images/amenities/cctv.png',
+          img: '/images/amenities/cctv.png',
           name: 'Security Surveillance for personal belongings',
         },
       ],
@@ -401,6 +405,11 @@ export default {
   },
   created() {
     this.$http.get('/profile/data').then(res => { this.profileData = res.data })
+  },
+  methods: {
+    navigateBack() {
+      this.$router.go(-1)
+    },
   },
 }
 /* eslint-disable global-require */

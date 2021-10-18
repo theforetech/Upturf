@@ -1,9 +1,9 @@
 <template>
   <div class="misc-wrapper">
     <b-link class="brand-logo">
-      <vuexy-logo />
+      <Vuexy-logo />
       <h2 class="brand-text text-primary ml-1">
-        Vuexy
+        SurfATurf
       </h2>
     </b-link>
 

@@ -87,18 +87,19 @@ class AuthService extends EventEmitter {
 
   renewTokens() {
     // reject can be used as parameter in promise for using reject
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
+      return reject(Error('Not logged in'))
+      // eslint-disable-next-line no-unreachable
       if (localStorage.getItem(localStorageKey) !== 'true') {
-        // return reject("Not logged in");
+        return reject(Error('Not logged in'))
       }
 
-      webAuth.checkSession({}, async (err, authResult) => {
+      return webAuth.checkSession({}, async (err, authResult) => {
         if (err) {
-          // reject(err);
-        } else {
-          await this.localLogin(authResult)
-          resolve(authResult)
+          return reject(err)
         }
+        await this.localLogin(authResult)
+        return resolve(authResult)
       })
     })
   }
@@ -114,6 +115,7 @@ class AuthService extends EventEmitter {
     localStorage.removeItem(localStorageKey)
     localStorage.removeItem(tokenExpiryKey)
     localStorage.removeItem('userInfo')
+    localStorage.removeItem('userProfile')
     localStorage.removeItem('apollo-token')
 
     this.emit(loginEvent, {
@@ -131,6 +133,13 @@ class AuthService extends EventEmitter {
     return (
       new Date(Date.now()) < new Date(localStorage.getItem(tokenExpiryKey))
       && localStorage.getItem(localStorageKey) === 'true'
+    )
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  isExpired() {
+    return (
+      localStorage.getItem(localStorageKey) === 'true' && new Date(Date.now()) >= new Date(localStorage.getItem(tokenExpiryKey))
     )
   }
 }
