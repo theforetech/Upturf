@@ -65,7 +65,7 @@ const getHeaders = () => {
 
 // HTTP connection to the API
 const httpLink = createHttpLink({
-  uri: 'https://backend.surfaturf.theforetech.co/v1/graphql',
+  uri: 'https://backend.upturf.in/v1/graphql',
   fetch,
   headers: getHeaders(),
 })
@@ -77,7 +77,7 @@ const apolloClient = new ApolloClient({
     addTypename: true,
   }),
   defaultOptions: {
-    fetchPolicy: 'no-cache',
+    // fetchPolicy: 'no-cache',
   },
 })
 

@@ -262,6 +262,7 @@ export default [
     name: 'pages-turfs',
     component: () => import('@/views/pages/components/booking/Booking'),
     meta: {
+      layout: 'full',
       pageTitle: 'Booking',
       breadcrumb: [
         {
