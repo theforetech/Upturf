@@ -372,8 +372,19 @@ export default {
     //     this.selectedSlots.push(e.target.value)
     //   }
     // },
-    onRowSelected(items) {
-      this.selectedSlots = items
+    onRowSelected(item) {
+      this.selectedSlots.push(item)
+      console.log(this.selectedSlots)
+      this.slotsSelected = this.selectedSlots.length
+      for (let i = 0; i < this.selectedSlots.length; i += 1) {
+        this.tempPrice += parseInt(this.selectedSlots[i].price, 10)
+      }
+      this.totalPrice = this.tempPrice
+      this.tempPrice = 0
+      this.canCheckout = this.slotsSelected > 0
+    },
+    onRowUnSelected(item) {
+      this.selectedSlots = this.selectedSlots.filter(slot => slot.id !== item.id)
       console.log(this.selectedSlots)
       this.slotsSelected = this.selectedSlots.length
       for (let i = 0; i < this.selectedSlots.length; i += 1) {
