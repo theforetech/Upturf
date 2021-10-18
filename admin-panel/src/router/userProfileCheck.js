@@ -8,7 +8,7 @@ export const doesProfileExist = async () => {
   }
   const userProfile = JSON.parse(localStorage.getItem('userProfile'))
   if (userProfile !== null) {
-    store.commit('user/UPDATE_USER_PROFILE', userProfile)
+    await store.commit('user/UPDATE_USER_PROFILE', userProfile)
   } else {
     const result = await apolloClient.query({
       query: gql`query {
@@ -32,7 +32,7 @@ export const doesProfileExist = async () => {
       }
       await store.commit('user/UPDATE_USER_PROFILE', result.data.vendor[0])
     }
-    await store.commit('user/UPDATE_USER_PROFILE', userProfile)
+    // await store.commit('user/UPDATE_USER_PROFILE', userProfile)
   }
   return true
 }

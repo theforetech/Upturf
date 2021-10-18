@@ -47,7 +47,7 @@ router.beforeEach(async (to, _, next) => {
   // eslint-disable-next-line no-constant-condition
   if (to.name !== 'auth-login' && AuthService.isExpired()) {
     // eslint-disable-next-line no-unused-vars,consistent-return
-    const res = await AuthService.renewTokens().catch(async () => {
+    await AuthService.renewTokens().catch(async () => {
       await AuthService.logOut()
     })
   }
