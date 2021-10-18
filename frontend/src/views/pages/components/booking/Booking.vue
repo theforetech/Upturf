@@ -123,6 +123,26 @@
         </b-card-body>
       </b-card>
       <b-card>
+        <!--        <b-card-header style="padding :0px">-->
+        <!--          <div style="margin-bottom: 1rem">-->
+        <!--            Slots Selected ( {{ slotsSelected }} )-->
+        <!--          </div>-->
+        <!--        </b-card-header>-->
+        <b-card-body style="padding: 0rem;">
+          <slot-select-card
+            v-for="x in selectedDate[0].slots"
+            :key="x"
+            :icon="getIcon()"
+            :statistic="x.time"
+            :statistic-title="x.price"
+            :date="checkoutDate"
+            class="slotCard"
+            @clicked="onRowSelected(x)"
+          />
+
+        </b-card-body>
+      </b-card>
+      <b-card>
         <b-card-header style="padding-top:0;" />
         <b-card-body style="padding: 0 0.5rem">
           <b-table
@@ -173,6 +193,7 @@
 
         </b-card-body>
       </b-card>
+
       <div class="booking-bar">
         <span>Slot(s) : {{ slotsSelected }} • &nbsp; ₹ {{ totalPrice }} Plus Charges </span>
         <b-button
@@ -222,6 +243,7 @@ import moment from 'moment'
 import gql from 'graphql-tag'
 import Ripple from 'vue-ripple-directive'
 import SlotCard from './SlotCard.vue'
+import SlotSelectCard from './SlotSelectCard.vue'
 
 export default {
   components: {
@@ -235,6 +257,7 @@ export default {
     BImg,
     BRow,
     BCol,
+    SlotSelectCard,
   },
   directives: {
     Ripple,
@@ -427,6 +450,16 @@ export default {
     },
     checkout() {
       this.showSummary = 2
+    },
+    getIcon(icon) {
+      if (icon) {
+        return 'CheckIcon'
+      }
+      return 'XIcon'
+    },
+    getSlotColor(color) {
+      if (color) return 'success'
+      return 'danger'
     },
   },
 }
