@@ -551,6 +551,7 @@ export default {
                   variant: 'danger',
                 },
               })
+              window.location.reload()
             }
           }
         },

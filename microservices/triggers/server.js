@@ -81,48 +81,47 @@ app.post('/createSlots', async (req, res) => {
         }
       });
   }
-  async function createSlot(start, end, id) {
-    // insert into db
-    const HASURA_MUTATION = `
-      mutation ($start_time: time!, $end_time: time!, $facility_id: Int!) {
-        insert_slots(objects: {start_time: $start_time, end_time: $end_time, facility_id: $facility_id}) {
-          affected_rows
-        }
-      }
-    `;
-    const variables = { start_time: start, end_time: end, facility_id: id };
-
-    // execute the parent mutation in Hasura
-    await require('axios')({
-      url: 'http://graphql-engine:8080/v1/graphql',
-      // url: 'https://backend.upturf.in/v1/graphql',
-      method: 'post',
-      data: {
-        query: HASURA_MUTATION,
-        variables
-      },
-      headers: {
-        "x-hasura-admin-secret": "SurfATurf"
-      }
-    })
-      .then(resp => {
-        console.log(resp.data)
-        if ('errors' in resp.data) {
-          return {
-            message: resp.data.errors[0].message
-          }
-        }
-        return resp.data.data.insert_slots;
-      })
-      .catch(err => {
-        return {
-          message: err.message
-        }
-      });
-  }
   for (const timeStop of timeStops) {
     await createSlot(timeStop, moment(timeStop, 'HH:mm:ss').add(req.body.event.data.new.slot_size, 'minutes').format('HH:mm:ss'), req.body.event.data.new.id)
   }
+
+  const HASURA_MUTATION = `
+      mutation t($id: Int!) {
+        update_facilities_by_pk(pk_columns: {id: $id}, _set: {status: 2}) {
+          id
+          status
+        }
+      }
+    `;
+  const variables = { id: req.body.event.data.new.id };
+
+  // execute the parent mutation in Hasura
+  await require('axios')({
+    url: 'http://graphql-engine:8080/v1/graphql',
+    // url: 'https://backend.upturf.in/v1/graphql',
+    method: 'post',
+    data: {
+      query: HASURA_MUTATION,
+      variables
+    },
+    headers: {
+      "x-hasura-admin-secret": "SurfATurf"
+    }
+  })
+    .then(resp => {
+      console.log(resp.data)
+      if ('errors' in resp.data) {
+        return {
+          message: resp.data.errors[0].message
+        }
+      }
+      return resp.data.data.insert_slots;
+    })
+    .catch(err => {
+      return {
+        message: err.message
+      }
+    });
 
   return res.status(200).json({
     timeStops: timeStops

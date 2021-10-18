@@ -1,5 +1,6 @@
 import auth0 from 'auth0-js'
 import EventEmitter from 'events'
+// eslint-disable-next-line import/no-cycle
 import store from '@/store'
 import authConfig from './auth0.json'
 
@@ -88,7 +89,7 @@ class AuthService extends EventEmitter {
   renewTokens() {
     // reject can be used as parameter in promise for using reject
     return new Promise((resolve, reject) => {
-      return reject(Error('Not logged in'))
+      // return reject(Error('Not logged in'))
       // eslint-disable-next-line no-unreachable
       if (localStorage.getItem(localStorageKey) !== 'true') {
         return reject(Error('Not logged in'))
@@ -141,6 +142,11 @@ class AuthService extends EventEmitter {
     return (
       localStorage.getItem(localStorageKey) === 'true' && new Date(Date.now()) >= new Date(localStorage.getItem(tokenExpiryKey))
     )
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  isExpiredPromise() {
+    return new Promise((resolve => resolve(localStorage.getItem(localStorageKey) === 'true' && new Date(Date.now()) >= new Date(localStorage.getItem(tokenExpiryKey)))))
   }
 }
 
