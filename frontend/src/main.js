@@ -77,7 +77,7 @@ const apolloClient = new ApolloClient({
     addTypename: true,
   }),
   defaultOptions: {
-    fetchPolicy: 'no-cache',
+    // fetchPolicy: 'no-cache',
   },
 })
 
