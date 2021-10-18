@@ -11,23 +11,6 @@ const httpLink = createHttpLink({
   uri: 'https://backend.upturf.in/v1/graphql',
 })
 
-// const authMiddleware = new ApolloLink(async (operation, forward) => {
-//   if (AuthService.isExpired()) {
-//     await AuthService.renewTokens().catch(async () => {
-//       await AuthService.logOut()
-//     })
-//   }
-//   // add the authorization to the headers
-//   operation.setContext(({ headers = {} }) => ({
-//     headers: {
-//       ...headers,
-//       authorization: (`Bearer ${localStorage.getItem('apollo-token')}`) || null,
-//     },
-//   }))
-//
-//   return forward(operation)
-// })
-
 const authMiddleware = new ApolloLink((operation, forward) => new Observable(observable => {
   let sub = null
   AuthService.isExpiredPromise().then(res => {
