@@ -394,6 +394,15 @@ export default {
       this.tempPrice = 0
       this.canCheckout = this.slotsSelected > 0
     },
+    isRowSelected(item) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const slot of this.selectedSlots) {
+        if (slot.id === item.id) {
+          return true
+        }
+      }
+      return false
+    },
     async getSlots() {
       console.log('hello')
       const result = await this.$apollo.query({
