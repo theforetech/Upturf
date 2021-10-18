@@ -22,7 +22,7 @@
           >
             <b-form-input
               id="account-twitter"
-              v-model="localOptions.socialLinks.twitter"
+              v-model="localOptions.twitter"
               placeholder="Add link"
             />
           </b-form-group>
@@ -37,7 +37,7 @@
           >
             <b-form-input
               id="account-facebook"
-              v-model="localOptions.socialLinks.facebook"
+              v-model="localOptions.facebook"
               placeholder="Add link"
             />
           </b-form-group>
@@ -52,27 +52,12 @@
           >
             <b-form-input
               id="account-google"
-              v-model="localOptions.socialLinks.google"
+              v-model="localOptions.google"
               placeholder="Add link"
             />
           </b-form-group>
         </b-col>
         <!--/ google+ -->
-
-        <!-- linkedin -->
-        <b-col md="6">
-          <b-form-group
-            label-for="account-linkedin"
-            label="LinkedIn"
-          >
-            <b-form-input
-              id="account-linkedin"
-              v-model="localOptions.socialLinks.linkedIn"
-              placeholder="Add link"
-            />
-          </b-form-group>
-        </b-col>
-        <!-- linkedin -->
 
         <!-- instagram -->
         <b-col md="6">
@@ -82,131 +67,15 @@
           >
             <b-form-input
               id="account-instagram"
-              v-model="localOptions.socialLinks.instagram"
+              v-model="localOptions.instagram"
               placeholder="Add link"
             />
           </b-form-group>
         </b-col>
         <!--/ instagram -->
 
-        <!-- quora -->
-        <b-col md="6">
-          <b-form-group
-            label-for="account-quora"
-            label="Quora"
-          >
-            <b-form-input
-              id="account-quora"
-              v-model="localOptions.socialLinks.quora"
-              placeholder="Add link"
-            />
-          </b-form-group>
-        </b-col>
-        <!--/ quora -->
-
         <b-col cols="12">
           <hr class="my-2">
-        </b-col>
-
-        <!-- Profile Connections -->
-        <b-col
-          cols="12"
-          class="mt-1"
-        >
-          <div class="d-flex align-items-center mb-3">
-            <feather-icon
-              icon="UserIcon"
-              size="18"
-            />
-            <h4 class="mb-0 ml-75">
-              Profile Connections
-            </h4>
-          </div>
-          <b-row class="text-center">
-            <!-- twitter profile -->
-            <b-col
-              md="3"
-              cols="6"
-              class="mb-1"
-            >
-              <b-card-text class="font-weight-bold">
-                Your Twitter
-              </b-card-text>
-              <div class="mb-1">
-                <b-avatar
-                  size="40"
-                  :src="localOptions.connections.twitter.profileImg"
-                />
-              </div>
-              <b-card-text class="mb-0">
-                @{{ localOptions.connections.twitter.id }}
-              </b-card-text>
-              <b-link>
-                Disconnect
-              </b-link>
-            </b-col>
-            <!--/ twitter profile -->
-
-            <!-- facebook connect button -->
-            <b-col
-              md="3"
-              cols="6"
-              class="mb-1"
-            >
-              <b-card-text class="font-weight-bold mb-2">
-                Your Facebook
-              </b-card-text>
-              <b-button
-                v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                variant="outline-primary"
-              >
-                Connect
-              </b-button>
-            </b-col>
-            <!--/ facebook connect button -->
-
-            <!-- google profile -->
-            <b-col
-              md="3"
-              cols="6"
-              class="mb-1"
-            >
-              <b-card-text class="font-weight-bold">
-                Your Google
-              </b-card-text>
-              <div class="mb-1">
-                <b-avatar
-                  size="40"
-                  :src="localOptions.connections.google.profileImg"
-                />
-              </div>
-              <b-card-text class="mb-0">
-                @{{ localOptions.connections.google.id }}
-              </b-card-text>
-              <b-link>
-                Disconnect
-              </b-link>
-            </b-col>
-            <!--/ google profile -->
-
-            <!-- github connect -->
-            <b-col
-              md="3"
-              cols="6"
-              class="mb-1"
-            >
-              <b-card-text class="font-weight-bold mb-2">
-                Your GitHub
-              </b-card-text>
-              <b-button
-                v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                variant="outline-primary"
-              >
-                Connect
-              </b-button>
-            </b-col>
-            <!--/ github connect -->
-          </b-row>
         </b-col>
 
         <!-- buttons -->
@@ -215,6 +84,7 @@
             v-ripple.400="'rgba(255, 255, 255, 0.15)'"
             variant="primary"
             class="mt-1 mr-1"
+            @click="submitForm"
           >
             Save changes
           </b-button>
@@ -236,9 +106,11 @@
 
 <script>
 import {
-  BButton, BForm, BFormGroup, BFormInput, BRow, BCol, BCard, BCardText, BLink, BAvatar,
+  BButton, BForm, BFormGroup, BFormInput, BRow, BCol, BCard,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
+import gql from 'graphql-tag'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default {
   components: {
@@ -249,9 +121,6 @@ export default {
     BRow,
     BCol,
     BCard,
-    BCardText,
-    BLink,
-    BAvatar,
   },
   directives: {
     Ripple,
@@ -264,12 +133,233 @@ export default {
   },
   data() {
     return {
-      localOptions: JSON.parse(JSON.stringify(this.socialData)),
+      localOptions: {},
     }
+  },
+  created() {
+    this.loading = true
+    this.localOptions = JSON.parse(JSON.stringify(this.socialData))
+    if (!('facebook' in this.localOptions)) {
+      this.localOptions.facebook = ''
+    }
+    if (!('instagram' in this.localOptions)) {
+      this.localOptions.instagram = ''
+    }
+    if (!('twitter' in this.localOptions)) {
+      this.localOptions.twitter = ''
+    }
+    if (!('google' in this.localOptions)) {
+      this.localOptions.google = ''
+    }
+    this.loading = false
   },
   methods: {
     resetForm() {
       this.localOptions = JSON.parse(JSON.stringify(this.socialData))
+      if (!('facebook' in this.localOptions)) {
+        this.localOptions.facebook = ''
+      }
+      if (!('instagram' in this.localOptions)) {
+        this.localOptions.instagram = ''
+      }
+      if (!('twitter' in this.localOptions)) {
+        this.localOptions.twitter = ''
+      }
+      if (!('google' in this.localOptions)) {
+        this.localOptions.google = ''
+      }
+    },
+    async updateTurfData(values) {
+      /**
+       *
+       * update_turf(where: {id: {_eq: ""}}, _set: {}) {
+          returning {
+            id
+            instagram
+          }
+        }
+       *
+       */
+      this.loading = true
+      await this.$apollo.mutate({
+        mutation: gql`mutation ($id: bigint!, $instagram: String, $facebook: String, $twitter: String, $google: String) {
+         update_turf(where: {id: {_eq: $id}}, _set: { instagram: $instagram, facebook: $facebook, google: $google, twitter: $twitter }) {
+            returning {
+                id
+            }
+          }
+        }`,
+        variables: {
+          ...values,
+        },
+        update: async cache => {
+          // Read the data from our cache for this query.
+          try {
+            const data = await cache.readQuery({
+              query: gql`query ($id: bigint!) {
+                turf_by_pk(id: $id) {
+                  facilities {
+                    id
+                    end_time
+                    max_players
+                    name
+                    price
+                    slot_size
+                    start_time
+                    status
+                    type
+                    weekendPrice
+                    sport {
+                      id
+                      name
+                      images {
+                        url
+                      }
+                      disabled
+                    }
+                  }
+                  about
+                  address
+                  city
+                  id
+                  name
+                  pincode
+                  state
+                  status
+                  ratings_aggregate {
+                    aggregate {
+                      avg {
+                        ratings
+                      }
+                    }
+                  }
+                  contactEmail
+                  contactName
+                  contactPhone
+                  gMapsBusinessLink
+                  gMapsLat
+                  gMapsLon
+                }
+              }`,
+              variables: {
+                id: values.id,
+              },
+            })
+            data.turf_by_pk = {
+              ...data.turf_by_pk,
+              ...values,
+            }
+            await cache.writeQuery({
+              query: gql`query ($id: bigint!) {
+                turf_by_pk(id: $id) {
+                  facilities {
+                    id
+                    end_time
+                    max_players
+                    name
+                    price
+                    slot_size
+                    start_time
+                    status
+                    type
+                    weekendPrice
+                    sport {
+                      id
+                      name
+                      images {
+                        url
+                      }
+                      disabled
+                    }
+                  }
+                  about
+                  address
+                  city
+                  id
+                  name
+                  pincode
+                  state
+                  status
+                  ratings_aggregate {
+                    aggregate {
+                      avg {
+                        ratings
+                      }
+                    }
+                  }
+                  contactEmail
+                  contactName
+                  contactPhone
+                  gMapsBusinessLink
+                  gMapsLat
+                  gMapsLon
+                }
+              }`,
+              variables: {
+                id: values.id,
+              },
+              data,
+            })
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Success',
+                icon: 'CheckIcon',
+                text: 'Updated Turf successfully!',
+                variant: 'success',
+              },
+            })
+          } catch (e) {
+            if (e.message.includes('Can\'t find field turf_by_pk')) {
+              this.$toast({
+                component: ToastificationContent,
+                props: {
+                  title: 'Success',
+                  icon: 'CheckIcon',
+                  text: 'Updated Turf successfully!',
+                  variant: 'success',
+                },
+              })
+              window.location.reload()
+            } else {
+              this.$toast({
+                component: ToastificationContent,
+                props: {
+                  title: 'Error updating turf',
+                  icon: 'XCircleIcon',
+                  text: e,
+                  variant: 'danger',
+                },
+              })
+            }
+          }
+        },
+      }).catch(e => {
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Error updating turf',
+            icon: 'XCircleIcon',
+            text: e,
+            variant: 'danger',
+          },
+        })
+        this.$router.go(-1)
+      })
+      this.loading = false
+    },
+    async submitForm() {
+      if (this.localOptions.facebook !== this.socialData.facebook || this.localOptions.google !== this.socialData.google || this.localOptions.twitter !== this.socialData.twitter || this.localOptions.instagram !== this.socialData.instagram) {
+        const data = {
+          id: this.socialData.id,
+          instagram: this.localOptions.instagram || null,
+          twitter: this.localOptions.twitter || null,
+          google: this.localOptions.google || null,
+          facebook: this.localOptions.facebook || null,
+        }
+        await this.updateTurfData(data)
+        this.$emit('update', data)
+      }
     },
   },
 }

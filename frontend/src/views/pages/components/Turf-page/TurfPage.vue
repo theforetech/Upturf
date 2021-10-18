@@ -146,7 +146,7 @@
         </b-card-header>
 
         <!-- body -->
-        <b-card-body>
+        <b-card-body style="padding-bottom: 50px;">
           <VueSlickCarousel
             ref="carousel"
             v-bind="settings"
@@ -354,9 +354,12 @@ export default {
       profileData: { },
       settings: {
         arrow: false,
+        dots: true,
         focusOnSelect: true,
         speed: 500,
-        infinite: false,
+        autoplay: true,
+        autoplaySpeed: 2500,
+        infinite: true,
         slidesToShow: 1,
         slidesToScroll: 1,
         draggable: true,

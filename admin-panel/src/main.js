@@ -1,13 +1,14 @@
 import Vue from 'vue'
 import { ToastPlugin, ModalPlugin } from 'bootstrap-vue'
 import VueCompositionAPI, { provide } from '@vue/composition-api'
+import * as VueGoogleMaps from 'vue2-google-maps'
 
 import i18n from '@/libs/i18n'
 import VueApollo from 'vue-apollo'
+import VueGmaps from 'vue-gmaps'
 import router from './router'
 import store from './store'
 import App from './App.vue'
-
 // Global Components
 import './global-components'
 
@@ -33,6 +34,16 @@ import AuthPlugin from './plugins/auth'
 
 Vue.use(VueApollo)
 Vue.use(AuthPlugin)
+Vue.use(VueGoogleMaps, {
+  load: {
+    // key: 'AIzaSyBs6lyDuSkz2G1X4oNlpwg4yohUVIauB4s',
+  },
+  installComponents: true,
+})
+
+Vue.use(VueGmaps, {
+  // key: 'AIzaSyBs6lyDuSkz2G1X4oNlpwg4yohUVIauB4s',
+})
 
 // BSV Plugin Registration
 Vue.use(ToastPlugin)

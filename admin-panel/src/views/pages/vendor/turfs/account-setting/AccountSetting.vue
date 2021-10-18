@@ -8,7 +8,6 @@
     />
   </div>
   <div v-else>
-    {{ turfData }}
     <b-tabs
       vertical
       content-class="col-12 col-md-9 mt-1 mt-md-0"
@@ -30,6 +29,7 @@
 
         <account-setting-general
           :general-data="turfData"
+          @update="updateTurfData"
         />
       </b-tab>
       <!--/ general tab -->
@@ -40,15 +40,16 @@
         <!-- title -->
         <template #title>
           <feather-icon
-            icon="LockIcon"
+            icon="ImageIcon"
             size="18"
             class="mr-50"
           />
-          <span class="font-weight-bold">Change Password</span>
+          <span class="font-weight-bold">Featured Pictures</span>
         </template>
 
         <account-setting-password
           :general-data="turfData"
+          :turfid="id"
         />
       </b-tab>
       <!--/ change password tab -->
@@ -68,6 +69,7 @@
 
         <account-setting-information
           :information-data="turfData"
+          @update="updateTurfData"
         />
       </b-tab>
 
@@ -85,8 +87,8 @@
         </template>
 
         <account-setting-social
-          v-if="options.social"
-          :social-data="options.social"
+          :social-data="turfData"
+          @update="updateTurfData"
         />
       </b-tab>
 
@@ -96,15 +98,35 @@
         <!-- title -->
         <template #title>
           <feather-icon
-            icon="BellIcon"
+            icon="MapPinIcon"
             size="18"
             class="mr-50"
           />
-          <span class="font-weight-bold">Notifications</span>
+          <span class="font-weight-bold">Location</span>
         </template>
 
         <account-setting-notification
           :notification-data="turfData"
+          @update="updateTurfData"
+        />
+      </b-tab>
+
+      <!-- notification -->
+      <b-tab>
+
+        <!-- title -->
+        <template #title>
+          <feather-icon
+            icon="MapIcon"
+            size="18"
+            class="mr-50"
+          />
+          <span class="font-weight-bold">Facilities</span>
+        </template>
+
+        <account-setting-facilities
+          :notification-data="turfData"
+          @update="updateTurfData"
         />
       </b-tab>
     </b-tabs>
@@ -120,6 +142,7 @@ import AccountSettingPassword from './AccountSettingPassword.vue'
 import AccountSettingInformation from './AccountSettingInformation.vue'
 import AccountSettingSocial from './AccountSettingSocial.vue'
 import AccountSettingNotification from './AccountSettingNotification.vue'
+import AccountSettingFacilities from './AccountSettingFacilities.vue'
 
 export default {
   components: {
@@ -131,6 +154,7 @@ export default {
     AccountSettingInformation,
     AccountSettingSocial,
     AccountSettingNotification,
+    AccountSettingFacilities,
   },
   data() {
     return {
@@ -145,7 +169,8 @@ export default {
         state: '',
         pincode: 0,
         country: 'India',
-        gMapsTag: null,
+        gMapsLat: null,
+        gMapsLon: null,
         gMapsBusinessLink: '',
         facebook: '',
         twitter: '',
@@ -175,19 +200,25 @@ export default {
           turf_by_pk(id: $id) {
             facilities {
               id
+              end_time
+              max_players
               name
               price
+              slot_size
+              start_time
+              status
+              type
+              weekendPrice
               sport {
                 id
                 name
+                images {
+                  url
+                }
                 disabled
               }
-              slots {
-                end_time
-                id
-                start_time
-              }
             }
+            about
             address
             city
             id
@@ -202,6 +233,12 @@ export default {
                 }
               }
             }
+            contactEmail
+            contactName
+            contactPhone
+            gMapsBusinessLink
+            gMapsLat
+            gMapsLon
           }
         }`,
         variables: {
@@ -235,6 +272,10 @@ export default {
           }
         }
       })
+    },
+    updateTurfData() {
+      // update turf here
+      this.getTurfData()
     },
   },
 }
