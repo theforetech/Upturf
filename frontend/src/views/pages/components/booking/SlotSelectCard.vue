@@ -1,26 +1,26 @@
 <template>
   <b-card
     no-body
-    class="slotCard"
+    :class="borderColor"
+    @click="select()"
   >
     <b-card-body class="d-flex justify-content-between align-items-center">
       <div class="truncate">
         <h2
           class="mb-25 font-weight-bolder"
-          style="font-size: 1.1rem"
+          style="font-size: 1rem"
         >
           {{ statistic }}
         </h2>
-        <span style="font-size: 0.9rem">{{ date }}  ₹ {{ statisticTitle }}</span>
+        <span style="font-size: 0.9rem">₹ {{ statisticTitle }}</span>
       </div>
       <b-avatar
         :variant="`light-${color}`"
-        size="30"
+        size="25"
       >
         <feather-icon
-          size="15"
+          size="12"
           :icon="icon"
-          @click="removeX"
         />
       </b-avatar>
     </b-card-body>
@@ -51,7 +51,11 @@ export default {
     },
     color: {
       type: String,
-      default: 'danger',
+      default: 'primary',
+    },
+    borderColor: {
+      type: String,
+      default: 'slotCard',
     },
     date: {
       type: String,
@@ -61,21 +65,29 @@ export default {
     //   type: Function,
     // },
   },
+  data() {
+    return {
+    }
+  },
   mounted() {
     // this.cross()
   },
   methods: {
-    removeX() {
-      this.$emit('clicke', true)
+    select() {
+      this.$emit('clicked', true)
     },
   },
-
 }
 </script>
 <style scoped>
 .slotCard{
   background-color: #f8f8f8;
-  border: 1px rgba(169, 169, 169, 0.6) solid;
-  height: 4.2rem;
+  border: 1px rgba(169, 169, 169, 1) solid;
+  height: 3.6rem;
+}
+.slotCardSelected{
+  background-color: rgba(43, 176, 83,0.15);
+  border: 1px rgba(43, 176, 83, 1) solid;
+  height: 3.6rem;
 }
 </style>
