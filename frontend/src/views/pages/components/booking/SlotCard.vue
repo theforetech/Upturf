@@ -20,6 +20,7 @@
         <feather-icon
           size="15"
           :icon="icon"
+          @click="removeX"
         />
       </b-avatar>
     </b-card-body>
@@ -63,6 +64,12 @@ export default {
   mounted() {
     // this.cross()
   },
+  methods: {
+    removeX() {
+      this.$emit('clicke', true)
+    },
+  },
+
 }
 </script>
 <style scoped>

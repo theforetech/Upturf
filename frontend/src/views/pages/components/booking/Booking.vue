@@ -29,11 +29,12 @@
           <slot-card
             v-for="x in selectedSlots"
             :key="x"
-            icon="XIcon"
+            icon="Trash2Icon"
             :statistic="x.time"
             :statistic-title="x.price"
             :date="checkoutDate"
             class="slotCard"
+            @clicke="removeSlot(x)"
           />
         </b-card-body>
       </b-card>
@@ -94,15 +95,41 @@
         </b-card-header>
       </b-card>
       <b-card>
-        <b-card-header style="padding-top:0;">
-          <span style="font-size: 1.2rem;font-weight: 500">
-            Select your date.
+        <b-card-header style="padding-top:0;padding-right:0;padding-left: 0">
+          <span style="font-size: 1.1rem;font-weight: 500;color:rgb(24, 24, 24);line-height: 2">
+            Facility(s)
           </span>
+          <b-dropdown
+            id="dropdown-grouped"
+            v-model="selected"
+            v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+            variant="outline-dark"
+            block
+            center
+            class="dropdown facDrop"
+            menu-class="w-100"
+          >
+            <template #button-content>
+              <span class="mr-1">{{ selected }}</span>
+
+            </template>
+
+            <b-dropdown-item
+              v-for="x in facilities"
+              :key="x"
+            >
+              <span class="mr-1">{{ x.sport }} - {{ x.type }}</span>
+            </b-dropdown-item>
+
+          </b-dropdown>
 
         </b-card-header>
         <b-card-body
           class="date"
         >
+          <span style="font-size: 1.1rem;font-weight: 500;color:rgb(24, 24, 24);line-height: 2">
+            Select your date.
+          </span>
           <VueSlickCarousel
             ref="carousel"
             v-bind="settings"
@@ -123,73 +150,19 @@
         </b-card-body>
       </b-card>
       <b-card>
-        <!--        <b-card-header style="padding :0px">-->
-        <!--          <div style="margin-bottom: 1rem">-->
-        <!--            Slots Selected ( {{ slotsSelected }} )-->
-        <!--          </div>-->
-        <!--        </b-card-header>-->
         <b-card-body style="padding: 0rem;">
           <slot-select-card
             v-for="x in selectedDate[0].slots"
             :key="x"
-            :icon="getIcon()"
+            :icon="getIcon(isRowSelected(x))"
             :statistic="x.time"
             :statistic-title="x.price"
             :date="checkoutDate"
+            :color="getSlotColor(isRowSelected(x))"
+            :border-color="getBorderColor(isRowSelected(x))"
             class="slotCard"
-            @clicked="onRowSelected(x)"
+            @clicked="toggleRow(x)"
           />
-
-        </b-card-body>
-      </b-card>
-      <b-card>
-        <b-card-header style="padding-top:0;" />
-        <b-card-body style="padding: 0 0.5rem">
-          <b-table
-            ref="selectableTable"
-            class="slotTable"
-            selectable
-            select-mode="multi"
-            :items="selectedDate[0].slots"
-            :fields="fields"
-            responsive="lg"
-            borderless
-            @row-selected="onRowSelected"
-          >
-            <!-- Example scoped slot for select state illustrative purposes -->
-            <template
-              #cell(*)="{ rowSelected }"
-            >
-              <template v-if="rowSelected">
-                <i
-                  class="feather icon-check-circle primary"
-                  style="color: #3FB27F"
-                />
-              </template>
-
-              <template v-else>
-                <i
-                  class="feather icon-x-circle primary"
-                  style="color: #fff"
-                />
-              </template>
-            </template>
-
-            <template #cell(avatar)="data">
-              <b-avatar :src="data.value" />
-            </template>
-            <template #cell(time)="data">
-              {{ data.value }}
-            </template>
-            <template #cell(price)="data">
-              ₹ {{ data.value }}
-            </template>
-            <template #cell(status)="data">
-              <b-badge :variant="status[1][data.value]">
-                {{ status[0][data.value] }}
-              </b-badge>
-            </template>
-          </b-table>
 
         </b-card-body>
       </b-card>
@@ -232,7 +205,7 @@
 
 <script>
 import {
-  BCardHeader, BCardBody, BCard, BButton, BTable, BImg, BRow, BCol,
+  BCardHeader, BCardBody, BCard, BButton, BImg, BRow, BCol, BDropdown, BDropdownItem,
 } from 'bootstrap-vue'
 
 import VueSlickCarousel from 'vue-slick-carousel'
@@ -252,11 +225,12 @@ export default {
     BCard,
     BButton,
     VueSlickCarousel,
-    BTable,
     SlotCard,
     BImg,
     BRow,
     BCol,
+    BDropdown,
+    BDropdownItem,
     SlotSelectCard,
   },
   directives: {
@@ -264,14 +238,21 @@ export default {
   },
   data() {
     return {
-      fields: [{
-        key: '*', label: '*', trClass: 'slotRows', tdClass: 'slotData',
+      facilities: [{
+        sport: 'Badminton',
+        type: '1v1',
       },
       {
-        key: 'time', label: 'Slots', trClass: 'slotRows', tdClass: 'slotData',
+        sport: 'Badminton',
+        type: '2v2',
       },
       {
-        key: 'price', label: 'Price', trClass: 'slotRows', tdClass: 'slotData',
+        sport: 'Football',
+        type: '3v3',
+      },
+      {
+        sport: 'Football',
+        type: '5v5',
       },
       ],
       date: moment().format('YYYY-MM-DD'),
@@ -281,24 +262,28 @@ export default {
       slotts: [],
       selectedSlots: [],
       selectedDate: [{
-        date: '2021-10-17',
+        date: '2021-10-20',
         slots: [
           {
+            id: '0',
             available: true,
             price: '1000',
             time: '6:00PM',
           },
           {
+            id: '1',
             available: true,
             price: '1000',
             time: '7:00PM',
           },
           {
+            id: '2',
             available: true,
             price: '1000',
             time: '8:00PM',
           },
           {
+            id: '3',
             available: true,
             price: '1400',
             time: '9:00PM',
@@ -307,24 +292,28 @@ export default {
       }],
       dates: [
         {
-          date: '2021-10-18',
+          date: '2021-10-20',
           slots: [
             {
+              id: '0',
               available: true,
               price: '1000',
               time: '6:00PM',
             },
             {
+              id: '1',
               available: true,
               price: '1000',
               time: '7:00PM',
             },
             {
+              id: '2',
               available: true,
               price: '1000',
               time: '8:00PM',
             },
             {
+              id: '3',
               available: true,
               price: '1400',
               time: '9:00PM',
@@ -332,19 +321,22 @@ export default {
           ],
         },
         {
-          date: '2021-10-19',
+          date: '2021-10-21',
           slots: [
             {
+              id: '4',
               available: true,
               price: '1000',
               time: '6:00PM',
             },
             {
+              id: '5',
               available: true,
               price: '1000',
               time: '7:00PM',
             },
             {
+              id: '6',
               available: true,
               price: '1700',
               time: '10:00PM',
@@ -373,6 +365,7 @@ export default {
       convFees: 0,
       discount: 0,
       checkoutAmt: 0,
+      selected: 'Badminton 1v1',
     }
   },
   mounted() {
@@ -397,7 +390,6 @@ export default {
     // },
     onRowSelected(item) {
       this.selectedSlots.push(item)
-      console.log(this.selectedSlots)
       this.slotsSelected = this.selectedSlots.length
       for (let i = 0; i < this.selectedSlots.length; i += 1) {
         this.tempPrice += parseInt(this.selectedSlots[i].price, 10)
@@ -408,7 +400,6 @@ export default {
     },
     onRowUnSelected(item) {
       this.selectedSlots = this.selectedSlots.filter(slot => slot.id !== item.id)
-      console.log(this.selectedSlots)
       this.slotsSelected = this.selectedSlots.length
       for (let i = 0; i < this.selectedSlots.length; i += 1) {
         this.tempPrice += parseInt(this.selectedSlots[i].price, 10)
@@ -416,6 +407,25 @@ export default {
       this.totalPrice = this.tempPrice
       this.tempPrice = 0
       this.canCheckout = this.slotsSelected > 0
+    },
+    toggleRow(item) {
+      if (this.isRowSelected(item)) this.onRowUnSelected(item)
+      else this.onRowSelected(item)
+    },
+    removeSlot(item) {
+      this.selectedSlots = this.selectedSlots.filter(slot => slot.id !== item.id)
+      this.slotsSelected = this.selectedSlots.length
+      if (this.slotsSelected > 0) {
+        for (let i = 0; i < this.selectedSlots.length; i += 1) {
+          this.tempPrice += parseInt(this.selectedSlots[i].price, 10)
+        }
+        this.totalPrice = this.tempPrice
+        this.tempPrice = 0
+        this.canCheckout = this.slotsSelected > 0
+        this.convFees = this.totalPrice * 0.05
+        this.discount = this.totalPrice * 0.2
+        this.checkoutAmt = this.totalPrice + this.convFees - this.discount
+      } else this.showSummary = 0
     },
     isRowSelected(item) {
       // eslint-disable-next-line no-restricted-syntax
@@ -446,10 +456,6 @@ export default {
     summary() {
       if (this.showSummary === 1) {
         this.showSummary = 0
-        this.slotsSelected = 0
-        this.selectedSlots = []
-        this.totalPrice = 0
-        this.canCheckout = false
       } else if (this.selectedSlots.length > 0) {
         this.showSummary = 1
         this.convFees = this.totalPrice * 0.05
@@ -464,11 +470,19 @@ export default {
       if (icon) {
         return 'CheckIcon'
       }
-      return 'XIcon'
+      return 'MinusIcon'
     },
     getSlotColor(color) {
       if (color) return 'success'
-      return 'danger'
+      return 'secondary'
+    },
+    getBorderColor(item) {
+      if (item) return 'slotCardSelected'
+      return 'slotCard'
+    },
+    onClick() {
+      // Close the menu and (by passing true) return focus to the toggle button
+      this.$refs.dropdown.hide(true)
     },
   },
 }
@@ -479,8 +493,8 @@ export default {
 }
 .date-btn{
   background: transparent!important;
-  color: #1e1e1e!important;
-  font-weight: 400;
+  color: #141414!important;
+  font-weight: 500;
   margin: 0.2rem;
   padding-right: 0.6rem;
   padding-left: 0.6rem;
@@ -563,6 +577,13 @@ export default {
 #totalP span{
   font-weight: 600;
   font-size: 1.04rem;
+}
+[dir] .date-btn:hover:not(.disabled):not(:disabled) {
+  background: #202023!important;
+  color:white!important;
+}
+.facDrop{
+  width: 100%;
 }
 </style>
 <style lang="scss">

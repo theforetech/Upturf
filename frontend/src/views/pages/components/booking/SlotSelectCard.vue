@@ -1,7 +1,7 @@
 <template>
   <b-card
     no-body
-    class="slotCard"
+    :class="borderColor"
     @click="select()"
   >
     <b-card-body class="d-flex justify-content-between align-items-center">
@@ -53,6 +53,10 @@ export default {
       type: String,
       default: 'primary',
     },
+    borderColor: {
+      type: String,
+      default: 'slotCard',
+    },
     date: {
       type: String,
       default: '',
@@ -60,6 +64,10 @@ export default {
     // cross: {
     //   type: Function,
     // },
+  },
+  data() {
+    return {
+    }
   },
   mounted() {
     // this.cross()
@@ -74,7 +82,12 @@ export default {
 <style scoped>
 .slotCard{
   background-color: #f8f8f8;
-  border: 1px rgba(169, 169, 169, 0.6) solid;
+  border: 1px rgba(169, 169, 169, 1) solid;
+  height: 3.6rem;
+}
+.slotCardSelected{
+  background-color: rgba(43, 176, 83,0.15);
+  border: 1px rgba(43, 176, 83, 1) solid;
   height: 3.6rem;
 }
 </style>
