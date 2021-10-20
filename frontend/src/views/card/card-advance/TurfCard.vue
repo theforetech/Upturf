@@ -24,12 +24,11 @@
           />
         </b-button>
       </div>
-
       <b-carousel-slide
         v-for="y in cardImage"
         :key="y"
         class="carousal-image"
-        :img-src="y"
+        :img-src="y.url"
       />
     </b-carousel>
     <template #footer>
@@ -41,10 +40,10 @@
           {{ cardTitle }}
         </h1>
         <b-badge
-          variant="success"
+          :variant="rating ? 'success' : 'info'"
           class="badge"
         >
-          <span>{{ rating }}</span>  <feather-icon
+          <span>{{ rating ? rating : '-' }}</span>  <feather-icon
             icon="StarIcon"
             class="star-icon"
           />
@@ -84,8 +83,7 @@
             style="padding: 0px"
           >
             <b-img
-
-              :src="x"
+              :src="x.image"
               alt="browser img"
               class="mr-1"
               width="23"
@@ -139,6 +137,10 @@ export default {
     Ripple,
   },
   props: {
+    cardId: {
+      type: Number,
+      default: 1,
+    },
     cardTitle: {
       type: String,
       default: '',
@@ -174,7 +176,7 @@ export default {
       this.wishlist = !this.wishlist
     },
     navigateTo() {
-      this.$router.push({ name: 'pages-turf', params: { id: '2' } })
+      this.$router.push({ name: 'pages-turf', params: { id: this.cardId } })
     },
   },
 }
@@ -217,5 +219,6 @@ export default {
 <style>
 .carousal-image>img{
   border-radius: 1.5rem ;
+  height: 18rem!important;
 }
 </style>
