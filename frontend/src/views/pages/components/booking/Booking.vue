@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div id="razorpay" />
     <div v-if="showSummary===0">
       <div style="padding-bottom: 2rem">
         <b-card
@@ -217,12 +218,54 @@
           cols="10"
         >
           <b-img
-            src="http://localhost:8080/images/loading/loading2.gif"
+            src="/images/loading/loading2.gif"
             fluid-growth
             style="height: 20rem;margin:auto"
           />
           <h2 style="margin-left: 1rem">
             Getting your turf. . .
+          </h2>
+        </b-col>
+        <b-col />
+      </b-row>
+    </div>
+    <div v-else-if="showSummary===3">
+      <b-row
+        class="vh-100 text-center"
+        align-h="center"
+        align-v="center"
+      ><b-col />
+        <b-col
+          cols="10"
+        >
+          <b-img
+            src="/images/loading/payment.gif"
+            fluid-growth
+            style="height: 20rem;margin:auto"
+          />
+          <h2 style="margin-left: 1rem">
+            Complete payment...
+          </h2>
+        </b-col>
+        <b-col />
+      </b-row>
+    </div>
+    <div v-else-if="showSummary===4">
+      <b-row
+        class="vh-100 text-center"
+        align-h="center"
+        align-v="center"
+      ><b-col />
+        <b-col
+          cols="10"
+        >
+          <b-img
+            src="/images/loading/payment.gif"
+            fluid-growth
+            style="height: 20rem;margin:auto"
+          />
+          <h2 style="margin-left: 1rem">
+            Booking Confirmed!
           </h2>
         </b-col>
         <b-col />
@@ -247,7 +290,7 @@ import Ripple from 'vue-ripple-directive'
 import SlotCard from './SlotCard.vue'
 import SlotSelectCard from './SlotSelectCard.vue'
 import ToastificationContent
-  from '../../../../../../admin-panel/src/@core/components/toastification/ToastificationContent.vue'
+  from '../../../../@core/components/toastification/ToastificationContent.vue'
 
 export default {
   components: {
@@ -270,6 +313,9 @@ export default {
   },
   data() {
     return {
+      contactName: 'Abhirup',
+      contactPhone: '8884442222',
+      currentBooking: null,
       slotsFetching: true,
       turfID: null,
       facilityID: null,
@@ -549,7 +595,7 @@ export default {
               end_time
               id
               start_time
-              bookings_aggregate(where: {reservation_date: {_eq: $date}}) {
+              booked_slots_aggregate(where: {date: {_eq: $date}}) {
                 aggregate {
                   count
                 }
@@ -571,7 +617,7 @@ export default {
         id: slot.id,
         start_time: moment(slot.start_time, 'HH:mm:ss').format('hh:mm A'),
         end_time: moment(slot.end_time, 'HH:mm:ss').format('hh:mm A'),
-        disabled: slot.disabled || slot.bookings_aggregate.aggregate.count !== 0,
+        disabled: slot.disabled || slot.booked_slots_aggregate.aggregate.count !== 0,
         date: this.checkoutDate,
         price,
       }))
@@ -646,111 +692,126 @@ export default {
         this.checkoutAmt = this.totalPrice + this.convFees - this.discount
       }
     },
+    loadScript(src) {
+      return new Promise(resolve => {
+        if (document.getElementById('razorpay').childElementCount != 1) {
+          const script = document.createElement('script')
+          script.src = src
+          script.onload = () => {
+            resolve(true)
+          }
+          script.onerror = () => {
+            resolve(false)
+          }
+          document.getElementById('razorpay').appendChild(script)
+        } else {
+          resolve(true)
+        }
+      })
+    },
+    async displayRazorpay() {
+      const vm = this
+      const res = await this.loadScript('https://checkout.razorpay.com/v1/checkout.js')
+      if (!res) {
+        alert('Razorpay SDK failed to load. Are you online?')
+        return
+      }
+      const options = {
+        key: 'rzp_live_OSVbHyJriFdrB3',
+        currency: 'INR',
+        amount: (this.currentBooking.amount * 100).toString(),
+        order_id: this.currentBooking.razorpayID,
+        name: 'Booking Payment',
+        description: `Campaign  ID: ${this.currentBooking.id}`,
+        image: 'https://upturf.in/logo.png',
+        handler() {
+          this.$toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Success!',
+              icon: 'CheckIcon',
+              text: 'Payment Confirmed.',
+              variant: 'success',
+            },
+          })
+          this.showSummary += 1
+          // setTimeout(() => {
+          //   vm.$router.push({ path: '/client/campaigns' })
+          // }, 4000)
+        },
+      }
+      const paymentObject = new window.Razorpay(options)
+      paymentObject.open()
+    },
     async checkout() {
       this.showSummary = 2
+      await new Promise(r => setTimeout(r, 1400))
+      const slots = []
+      this.selectedSlots.forEach(slot => {
+        slots.push(slot.id)
+      })
       await this.$apollo.mutate({
-        mutation: gql`mutation ($facilityId: Int, $contactName: String, $contactPhone: String, $reservationDate: date, $reservationStartTime: timestamptz, $reservationEndTime: timestamptz, $slotId: bigint) {
-          insert_bookings_one(object: {contact_name: $contactName, contact_phone: $contactPhone, facility_id: $facilityId, reservation_date: $reservationDate, reservation_end_time: $reservationEndTime, reservation_start_time: $reservationStartTime, slot_id: $slotId, split_payment: false}) {
-            booking_status
-            created_at
-            payment_status
+        mutation: gql`mutation ($contactName: String, $contactPhone: String, $date: date, $facility: Int!, $slots: [bigint!]) {
+          book(contactName: $contactName, contactPhone: $contactPhone, date: $date, facility: $facility, slots: $slots) {
+            amount
+            id
           }
         }`,
         variables: {
-          facilityId: this.facilityID,
+          facility: this.facilityID,
           contactName: this.contactName,
           contactPhone: this.contactPhone,
-          reservationDate: this.checkoutDate,
-          reservationStartTime: this.checkoutDate,
-          reservationEndTime: this.checkoutDate,
-          slotId: this.city,
+          date: this.checkoutDate,
+          slots,
         },
-        update: async (cache, { data: { insert_turf_one } }) => {
+        update: async ({ data: { book } }) => {
           // Read the data from our cache for this query.
           try {
-            const data = await cache.readQuery({
-              query: gql`query {
-                      turf {
-                        id
-                        name
-                        pincode
-                        city
-                        ratings_aggregate {
-                          aggregate {
-                            avg {
-                              ratings
-                            }
-                          }
-                        }
-                        facilities_aggregate {
-                          aggregate {
-                            count
-                          }
-                        }
-                        status
-                      }
-                    }`,
-            })
-            data.turf.splice(0, 0, insert_turf_one)
-            await cache.writeQuery({
-              query: gql`query {
-                      turf {
-                        id
-                        name
-                        pincode
-                        city
-                        ratings_aggregate {
-                          aggregate {
-                            avg {
-                              ratings
-                            }
-                          }
-                        }
-                        facilities_aggregate {
-                          aggregate {
-                            count
-                          }
-                        }
-                        status
-                      }
-                    }`,
-              data,
-            })
             this.$toast({
               component: ToastificationContent,
               props: {
-                title: 'Success',
+                title: 'Booking Created!',
                 icon: 'CheckIcon',
-                text: 'Added turf successfully!',
+                text: 'Complete payment within 15 minutes.',
                 variant: 'success',
               },
             })
-            this.$emit('refetch-data', true)
+            this.currentBooking = book
+            this.showSummary += 1
+            await this.displayRazorpay()
           } catch (e) {
+            let msg = e.message
+            if (e.message.includes('Uniqueness violation')) {
+              msg = 'Slot unavailable'
+            }
             this.$toast({
               component: ToastificationContent,
               props: {
-                title: 'Error adding turf',
+                title: 'Error Booking',
                 icon: 'XCircleIcon',
-                text: e.message,
+                text: msg,
                 variant: 'danger',
               },
             })
+            this.showSummary -= 1
           }
         },
       }).catch(e => {
+        let msg = e.message
+        if (e.message.includes('Uniqueness violation')) {
+          msg = 'Slot unavailable'
+        }
         this.$toast({
           component: ToastificationContent,
           props: {
-            title: 'Error adding turf',
+            title: 'Error Booking',
             icon: 'XCircleIcon',
-            text: e,
+            text: msg,
             variant: 'danger',
           },
         })
+        this.showSummary -= 1
       })
-      this.reset()
-      this.isAddNewUserSidebarActive = false
     },
     getIcon(icon) {
       if (icon) {
