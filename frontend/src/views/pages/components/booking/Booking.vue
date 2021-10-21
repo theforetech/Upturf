@@ -67,7 +67,7 @@
                 @click="getDate($event)"
               >
                 {{ moment().add(i,'d').format('ddd') }} <br>
-                {{ moment().add(i,'d').format('MMM Do') }}
+                {{ moment().add(i,'d').format('MMM') }} {{ moment().add(i,'d').format('Do') }}
               </b-button></div>
           </VueSlickCarousel>
         </b-card-body>
@@ -507,6 +507,7 @@ export default {
   padding-left: 0.6rem;
   font-size: 1rem;
   line-height: 1.2;
+
 }
 .active {
    background-color: #1e1e1e!important;
