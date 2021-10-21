@@ -237,9 +237,6 @@ export default [
       pageTitle: 'Turfs',
       breadcrumb: [
         {
-          text: 'Pages',
-        },
-        {
           text: 'Turfs',
           active: true,
         },

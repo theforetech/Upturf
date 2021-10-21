@@ -1582,12 +1582,13 @@ type slots {
         "filter the rows returned"
         where: bookings_bool_exp
     ): bookings_aggregate!
-    end_time: timestamptz!
+    disabled: Boolean!
+    end_time: time!
     "An object relationship"
     facility: facilities
     facility_id: Int
     id: bigint!
-    start_time: timestamptz!
+    start_time: time!
 }
 
 "aggregated selection of \"slots\""
@@ -1619,18 +1620,14 @@ type slots_avg_fields {
 
 "aggregate max on columns"
 type slots_max_fields {
-    end_time: timestamptz
     facility_id: Int
     id: bigint
-    start_time: timestamptz
 }
 
 "aggregate min on columns"
 type slots_min_fields {
-    end_time: timestamptz
     facility_id: Int
     id: bigint
-    start_time: timestamptz
 }
 
 "response of any mutation on the table \"slots\""
@@ -2985,6 +2982,8 @@ enum slots_constraint {
 "select columns of table \"slots\""
 enum slots_select_column {
     "column name"
+    disabled
+    "column name"
     end_time
     "column name"
     facility_id
@@ -2996,6 +2995,8 @@ enum slots_select_column {
 
 "update columns of table \"slots\""
 enum slots_update_column {
+    "column name"
+    disabled
     "column name"
     end_time
     "column name"
@@ -4376,11 +4377,12 @@ input slots_bool_exp {
     _not: slots_bool_exp
     _or: [slots_bool_exp!]
     bookings: bookings_bool_exp
-    end_time: timestamptz_comparison_exp
+    disabled: Boolean_comparison_exp
+    end_time: time_comparison_exp
     facility: facilities_bool_exp
     facility_id: Int_comparison_exp
     id: bigint_comparison_exp
-    start_time: timestamptz_comparison_exp
+    start_time: time_comparison_exp
 }
 
 "input type for incrementing numeric columns in table \"slots\""
@@ -4392,27 +4394,24 @@ input slots_inc_input {
 "input type for inserting data into table \"slots\""
 input slots_insert_input {
     bookings: bookings_arr_rel_insert_input
-    end_time: timestamptz
+    disabled: Boolean
+    end_time: time
     facility: facilities_obj_rel_insert_input
     facility_id: Int
     id: bigint
-    start_time: timestamptz
+    start_time: time
 }
 
 "order by max() on columns of table \"slots\""
 input slots_max_order_by {
-    end_time: order_by
     facility_id: order_by
     id: order_by
-    start_time: order_by
 }
 
 "order by min() on columns of table \"slots\""
 input slots_min_order_by {
-    end_time: order_by
     facility_id: order_by
     id: order_by
-    start_time: order_by
 }
 
 "input type for inserting object relation for remote table \"slots\""
@@ -4432,6 +4431,7 @@ input slots_on_conflict {
 "Ordering options when selecting data from \"slots\"."
 input slots_order_by {
     bookings_aggregate: bookings_aggregate_order_by
+    disabled: order_by
     end_time: order_by
     facility: facilities_order_by
     facility_id: order_by
@@ -4446,10 +4446,11 @@ input slots_pk_columns_input {
 
 "input type for updating data in table \"slots\""
 input slots_set_input {
-    end_time: timestamptz
+    disabled: Boolean
+    end_time: time
     facility_id: Int
     id: bigint
-    start_time: timestamptz
+    start_time: time
 }
 
 "order by stddev() on columns of table \"slots\""

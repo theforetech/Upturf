@@ -58,8 +58,12 @@ export default {
       default: '',
     },
     cost: {
-      type: String,
-      default: '',
+      type: Number,
+      default: 9999,
+    },
+    weekendCost: {
+      type: Number,
+      default: 9999,
     },
     facilityType: {
       type: String,
