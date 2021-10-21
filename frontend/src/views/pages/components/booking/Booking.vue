@@ -244,10 +244,10 @@ import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 import moment from 'moment'
 import gql from 'graphql-tag'
 import Ripple from 'vue-ripple-directive'
+import ToastificationContent
+  from '../../../../@core/components/toastification/ToastificationContent.vue'
 import SlotCard from './SlotCard.vue'
 import SlotSelectCard from './SlotSelectCard.vue'
-import ToastificationContent
-  from '../../../../../../admin-panel/src/@core/components/toastification/ToastificationContent.vue'
 
 export default {
   components: {
