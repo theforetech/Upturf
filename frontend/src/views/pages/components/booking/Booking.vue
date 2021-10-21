@@ -1,100 +1,128 @@
 <template>
   <div>
     <div v-if="showSummary===0">
-      <b-card
-        no-body
-      >
-        <b-card-header>
-          <b-button
-            v-ripple.200="'rgba(135, 135, 149 ,0.3)'"
-            class="back"
-            @click="goBack"
-          >
-            <feather-icon
-              icon="ChevronLeftIcon"
-              size="27"
-              style="color: #1e1e1e;"
-            />
-          </b-button> <span style="margin: auto;font-size: 1.2rem;font-weight: 500">{{ turf.name }}</span>
-        </b-card-header>
-      </b-card>
-      <b-card>
-        <b-card-header style="padding-top:0;padding-right:0;padding-left: 0">
-          <span style="font-size: 1.1rem;font-weight: 500;color:rgb(24, 24, 24);line-height: 2">
-            Facility(s)
-          </span>
-          <b-dropdown
-            id="dropdown-grouped"
-            v-model="selected"
-            v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-            variant="outline-dark"
-            block
-            center
-            class="dropdown facDrop"
-            menu-class="w-100"
-          >
-            <template #button-content>
-              <span class="mr-1">{{ selected }}</span>
-            </template>
-
-            <b-dropdown-item
-              v-for="x in facilities"
-              :key="x"
-            >
-              <span class="mr-1">{{ x.sport }} - {{ x.type }}</span>
-            </b-dropdown-item>
-
-          </b-dropdown>
-
-        </b-card-header>
-        <b-card-body
-          class="date"
+      <div style="padding-bottom: 2rem">
+        <b-card
+          no-body
         >
-          <span style="font-size: 1.1rem;font-weight: 500;color:rgb(24, 24, 24);line-height: 2">
-            Select your date.
-          </span>
-          <VueSlickCarousel
-            ref="carousel"
-            v-bind="settings"
-          >
-            <div
-              v-for="(x,i) in daysOfWeek"
-              :key="x"
+          <b-card-header>
+            <b-button
+              v-ripple.200="'rgba(135, 135, 149 ,0.3)'"
+              class="back"
+              @click="goBack"
             >
-              <b-button
-                class="date-btn"
-                :value="moment().add(i,'d').format('YYYY-MM-DD')"
-                @click="getDate($event)"
-              >
-                {{ moment().add(i,'d').format('ddd') }} <br>
-                {{ moment().add(i,'d').format('MMM Do') }}
-              </b-button></div>
-          </VueSlickCarousel>
-        </b-card-body>
-      </b-card>
-      <b-card>
-        <b-card-header style="padding:0;">
-          <span style="font-size: 1.1rem;font-weight: 500;color:rgb(24, 24, 24);line-height: 2"> Slot(s) Selection:</span>
-        </b-card-header>
-        <b-card-body style="padding: 0rem;">
-          <slot-select-card
-            v-for="x in selectedDate[0].slots"
-            :key="x"
-            :icon="getIcon(isRowSelected(x))"
-            :statistic="x.time"
-            :statistic-title="x.price"
-            :date="checkoutDate"
-            :color="getSlotColor(isRowSelected(x))"
-            :border-color="getBorderColor(isRowSelected(x))"
-            class="slotCard"
-            @clicked="toggleRow(x)"
-          />
+              <feather-icon
+                icon="ChevronLeftIcon"
+                size="27"
+                style="color: #1e1e1e;"
+              />
+            </b-button> <span style="margin: auto;font-size: 1.2rem;font-weight: 500">{{ turf.name }}</span>
+          </b-card-header>
+        </b-card>
+        <b-card>
+          <b-card-header style="padding-top:0;padding-right:0;padding-left: 0">
+            <span style="font-size: 1.1rem;font-weight: 500;color:rgb(24, 24, 24);line-height: 2">
+              Facility(s)
+            </span>
+            <b-dropdown
+              id="dropdown-grouped"
+              v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+              variant="outline-dark"
+              block
+              center
+              class="dropdown facDrop"
+              menu-class="w-100"
+            >
+              <template #button-content>
+                <span
+                  v-if="selected"
+                  class="mr-1"
+                >
+                  <img
+                    :src="selected.sport.images[0].url"
+                    style="width:1.5rem"
+                  >
+                  &nbsp;&nbsp;:&nbsp;&nbsp;{{ selected.sport.name[0].toUpperCase() + selected.sport.name.slice(1) }} - {{ selected.type }}</span>
+                <span
+                  v-else
+                  class="mr-1"
+                >Please select a facility</span>
+              </template>
 
-        </b-card-body>
-      </b-card>
+              <b-dropdown-item
+                v-for="x in turfData.facilities"
+                :key="x.id"
+                @click="selectFacility(x)"
+              >
+                <span class="mr-1"><img
+                  :src="x.sport.images[0].url"
+                  style="width:1.5rem"
+                >&nbsp;&nbsp;:&nbsp;&nbsp;{{ x.sport.name[0].toUpperCase() + x.sport.name.slice(1) }} - {{ x.type }}</span>
+              </b-dropdown-item>
+
+            </b-dropdown>
+          </b-card-header>
+          <b-card-body
+            class="date"
+          >
+            <span style="font-size: 1.1rem;font-weight: 500;color:rgb(24, 24, 24);line-height: 2">
+              Select your date.
+            </span>
+            <VueSlickCarousel
+              ref="carousel"
+              v-bind="settings"
+            >
+              <div
+                v-for="(x,i) in daysOfWeek"
+                :key="'date_'+x"
+              >
+                <b-button
+                  class="date-btn"
+                  :class="{
+                    'date-active': isDateSelected(moment().add(i,'d').toISOString())
+                  }"
+                  @click="getDate(moment().add(i,'d'))"
+                >
+                  {{ moment().add(i,'d').format('ddd') }} <br>
+                  {{ moment().add(i,'d').format('MMM Do') }}
+                </b-button></div>
+            </VueSlickCarousel>
+          </b-card-body>
+        </b-card>
+        <b-card>
+          <b-card-header style="padding:0;">
+            <span style="font-size: 1.1rem;font-weight: 500;color:rgb(24, 24, 24);line-height: 2"> Slot(s) Selection:</span>
+          </b-card-header>
+          <b-card-body
+            v-if="!slotsFetching"
+            style="padding: 0rem;"
+          >
+            <slot-select-card
+              v-for="x in slots"
+              :key="'slots_' + x.id"
+              :icon="getIcon(isRowSelected(x))"
+              :statistic="x.start_time"
+              :statistic-title="x.price"
+              :date="checkoutDate"
+              :color="getSlotColor(isRowSelected(x))"
+              :border-color="getBorderColor(isRowSelected(x))"
+              class="slotCard"
+              @clicked="toggleRow(x)"
+            />
+          </b-card-body>
+          <b-card-body v-else>
+            <b-skeleton-table
+              class="mt-4"
+              :rows="7"
+              :columns="4"
+              :table-props="{ bordered: true, striped: true }"
+            />
+          </b-card-body>
+        </b-card>
+      </div>
 
       <div class="booking-bar">
-        <span>Slot(s) : {{ slotsSelected }} • &nbsp; ₹ {{ totalPrice }} Plus Charges </span>
+        <span>Slot(s) : {{ getSelectedFacilities }} • &nbsp; ₹ {{ getTotal }} Plus Charges </span>
         <b-button
           v-ripple.400="'rgba(40, 199, 111, 0.3)'"
           :disabled="!canCheckout"
@@ -131,11 +159,11 @@
         <b-card-body style="padding: 0rem;">
           <slot-card
             v-for="x in selectedSlots"
-            :key="x"
+            :key="'slots_' + x.id"
             icon="Trash2Icon"
-            :statistic="x.time"
+            :statistic="x.start_time"
             :statistic-title="x.price"
-            :date="checkoutDate"
+            :date="moment(checkoutDate).format('YYYY-MMM-DD')"
             class="slotCard"
             @clicke="removeSlot(x)"
           />
@@ -206,7 +234,7 @@
 
 <script>
 import {
-  BCardHeader, BCardBody, BCard, BButton, BImg, BRow, BCol, BDropdown, BDropdownItem,
+  BCardHeader, BCardBody, BCard, BButton, BImg, BRow, BCol, BDropdown, BDropdownItem, BSkeletonTable,
 } from 'bootstrap-vue'
 
 import VueSlickCarousel from 'vue-slick-carousel'
@@ -218,6 +246,8 @@ import gql from 'graphql-tag'
 import Ripple from 'vue-ripple-directive'
 import SlotCard from './SlotCard.vue'
 import SlotSelectCard from './SlotSelectCard.vue'
+import ToastificationContent
+  from '../../../../../../admin-panel/src/@core/components/toastification/ToastificationContent.vue'
 
 export default {
   components: {
@@ -225,6 +255,7 @@ export default {
     BCardBody,
     BCard,
     BButton,
+    BSkeletonTable,
     VueSlickCarousel,
     SlotCard,
     BImg,
@@ -239,8 +270,11 @@ export default {
   },
   data() {
     return {
+      slotsFetching: true,
       turfID: null,
       facilityID: null,
+      turfData: {},
+      facilityData: {},
       facilities: [{
         sport: 'Badminton',
         type: '1v1',
@@ -364,38 +398,193 @@ export default {
       totalPrice: 0,
       showSummary: 0,
       canCheckout: false,
-      checkoutDate: moment().format('DD MMM YYYY'),
+      checkoutDate: moment().toISOString(),
       convFees: 0,
       discount: 0,
       checkoutAmt: 0,
-      selected: 'Badminton 1v1',
+      selected: null,
     }
+  },
+  computed: {
+    getTotal() {
+      if (this.selectedSlots.length < 0) {
+        return 0
+      }
+      let sum = 0
+      this.selectedSlots.forEach(slot => {
+        sum += slot.price
+      })
+      return sum
+    },
+    getSelectedFacilities() {
+      return this.selectedSlots.length
+    },
   },
   created() {
     // console.log(this.$route.params)
     this.turfID = this.$route.params.turf
     this.facilityID = this.$route.params.facility
   },
-  mounted() {
-    // console.log(this.turfID, this.facilityID)
+  async mounted() {
+    console.log(this.turfID, this.facilityID)
+    await this.getTurfData()
+    await this.getFacilityData()
+    this.checkoutDate = moment().toISOString()
+    await this.getSlots()
   },
   methods: {
+    isDateSelected(date) {
+      const d1 = moment(date).format('YYYY-MM-DD')
+      const d2 = moment(this.checkoutDate).format('YYYY-MM-DD')
+      if (d1 === d2) {
+        return true
+      }
+      return false
+    },
+    selectFacility(x) {
+      this.facilityID = x.id
+      this.selected = x
+    },
+    async getTurfData() {
+      const result = await this.$apollo.query({
+        query: gql`query ($id: bigint!) {
+          turf_by_pk(id: $id) {
+            id
+            name
+            pincode
+            city
+            about
+            contactPhone
+            gMapsBusinessLink
+            address
+            images{
+              url
+              id
+            }
+            facilities {
+              id
+              type
+              price
+              weekendPrice
+              sport{
+                id
+                name
+                images{
+                  url
+                }
+              }
+            }
+            ratings_aggregate {
+              aggregate {
+                avg {
+                  ratings
+                }
+              }
+            }
+          }
+        }`,
+        variables: {
+          id: this.turfID,
+        },
+      })
+      const turf = result.data.turf_by_pk
+      const t = {
+        ...turf,
+        rating: turf.ratings_aggregate.aggregate.avg.ratings,
+        sports: [],
+      }
+      delete t.ratings_aggregate
+      const dict = {}
+      turf.facilities.forEach(facility => {
+        if (facility.id === this.facilityID) {
+          this.selected = facility
+        }
+        if (!(facility.sport.id in dict)) {
+          dict[facility.sport.id] = true
+          t.sports.push({
+            id: facility.sport.id,
+            name: facility.sport.name,
+            image: facility.sport.images[0].url,
+          })
+        }
+      })
+      this.turfData = t
+    },
+    async getFacilityData() {
+      const result = await this.$apollo.query({
+        query: gql`query ($id: Int!) {
+          facilities_by_pk(id: $id) {
+            id
+            max_players
+            name
+            price
+            slot_size
+            sport {
+              id
+              name
+              images {
+                url
+              }
+            }
+            weekendPrice
+            type
+            status
+          }
+        }`,
+        variables: {
+          id: this.facilityID,
+        },
+      })
+      this.facilityData = result.data.facilities_by_pk
+    },
+    async getSlots() {
+      this.slotsFetching = true
+      this.selectedSlots = []
+      const result = await this.$apollo.query({
+        query: gql`query ($date: date, $id: Int!) {
+          facilities_by_pk(id: $id) {
+            id
+            slots {
+              disabled
+              end_time
+              id
+              start_time
+              bookings_aggregate(where: {reservation_date: {_eq: $date}}) {
+                aggregate {
+                  count
+                }
+              }
+            }
+          }
+        }`,
+        variables: {
+          id: this.facilityID,
+          date: this.checkoutDate,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      let { price } = this.facilityData
+      if (moment(this.checkoutDate).day() === 0 || moment(this.checkoutDate).day() === 6) {
+        price = this.facilityData.weekendPrice
+      }
+      this.slots = result.data.facilities_by_pk.slots.map(slot => ({
+        id: slot.id,
+        start_time: moment(slot.start_time, 'HH:mm:ss').format('hh:mm A'),
+        end_time: moment(slot.end_time, 'HH:mm:ss').format('hh:mm A'),
+        disabled: slot.disabled || slot.bookings_aggregate.aggregate.count !== 0,
+        date: this.checkoutDate,
+        price,
+      }))
+      console.log(this.slots)
+      this.slotsFetching = false
+    },
     moment() {
       return moment()
     },
-    getDate(e) {
-      this.checkoutDate = moment(e.target.value).format('DD MMM YYYY')
-      this.selectedDate = this.dates.filter(x => x.date.includes(e.target.value.toString()))
+    getDate(date) {
+      this.checkoutDate = date.toISOString()
+      this.getSlots()
     },
-    // getSlot(e, i) {
-    //   // console.log(e.target.value)
-    //   console.log(this.selectedSlots.time)
-    //   if (this.selectedSlots.includes(e.target.value)) {
-    //     this.selectedSlots.splice(i - 1, 1)
-    //   } else {
-    //     this.selectedSlots.push(e.target.value)
-    //   }
-    // },
     onRowSelected(item) {
       this.selectedSlots.push(item)
       this.slotsSelected = this.selectedSlots.length
@@ -444,19 +633,6 @@ export default {
       }
       return false
     },
-    async getSlots() {
-      const result = await this.$apollo.query({
-        query: gql`query {
-            slots(where: {facility_id: {_eq: 10}}) {
-                start_time
-            }
-        }`,
-      })
-      this.slotts = result.data.slots.map(slots => ({
-        start_time: slots.start_time,
-      }))
-      // console.log(this.slotts)
-    },
     goBack() {
       this.$router.go(-1)
     },
@@ -470,8 +646,111 @@ export default {
         this.checkoutAmt = this.totalPrice + this.convFees - this.discount
       }
     },
-    checkout() {
+    async checkout() {
       this.showSummary = 2
+      await this.$apollo.mutate({
+        mutation: gql`mutation ($facilityId: Int, $contactName: String, $contactPhone: String, $reservationDate: date, $reservationStartTime: timestamptz, $reservationEndTime: timestamptz, $slotId: bigint) {
+          insert_bookings_one(object: {contact_name: $contactName, contact_phone: $contactPhone, facility_id: $facilityId, reservation_date: $reservationDate, reservation_end_time: $reservationEndTime, reservation_start_time: $reservationStartTime, slot_id: $slotId, split_payment: false}) {
+            booking_status
+            created_at
+            payment_status
+          }
+        }`,
+        variables: {
+          facilityId: this.facilityID,
+          contactName: this.contactName,
+          contactPhone: this.contactPhone,
+          reservationDate: this.checkoutDate,
+          reservationStartTime: this.checkoutDate,
+          reservationEndTime: this.checkoutDate,
+          slotId: this.city,
+        },
+        update: async (cache, { data: { insert_turf_one } }) => {
+          // Read the data from our cache for this query.
+          try {
+            const data = await cache.readQuery({
+              query: gql`query {
+                      turf {
+                        id
+                        name
+                        pincode
+                        city
+                        ratings_aggregate {
+                          aggregate {
+                            avg {
+                              ratings
+                            }
+                          }
+                        }
+                        facilities_aggregate {
+                          aggregate {
+                            count
+                          }
+                        }
+                        status
+                      }
+                    }`,
+            })
+            data.turf.splice(0, 0, insert_turf_one)
+            await cache.writeQuery({
+              query: gql`query {
+                      turf {
+                        id
+                        name
+                        pincode
+                        city
+                        ratings_aggregate {
+                          aggregate {
+                            avg {
+                              ratings
+                            }
+                          }
+                        }
+                        facilities_aggregate {
+                          aggregate {
+                            count
+                          }
+                        }
+                        status
+                      }
+                    }`,
+              data,
+            })
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Success',
+                icon: 'CheckIcon',
+                text: 'Added turf successfully!',
+                variant: 'success',
+              },
+            })
+            this.$emit('refetch-data', true)
+          } catch (e) {
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Error adding turf',
+                icon: 'XCircleIcon',
+                text: e.message,
+                variant: 'danger',
+              },
+            })
+          }
+        },
+      }).catch(e => {
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Error adding turf',
+            icon: 'XCircleIcon',
+            text: e,
+            variant: 'danger',
+          },
+        })
+      })
+      this.reset()
+      this.isAddNewUserSidebarActive = false
     },
     getIcon(icon) {
       if (icon) {
@@ -586,6 +865,10 @@ export default {
   font-size: 1.04rem;
 }
 [dir] .date-btn:hover:not(.disabled):not(:disabled) {
+  background: #202023!important;
+  color:white!important;
+}
+.date-active {
   background: #202023!important;
   color:white!important;
 }

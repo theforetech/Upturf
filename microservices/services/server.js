@@ -14,12 +14,30 @@ const PORT = process.env.PORT || 8000;
 
 app.use(bodyParser.json());
 
-app.post('/razorpay', async (req, res) => {
+// app.post('/razorpay', async (req, res) => {
+//
+//   return res.status(200).json({
+//     status: "ok"
+//   });
+// });
 
-  return res.status(200).json({
-    status: "ok"
-  });
+app.post('/book', async (req, res, next) => {
+  try {
+    const userID = req.body.session_variables['x-hasura-user-id']
+    const userRole = req.body.session_variables['x-hasura-role']
+    let { facility, slots, contactName, contactPhone, date } = req.body.input;
+    
+    console.log(userID, userRole)
+    console.log(req.body.input)
+    return res.status(200).json({
+      status: "ok",
+      id: "123"
+    });
+  } catch (e) {
+    next(e);
+  }
 });
+
 app.post('/createSlots', async (req, res) => {
   async function getTimeStops(start, end, interval){
     const startTime = moment(start, 'HH:mm:ss');

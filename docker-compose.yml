@@ -45,9 +45,9 @@ services:
     restart: always
     environment:
       HASURA_SECRET: SurfATurf
-  triggers:
-    image: surfaturf/triggers:latest
-    container_name: triggers
+  services:
+    image: surfaturf/services:latest
+    container_name: services
     restart: always
     environment:
       HASURA_SECRET: SurfATurf

@@ -46,7 +46,7 @@ export default {
       required: true,
     },
     statisticTitle: {
-      type: String,
+      type: [Number, String],
       default: '',
     },
     color: {

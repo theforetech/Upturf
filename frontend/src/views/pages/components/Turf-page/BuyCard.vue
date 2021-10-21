@@ -55,7 +55,7 @@ export default {
       default: null,
     },
     turfID: {
-      type: Number,
+      type: String,
       default: null,
     },
     facilityName: {
