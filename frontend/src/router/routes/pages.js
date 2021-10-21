@@ -266,6 +266,26 @@ export default [
     },
   },
   {
+    path: '/pages/components/user-bookings',
+    name: 'pages-booking',
+    component: () => import('@/views/pages/components/user/UserBookings'),
+    meta: {
+      layout: 'full',
+      pageTitle: 'Bookings',
+      breadcrumb: [
+        {
+          text: 'Pages',
+        },
+        {
+          text: 'Bookings',
+          active: true,
+        },
+      ],
+    },
+
+  },
+
+  {
     path: '/pages/faq',
     name: 'pages-faq',
     component: () => import('@/views/pages/faq/Faq.vue'),

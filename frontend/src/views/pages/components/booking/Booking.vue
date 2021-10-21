@@ -73,6 +73,9 @@
         </b-card-body>
       </b-card>
       <b-card>
+        <b-card-header style="padding:0;">
+          <span style="font-size: 1.1rem;font-weight: 500;color:rgb(24, 24, 24);line-height: 2"> Slot(s) Selection:</span>
+        </b-card-header>
         <b-card-body style="padding: 0rem;">
           <slot-select-card
             v-for="x in selectedDate[0].slots"
