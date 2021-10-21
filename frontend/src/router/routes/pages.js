@@ -245,7 +245,7 @@ export default [
   },
   {
     path: '/pages/components/booking',
-    name: 'pages-turfs',
+    name: 'booking',
     component: () => import('@/views/pages/components/booking/Booking'),
     meta: {
       layout: 'full',
@@ -259,6 +259,10 @@ export default [
           active: true,
         },
       ],
+    },
+    props: {
+      header: true,
+      content: true,
     },
   },
   {

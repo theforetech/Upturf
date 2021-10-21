@@ -18,6 +18,7 @@
     <b-button
       v-ripple.400="'rgba(255, 255, 255, 0.15)'"
       variant="primary"
+      @click="book"
     >
       BOOK
     </b-button>
@@ -49,6 +50,14 @@ export default {
     Ripple,
   },
   props: {
+    facilityID: {
+      type: Number,
+      default: null,
+    },
+    turfID: {
+      type: Number,
+      default: null,
+    },
     facilityName: {
       type: String,
       default: '',
@@ -68,6 +77,17 @@ export default {
     facilityType: {
       type: String,
       default: '',
+    },
+  },
+  methods: {
+    book() {
+      this.$router.push({
+        name: 'booking',
+        params: {
+          facility: this.facilityID,
+          turf: this.turfID,
+        },
+      })
     },
   },
 }
