@@ -214,6 +214,7 @@ export default {
   },
   mounted() {
     this.sportData = this.sport
+    console.log(this.sportData)
   },
   beforeDestroy() {
     this.$emit('reset-sport', true)
@@ -337,7 +338,7 @@ export default {
           }
         }`,
         variables: {
-          id: this.sportData.images[0].id,
+          id: this.sportData.imgID,
         },
         update: async cache => {
           // Read the data from our cache for this query.

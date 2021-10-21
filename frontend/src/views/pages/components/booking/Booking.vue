@@ -1,7 +1,110 @@
 <template>
-
   <div>
-    <div v-if="showSummary===1">
+    <div v-if="showSummary===0">
+      <b-card
+        no-body
+      >
+        <b-card-header>
+          <b-button
+            v-ripple.200="'rgba(135, 135, 149 ,0.3)'"
+            class="back"
+            @click="goBack"
+          >
+            <feather-icon
+              icon="ChevronLeftIcon"
+              size="27"
+              style="color: #1e1e1e;"
+            />
+          </b-button> <span style="margin: auto;font-size: 1.2rem;font-weight: 500">{{ turf.name }}</span>
+        </b-card-header>
+      </b-card>
+      <b-card>
+        <b-card-header style="padding-top:0;padding-right:0;padding-left: 0">
+          <span style="font-size: 1.1rem;font-weight: 500;color:rgb(24, 24, 24);line-height: 2">
+            Facility(s)
+          </span>
+          <b-dropdown
+            id="dropdown-grouped"
+            v-model="selected"
+            v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+            variant="outline-dark"
+            block
+            center
+            class="dropdown facDrop"
+            menu-class="w-100"
+          >
+            <template #button-content>
+              <span class="mr-1">{{ selected }}</span>
+            </template>
+
+            <b-dropdown-item
+              v-for="x in facilities"
+              :key="x"
+            >
+              <span class="mr-1">{{ x.sport }} - {{ x.type }}</span>
+            </b-dropdown-item>
+
+          </b-dropdown>
+
+        </b-card-header>
+        <b-card-body
+          class="date"
+        >
+          <span style="font-size: 1.1rem;font-weight: 500;color:rgb(24, 24, 24);line-height: 2">
+            Select your date.
+          </span>
+          <VueSlickCarousel
+            ref="carousel"
+            v-bind="settings"
+          >
+            <div
+              v-for="(x,i) in daysOfWeek"
+              :key="x"
+            >
+              <b-button
+                class="date-btn"
+                :value="moment().add(i,'d').format('YYYY-MM-DD')"
+                @click="getDate($event)"
+              >
+                {{ moment().add(i,'d').format('ddd') }} <br>
+                {{ moment().add(i,'d').format('MMM Do') }}
+              </b-button></div>
+          </VueSlickCarousel>
+        </b-card-body>
+      </b-card>
+      <b-card>
+        <b-card-header style="padding:0;">
+          <span style="font-size: 1.1rem;font-weight: 500;color:rgb(24, 24, 24);line-height: 2"> Slot(s) Selection:</span>
+        </b-card-header>
+        <b-card-body style="padding: 0rem;">
+          <slot-select-card
+            v-for="x in selectedDate[0].slots"
+            :key="x"
+            :icon="getIcon(isRowSelected(x))"
+            :statistic="x.time"
+            :statistic-title="x.price"
+            :date="checkoutDate"
+            :color="getSlotColor(isRowSelected(x))"
+            :border-color="getBorderColor(isRowSelected(x))"
+            class="slotCard"
+            @clicked="toggleRow(x)"
+          />
+
+        </b-card-body>
+      </b-card>
+
+      <div class="booking-bar">
+        <span>Slot(s) : {{ slotsSelected }} • &nbsp; ₹ {{ totalPrice }} Plus Charges </span>
+        <b-button
+          v-ripple.400="'rgba(40, 199, 111, 0.3)'"
+          :disabled="!canCheckout"
+          @click="summary()"
+        >
+          Summary →
+        </b-button>
+      </div>
+    </div>
+    <div v-else-if="showSummary===1">
       <b-card
         no-body
       >
@@ -76,111 +179,6 @@
         </b-button>
       </div>
     </div>
-    <div v-else-if="showSummary===0">
-      <b-card
-        no-body
-      >
-        <b-card-header>
-          <b-button
-            v-ripple.200="'rgba(135, 135, 149 ,0.3)'"
-            class="back"
-            @click="goBack"
-          >
-            <feather-icon
-              icon="ChevronLeftIcon"
-              size="27"
-              style="color: #1e1e1e;"
-            />
-          </b-button> <span style="margin: auto;font-size: 1.2rem;font-weight: 500">{{ turf.name }}</span>
-        </b-card-header>
-      </b-card>
-      <b-card>
-        <b-card-header style="padding-top:0;padding-right:0;padding-left: 0">
-          <span style="font-size: 1.1rem;font-weight: 500;color:rgb(24, 24, 24);line-height: 2">
-            Facility(s)
-          </span>
-          <b-dropdown
-            id="dropdown-grouped"
-            v-model="selected"
-            v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-            variant="outline-dark"
-            block
-            center
-            class="dropdown facDrop"
-            menu-class="w-100"
-          >
-            <template #button-content>
-              <span class="mr-1">{{ selected }}</span>
-
-            </template>
-
-            <b-dropdown-item
-              v-for="x in facilities"
-              :key="x"
-            >
-              <span class="mr-1">{{ x.sport }} - {{ x.type }}</span>
-            </b-dropdown-item>
-
-          </b-dropdown>
-
-        </b-card-header>
-        <b-card-body
-          class="date"
-        >
-          <span style="font-size: 1.1rem;font-weight: 500;color:rgb(24, 24, 24);line-height: 2">
-            Select your date.
-          </span>
-          <VueSlickCarousel
-            ref="carousel"
-            v-bind="settings"
-          >
-            <div
-              v-for="(x,i) in daysOfWeek"
-              :key="x"
-            >
-              <b-button
-                class="date-btn"
-                :value="moment().add(i,'d').format('YYYY-MM-DD')"
-                @click="getDate($event)"
-              >
-                {{ moment().add(i,'d').format('ddd') }} <br>
-                {{ moment().add(i,'d').format('MMM Do') }}
-              </b-button></div>
-          </VueSlickCarousel>
-        </b-card-body>
-      </b-card>
-      <b-card>
-        <b-card-header style="padding:0;">
-          <span style="font-size: 1.1rem;font-weight: 500;color:rgb(24, 24, 24);line-height: 2"> Slot(s) Selection:</span>
-        </b-card-header>
-        <b-card-body style="padding: 0rem;">
-          <slot-select-card
-            v-for="x in selectedDate[0].slots"
-            :key="x"
-            :icon="getIcon(isRowSelected(x))"
-            :statistic="x.time"
-            :statistic-title="x.price"
-            :date="checkoutDate"
-            :color="getSlotColor(isRowSelected(x))"
-            :border-color="getBorderColor(isRowSelected(x))"
-            class="slotCard"
-            @clicked="toggleRow(x)"
-          />
-
-        </b-card-body>
-      </b-card>
-
-      <div class="booking-bar">
-        <span>Slot(s) : {{ slotsSelected }} • &nbsp; ₹ {{ totalPrice }} Plus Charges </span>
-        <b-button
-          v-ripple.400="'rgba(40, 199, 111, 0.3)'"
-          :disabled="!canCheckout"
-          @click="summary()"
-        >
-          Summary →
-        </b-button>
-      </div>
-    </div>
     <div v-else-if="showSummary===2">
       <b-row
         class="vh-100 text-center"
@@ -241,6 +239,8 @@ export default {
   },
   data() {
     return {
+      turfID: null,
+      facilityID: null,
       facilities: [{
         sport: 'Badminton',
         type: '1v1',
@@ -371,8 +371,13 @@ export default {
       selected: 'Badminton 1v1',
     }
   },
+  created() {
+    // console.log(this.$route.params)
+    this.turfID = this.$route.params.turf
+    this.facilityID = this.$route.params.facility
+  },
   mounted() {
-
+    // console.log(this.turfID, this.facilityID)
   },
   methods: {
     moment() {
@@ -450,6 +455,7 @@ export default {
       this.slotts = result.data.slots.map(slots => ({
         start_time: slots.start_time,
       }))
+      // console.log(this.slotts)
     },
     goBack() {
       this.$router.go(-1)

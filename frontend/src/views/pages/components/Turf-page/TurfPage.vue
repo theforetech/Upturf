@@ -184,23 +184,25 @@
 
         <!-- body -->
         <b-card-body style="padding-bottom: 50px;">
-          <!--          <VueSlickCarousel-->
-          <!--            ref="carousel"-->
-          <!--            v-bind="settings"-->
-          <!--          >-->
-          <!--            <div-->
-          <!--              v-for="x in turfData.facilities"-->
-          <!--              :key="x.id + x.name + 'sd'"-->
-          <!--            >-->
-          <!--              <buy-card-->
-          <!--                :facility-name="x.sport.name[0].toUpperCase() + x.sport.name.slice(1)"-->
-          <!--                :facility-type="x.type"-->
-          <!--                :cost="x.price"-->
-          <!--                :weekend-cost="x.weekendPrice"-->
-          <!--                :sport="x.sport.images[0].url"-->
-          <!--              />-->
-          <!--            </div>-->
-          <!--          </VueSlickCarousel>-->
+          <VueSlickCarousel
+            ref="carousel"
+            v-bind="settings"
+          >
+            <div
+              v-for="x in turfData.facilities"
+              :key="x.id + x.name + 'sd'"
+            >
+              <buy-card
+                :facility-i-d="x.id"
+                :turf-i-d="turfID"
+                :facility-name="x.sport.name[0].toUpperCase() + x.sport.name.slice(1)"
+                :facility-type="x.type"
+                :cost="x.price"
+                :weekend-cost="x.weekendPrice"
+                :sport="x.sport.images[0].url"
+              />
+            </div>
+          </VueSlickCarousel>
         </b-card-body>
       </b-card>
       <b-card
