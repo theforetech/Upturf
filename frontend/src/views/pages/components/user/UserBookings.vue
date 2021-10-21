@@ -19,7 +19,7 @@
     </b-card>
     <BookedCard
       v-for="x in bookings"
-      :key="x"
+      :key="x.id"
       :turf="x.turf"
       :slots="x.slots"
       :amount="x.amount"
@@ -59,6 +59,7 @@ export default {
     return {
       bookings: [
         {
+          id: '0',
           turf: 'Sirifort Stadium',
           sport: 'Football',
           facility: '3 v 3',
@@ -66,8 +67,10 @@ export default {
           amount: '3000',
           tag: 'Upcoming',
           date: '2021 10 28',
+
         },
         {
+          id: '1',
           turf: 'Manav Rachna Sport Academy',
           sport: 'Football',
           facility: '3 v 3',
@@ -77,6 +80,7 @@ export default {
           date: '2021 10 28',
         },
         {
+          id: '2',
           turf: 'Panchsheel Club',
           sport: 'Badminton',
           facility: '1 v 1',
@@ -86,6 +90,7 @@ export default {
           date: '2021 09 22',
         },
         {
+          id: '3',
           turf: 'Panchsheel Club',
           sport: 'Basketball',
           facility: '5 v 5',

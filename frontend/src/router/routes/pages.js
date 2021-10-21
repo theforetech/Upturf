@@ -284,7 +284,39 @@ export default [
     },
 
   },
+  {
+    path: '/pages/components/summary',
+    name: 'pages-summary',
+    component: () => import('@/views/pages/components/user/Summary'),
+    meta: {
+      layout: 'full',
+      pageTitle: 'Summary',
+      breadcrumb: [
+        {
+          text: 'Pages',
+        },
+        {
+          text: 'Summary',
+          active: true,
+        },
+      ],
+    },
 
+  },
+  {
+    path: '/search',
+    name: 'pages-search',
+    component: () => import('@/views/pages/components/Search'),
+    meta: {
+      pageTitle: '',
+      breadcrumb: [
+        {
+          text: 'Search',
+          active: true,
+        },
+      ],
+    },
+  },
   {
     path: '/pages/faq',
     name: 'pages-faq',

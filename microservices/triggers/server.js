@@ -20,6 +20,12 @@ app.post('/razorpay', async (req, res) => {
     status: "ok"
   });
 });
+app.post('/book', async (req, res) => {
+
+  return res.status(200).json({
+    status: "ok"
+  });
+});
 app.post('/createSlots', async (req, res) => {
   async function getTimeStops(start, end, interval){
     const startTime = moment(start, 'HH:mm:ss');

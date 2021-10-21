@@ -6,31 +6,44 @@
       <b-row
         style="padding-bottom: 1.5rem"
       >
-        <b-col>
+        <b-col
+          style="padding-left: 0;padding-right: 3rem"
+          cols="1"
+          align-h="start"
+        >
           <b-img
             :src="url"
             class="sport-image"
           />
         </b-col>
-        <b-col>
-          <h2 style="font-size: 1rem;color:#202023">
-            {{ facility }}
-          </h2>
-          <h2 style="font-size: 0.8rem;color:#3D3D42;overflow-wrap: break-word;">
-            {{ turf }}
-          </h2>
-          <h2 style="font-size: 0.8rem;color:#3D3D42;">
-            {{ dateFormat }}
-          </h2>
+        <b-col
+          cols="6"
+          align-h="center"
+          style="padding-left: 0.2rem;"
+        >
+          <div>
+            <h2 style="font-size: 1rem;color:#202023">
+              {{ facility }}
+            </h2>
+            <h2 style="font-size: 0.8rem;color:#3D3D42;overflow-wrap: break-word;">
+              {{ turf }}
+            </h2>
+            <h2 style="font-size: 0.72rem;color:#3D3D42;">
+              Booking Date: {{ dateFormat }}
+            </h2>
+          </div>
+
         </b-col>
-        <b-col style="position: absolute;right: 3%;">
+        <b-col
+          align-h="end"
+        >
           <b-badge :variant="statusCheck.color">
             {{ statusCheck.name }}
           </b-badge>
           <h2 style="font-size: 1rem;color:#202023;padding-top: 0.6rem">
             ₹ {{ amount }}
           </h2>
-          <h2 style="font-size: 0.8rem;color:#3D3D42">
+          <h2 style="font-size: 0.72rem;color:#3D3D42">
             Slots: {{ slots }}
           </h2>
         </b-col>
@@ -64,7 +77,7 @@
 
 <script>
 import {
-  BCard, BButton, BImg, BRow, BBadge, BContainer,
+  BCard, BButton, BImg, BRow, BBadge, BContainer, BCol,
   // , BCardText, BLink
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
@@ -80,6 +93,7 @@ export default {
     BRow,
     BContainer,
     BBadge,
+    BCol,
   },
   directives: {
     Ripple,
@@ -88,30 +102,37 @@ export default {
     turf: {
       type: String,
       required: true,
+      default: '',
     },
     amount: {
       type: String,
       required: true,
+      default: '',
     },
     slots: {
       type: Number,
       required: true,
+      default: 0,
     },
     sport: {
       type: String,
       required: true,
+      default: '',
     },
     facility: {
-      type: Number,
+      type: String,
       required: true,
+      default: '',
     },
     tag: {
       type: String,
       required: true,
+      default: '',
     },
     date: {
       type: String,
       required: true,
+      default: '',
     },
   },
   data() {
