@@ -42,7 +42,6 @@ const router = new VueRouter({
 
 router.beforeEach(async (to, from, next) => {
   const isLoggedIn = AuthService.isAuthenticated()
-
   if (!canNavigate(to)) {
     // Redirect to login if not logged in
     if (!isLoggedIn) return next({ name: 'auth-login', query: { redirect: to.path } })

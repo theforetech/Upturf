@@ -1,5 +1,29 @@
 <template>
   <div
+    v-if="loading"
+  >
+    <b-row
+      class="vh-100 text-center"
+      align-h="center"
+      align-v="center"
+    ><b-col />
+      <b-col
+        cols="10"
+      >
+        <b-img
+          src="/images/loading/loading2.gif"
+          fluid-growth
+          style="height: 20rem;margin:auto"
+        />
+        <h2 style="margin-left: 1rem">
+          Getting Turf! Please be patient.
+        </h2>
+      </b-col>
+      <b-col />
+    </b-row>
+  </div>
+  <div
+    v-else
     id="user-profile"
   >
     <b-card
@@ -154,7 +178,7 @@
       >
         <b-col
           v-for="x in turfData.sports"
-          :key="x"
+          :key="x.id"
           cols="1"
           style="padding: 0px"
         >
@@ -230,7 +254,7 @@
           <b-card-text class="font-small-2" />
           <div
             v-for="x in amenities"
-            :key="x.img"
+            :key="x.name"
             class="browser-states"
           >
             <b-media no-body>
@@ -332,6 +356,7 @@ export default {
   data() {
     return {
       turfID: null,
+      loading: true,
       facilities: [
         {
           facilityName: 'Football',
@@ -446,12 +471,12 @@ export default {
   },
   mounted() {
     this.turfID = this.$route.params.id
-    console.log(this.turfID)
+    // console.log(this.turfID)
     this.getTurfData()
   },
   methods: {
     async getTurfData() {
-      console.log('sd')
+      // console.log('sd')
       const result = await this.$apollo.query({
         query: gql`query ($id: bigint!) {
           turf_by_pk(id: $id) {
@@ -512,7 +537,11 @@ export default {
         }
       })
       this.turfData = t
-      console.log(this.turfData)
+      const vm = this
+      setTimeout(() => {
+        vm.loading = false
+      }, 750)
+      // console.log(this.turfData)
     },
     navigateBack() {
       this.$router.go(-1)

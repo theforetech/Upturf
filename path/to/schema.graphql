@@ -17,6 +17,7 @@ type FileOutput {
 type bookOutput {
     amount: Int
     id: String
+    razorpay: String
 }
 
 "columns and relationships of \"booked_slots\""
@@ -169,7 +170,7 @@ type bookings {
         "filter the rows returned"
         where: booked_slots_bool_exp
     ): booked_slots_aggregate!
-    booking_status: Boolean!
+    booking_status: Int!
     contact_name: String!
     contact_phone: String!
     created_at: timestamptz
@@ -177,9 +178,9 @@ type bookings {
     facility: facilities!
     facility_id: Int!
     id: uuid!
-    payment_status: payment_status_enum_enum
+    payment_status: payment_status_enum_enum!
     "An object relationship"
-    payment_status_enum: payment_status_enum
+    payment_status_enum: payment_status_enum!
     "An array relationship"
     payments(
         "distinct select on columns"
@@ -240,6 +241,7 @@ type bookings_aggregate_fields {
 "aggregate avg on columns"
 type bookings_avg_fields {
     amount: Float
+    booking_status: Float
     facility_id: Float
     split_amount: Float
     split_members: Float
@@ -248,6 +250,7 @@ type bookings_avg_fields {
 "aggregate max on columns"
 type bookings_max_fields {
     amount: Int
+    booking_status: Int
     contact_name: String
     contact_phone: String
     created_at: timestamptz
@@ -263,6 +266,7 @@ type bookings_max_fields {
 "aggregate min on columns"
 type bookings_min_fields {
     amount: Int
+    booking_status: Int
     contact_name: String
     contact_phone: String
     created_at: timestamptz
@@ -286,6 +290,7 @@ type bookings_mutation_response {
 "aggregate stddev on columns"
 type bookings_stddev_fields {
     amount: Float
+    booking_status: Float
     facility_id: Float
     split_amount: Float
     split_members: Float
@@ -294,6 +299,7 @@ type bookings_stddev_fields {
 "aggregate stddev_pop on columns"
 type bookings_stddev_pop_fields {
     amount: Float
+    booking_status: Float
     facility_id: Float
     split_amount: Float
     split_members: Float
@@ -302,6 +308,7 @@ type bookings_stddev_pop_fields {
 "aggregate stddev_samp on columns"
 type bookings_stddev_samp_fields {
     amount: Float
+    booking_status: Float
     facility_id: Float
     split_amount: Float
     split_members: Float
@@ -310,6 +317,7 @@ type bookings_stddev_samp_fields {
 "aggregate sum on columns"
 type bookings_sum_fields {
     amount: Int
+    booking_status: Int
     facility_id: Int
     split_amount: Int
     split_members: Int
@@ -318,6 +326,7 @@ type bookings_sum_fields {
 "aggregate var_pop on columns"
 type bookings_var_pop_fields {
     amount: Float
+    booking_status: Float
     facility_id: Float
     split_amount: Float
     split_members: Float
@@ -326,6 +335,7 @@ type bookings_var_pop_fields {
 "aggregate var_samp on columns"
 type bookings_var_samp_fields {
     amount: Float
+    booking_status: Float
     facility_id: Float
     split_amount: Float
     split_members: Float
@@ -334,9 +344,16 @@ type bookings_var_samp_fields {
 "aggregate variance on columns"
 type bookings_variance_fields {
     amount: Float
+    booking_status: Float
     facility_id: Float
     split_amount: Float
     split_members: Float
+}
+
+type cancelOutput {
+    id: String!
+    refundID: String
+    status: String!
 }
 
 "columns and relationships of \"facilities\""
@@ -685,6 +702,7 @@ type images_variance_fields {
 "mutation root"
 type mutation_root {
     book(contactName: String, contactPhone: String, date: date, facility: Int, slots: [bigint]): bookOutput
+    cancel(bookingID: uuid!): cancelOutput
     "delete data from the table: \"booked_slots\""
     delete_booked_slots(
         "filter the rows which have to be deleted"
@@ -726,7 +744,7 @@ type mutation_root {
         where: payments_bool_exp!
     ): payments_mutation_response
     "delete single row from the table: \"payments\""
-    delete_payments_by_pk(id: uuid!): payments
+    delete_payments_by_pk(id: String!): payments
     "delete data from the table: \"rating\""
     delete_rating(
         "filter the rows which have to be deleted"
@@ -1191,6 +1209,32 @@ type payment_status_enum {
         where: bookings_bool_exp
     ): bookings_aggregate!
     description: String!
+    "An array relationship"
+    payments(
+        "distinct select on columns"
+        distinct_on: [payments_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [payments_order_by!],
+        "filter the rows returned"
+        where: payments_bool_exp
+    ): [payments!]!
+    "An aggregate relationship"
+    payments_aggregate(
+        "distinct select on columns"
+        distinct_on: [payments_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [payments_order_by!],
+        "filter the rows returned"
+        where: payments_bool_exp
+    ): payments_aggregate!
     status: String!
 }
 
@@ -1233,13 +1277,16 @@ type payments {
     booking: bookings!
     booking_id: uuid!
     created_at: timestamptz!
-    id: uuid!
-    payment_approved: Boolean!
+    id: String!
+    payment_captured: Boolean!
     payment_obj(
         "JSON select path"
         path: String
     ): json
-    payment_status: String!
+    payment_status: payment_status_enum_enum!
+    "An object relationship"
+    payment_status_enum: payment_status_enum!
+    refund_id: String
     updated_at: timestamptz!
 }
 
@@ -1260,8 +1307,8 @@ type payments_aggregate_fields {
 type payments_max_fields {
     booking_id: uuid
     created_at: timestamptz
-    id: uuid
-    payment_status: String
+    id: String
+    refund_id: String
     updated_at: timestamptz
 }
 
@@ -1269,8 +1316,8 @@ type payments_max_fields {
 type payments_min_fields {
     booking_id: uuid
     created_at: timestamptz
-    id: uuid
-    payment_status: String
+    id: String
+    refund_id: String
     updated_at: timestamptz
 }
 
@@ -1450,7 +1497,7 @@ type query_root {
         where: payments_bool_exp
     ): payments_aggregate!
     "fetch data from the table: \"payments\" using primary key columns"
-    payments_by_pk(id: uuid!): payments
+    payments_by_pk(id: String!): payments
     "fetch data from the table: \"rating\""
     rating(
         "distinct select on columns"
@@ -2199,7 +2246,7 @@ type subscription_root {
         where: payments_bool_exp
     ): payments_aggregate!
     "fetch data from the table: \"payments\" using primary key columns"
-    payments_by_pk(id: uuid!): payments
+    payments_by_pk(id: String!): payments
     "fetch data from the table: \"rating\""
     rating(
         "distinct select on columns"
@@ -3154,6 +3201,8 @@ enum payment_status_enum_constraint {
 enum payment_status_enum_enum {
     "Payment Failed"
     failed
+    "Payment is being processed."
+    processing
     "Payment has been refunded"
     refunded
     "Payment Successful"
@@ -3191,11 +3240,13 @@ enum payments_select_column {
     "column name"
     id
     "column name"
-    payment_approved
+    payment_captured
     "column name"
     payment_obj
     "column name"
     payment_status
+    "column name"
+    refund_id
     "column name"
     updated_at
 }
@@ -3209,11 +3260,13 @@ enum payments_update_column {
     "column name"
     id
     "column name"
-    payment_approved
+    payment_captured
     "column name"
     payment_obj
     "column name"
     payment_status
+    "column name"
+    refund_id
     "column name"
     updated_at
 }
@@ -3819,6 +3872,7 @@ input bookings_arr_rel_insert_input {
 "order by avg() on columns of table \"bookings\""
 input bookings_avg_order_by {
     amount: order_by
+    booking_status: order_by
     facility_id: order_by
     split_amount: order_by
     split_members: order_by
@@ -3831,7 +3885,7 @@ input bookings_bool_exp {
     _or: [bookings_bool_exp!]
     amount: Int_comparison_exp
     booked_slots: booked_slots_bool_exp
-    booking_status: Boolean_comparison_exp
+    booking_status: Int_comparison_exp
     contact_name: String_comparison_exp
     contact_phone: String_comparison_exp
     created_at: timestamptz_comparison_exp
@@ -3853,6 +3907,7 @@ input bookings_bool_exp {
 "input type for incrementing numeric columns in table \"bookings\""
 input bookings_inc_input {
     amount: Int
+    booking_status: Int
     facility_id: Int
     split_amount: Int
     split_members: Int
@@ -3862,7 +3917,7 @@ input bookings_inc_input {
 input bookings_insert_input {
     amount: Int
     booked_slots: booked_slots_arr_rel_insert_input
-    booking_status: Boolean
+    booking_status: Int
     contact_name: String
     contact_phone: String
     created_at: timestamptz
@@ -3884,6 +3939,7 @@ input bookings_insert_input {
 "order by max() on columns of table \"bookings\""
 input bookings_max_order_by {
     amount: order_by
+    booking_status: order_by
     contact_name: order_by
     contact_phone: order_by
     created_at: order_by
@@ -3899,6 +3955,7 @@ input bookings_max_order_by {
 "order by min() on columns of table \"bookings\""
 input bookings_min_order_by {
     amount: order_by
+    booking_status: order_by
     contact_name: order_by
     contact_phone: order_by
     created_at: order_by
@@ -3956,7 +4013,7 @@ input bookings_pk_columns_input {
 "input type for updating data in table \"bookings\""
 input bookings_set_input {
     amount: Int
-    booking_status: Boolean
+    booking_status: Int
     contact_name: String
     contact_phone: String
     created_at: timestamptz
@@ -3974,6 +4031,7 @@ input bookings_set_input {
 "order by stddev() on columns of table \"bookings\""
 input bookings_stddev_order_by {
     amount: order_by
+    booking_status: order_by
     facility_id: order_by
     split_amount: order_by
     split_members: order_by
@@ -3982,6 +4040,7 @@ input bookings_stddev_order_by {
 "order by stddev_pop() on columns of table \"bookings\""
 input bookings_stddev_pop_order_by {
     amount: order_by
+    booking_status: order_by
     facility_id: order_by
     split_amount: order_by
     split_members: order_by
@@ -3990,6 +4049,7 @@ input bookings_stddev_pop_order_by {
 "order by stddev_samp() on columns of table \"bookings\""
 input bookings_stddev_samp_order_by {
     amount: order_by
+    booking_status: order_by
     facility_id: order_by
     split_amount: order_by
     split_members: order_by
@@ -3998,6 +4058,7 @@ input bookings_stddev_samp_order_by {
 "order by sum() on columns of table \"bookings\""
 input bookings_sum_order_by {
     amount: order_by
+    booking_status: order_by
     facility_id: order_by
     split_amount: order_by
     split_members: order_by
@@ -4006,6 +4067,7 @@ input bookings_sum_order_by {
 "order by var_pop() on columns of table \"bookings\""
 input bookings_var_pop_order_by {
     amount: order_by
+    booking_status: order_by
     facility_id: order_by
     split_amount: order_by
     split_members: order_by
@@ -4014,6 +4076,7 @@ input bookings_var_pop_order_by {
 "order by var_samp() on columns of table \"bookings\""
 input bookings_var_samp_order_by {
     amount: order_by
+    booking_status: order_by
     facility_id: order_by
     split_amount: order_by
     split_members: order_by
@@ -4022,6 +4085,7 @@ input bookings_var_samp_order_by {
 "order by variance() on columns of table \"bookings\""
 input bookings_variance_order_by {
     amount: order_by
+    booking_status: order_by
     facility_id: order_by
     split_amount: order_by
     split_members: order_by
@@ -4479,6 +4543,7 @@ input payment_status_enum_bool_exp {
     _or: [payment_status_enum_bool_exp!]
     bookings: bookings_bool_exp
     description: String_comparison_exp
+    payments: payments_bool_exp
     status: String_comparison_exp
 }
 
@@ -4495,6 +4560,7 @@ input payment_status_enum_enum_comparison_exp {
 input payment_status_enum_insert_input {
     bookings: bookings_arr_rel_insert_input
     description: String
+    payments: payments_arr_rel_insert_input
     status: String
 }
 
@@ -4516,6 +4582,7 @@ input payment_status_enum_on_conflict {
 input payment_status_enum_order_by {
     bookings_aggregate: bookings_aggregate_order_by
     description: order_by
+    payments_aggregate: payments_aggregate_order_by
     status: order_by
 }
 
@@ -4552,10 +4619,12 @@ input payments_bool_exp {
     booking: bookings_bool_exp
     booking_id: uuid_comparison_exp
     created_at: timestamptz_comparison_exp
-    id: uuid_comparison_exp
-    payment_approved: Boolean_comparison_exp
+    id: String_comparison_exp
+    payment_captured: Boolean_comparison_exp
     payment_obj: json_comparison_exp
-    payment_status: String_comparison_exp
+    payment_status: payment_status_enum_enum_comparison_exp
+    payment_status_enum: payment_status_enum_bool_exp
+    refund_id: String_comparison_exp
     updated_at: timestamptz_comparison_exp
 }
 
@@ -4564,10 +4633,12 @@ input payments_insert_input {
     booking: bookings_obj_rel_insert_input
     booking_id: uuid
     created_at: timestamptz
-    id: uuid
-    payment_approved: Boolean
+    id: String
+    payment_captured: Boolean
     payment_obj: json
-    payment_status: String
+    payment_status: payment_status_enum_enum
+    payment_status_enum: payment_status_enum_obj_rel_insert_input
+    refund_id: String
     updated_at: timestamptz
 }
 
@@ -4576,7 +4647,7 @@ input payments_max_order_by {
     booking_id: order_by
     created_at: order_by
     id: order_by
-    payment_status: order_by
+    refund_id: order_by
     updated_at: order_by
 }
 
@@ -4585,7 +4656,7 @@ input payments_min_order_by {
     booking_id: order_by
     created_at: order_by
     id: order_by
-    payment_status: order_by
+    refund_id: order_by
     updated_at: order_by
 }
 
@@ -4602,25 +4673,28 @@ input payments_order_by {
     booking_id: order_by
     created_at: order_by
     id: order_by
-    payment_approved: order_by
+    payment_captured: order_by
     payment_obj: order_by
     payment_status: order_by
+    payment_status_enum: payment_status_enum_order_by
+    refund_id: order_by
     updated_at: order_by
 }
 
 "primary key columns input for table: payments"
 input payments_pk_columns_input {
-    id: uuid!
+    id: String!
 }
 
 "input type for updating data in table \"payments\""
 input payments_set_input {
     booking_id: uuid
     created_at: timestamptz
-    id: uuid
-    payment_approved: Boolean
+    id: String
+    payment_captured: Boolean
     payment_obj: json
-    payment_status: String
+    payment_status: payment_status_enum_enum
+    refund_id: String
     updated_at: timestamptz
 }
 

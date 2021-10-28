@@ -137,7 +137,7 @@
 <script>
 import {
   BLink, BMedia, BImg, BCarousel, BCarouselSlide, BCard, BMediaAside, BMediaBody,
-  // BRow, BCol,  BCardText,
+  BRow, BCol,
 } from 'bootstrap-vue'
 import store from '@/store/index'
 import gql from 'graphql-tag'
@@ -152,8 +152,8 @@ import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 
 export default {
   components: {
-    // BRow,
-    // BCol,
+    BRow,
+    BCol,
     BCard,
     BCarousel,
     BCarouselSlide,

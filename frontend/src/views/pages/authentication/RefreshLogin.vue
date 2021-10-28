@@ -21,6 +21,9 @@
 </template>
 
 <script>
+import {
+  BLink,
+} from 'bootstrap-vue'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 // import { getHomeRouteForLoggedInUser } from '@/auth/utils'
 
@@ -32,6 +35,7 @@ export default {
   name: 'RefreshLogin',
   components: {
     VuexyLogo,
+    BLink,
   },
   created() {
     if (this.$auth.isAuthenticated()) {
