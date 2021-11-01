@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div id="razorpay" />
     <div v-if="showSummary===0">
       <div style="padding-bottom: 2rem">
         <b-card
@@ -16,7 +17,7 @@
                 size="27"
                 style="color: #1e1e1e;"
               />
-            </b-button> <span style="margin: auto;font-size: 1.2rem;font-weight: 500">{{ turf.name }}</span>
+            </b-button> <span style="margin: auto;font-size: 1.2rem;font-weight: 500">{{ turfData.name }}</span>
           </b-card-header>
         </b-card>
         <b-card>
@@ -100,6 +101,7 @@
             <slot-select-card
               v-for="x in slots"
               :key="'slots_' + x.id"
+              :disabled="x.disabled"
               :icon="getIcon(isRowSelected(x))"
               :statistic="x.start_time"
               :statistic-title="x.price"
@@ -147,7 +149,7 @@
               size="27"
               style="color: #1e1e1e;"
             />
-          </b-button> <span style="margin: auto;font-size: 1.2rem;font-weight: 500">{{ turf.name }}</span>
+          </b-button> <span style="margin: auto;font-size: 1.2rem;font-weight: 500">{{ turfData.name }}</span>
         </b-card-header>
       </b-card>
       <b-card>
@@ -196,12 +198,59 @@
         </b-card-header>
         <b-card-body style="padding: 0rem;" />
       </b-card>
+      <b-card>
+        <b-card-header style="padding :0px">
+          <div style="width:100%;margin-bottom: 1rem;font-size: 1.1rem;font-weight: bold">
+            Contact Details:
+          </div>
+          <validation-observer ref="bookDataForm">
+            <b-form>
+              <b-row>
+                <b-col md="6">
+                  <b-form-group>
+                    <validation-provider
+                      #default="{ errors }"
+                      name="Name"
+                      rules="required"
+                    >
+                      <b-form-input
+                        v-model="contactName"
+                        :state="errors.length > 0 ? false:null"
+                        placeholder="Name"
+                      />
+                      <small class="text-danger">{{ errors[0] }}</small>
+                    </validation-provider>
+                  </b-form-group>
+                </b-col>
+                <b-col md="6">
+                  <b-form-group>
+                    <validation-provider
+                      #default="{ errors }"
+                      name="Phone Number"
+                      :rules="{ required, regex:/^[6-9]\d{9}$/ }"
+                    >
+                      <b-form-input
+                        v-model="contactPhone"
+                        :state="errors.length > 0 ? false:null"
+                        type="phone"
+                        placeholder="Phone Number"
+                      />
+                      <small class="text-danger">{{ errors[0] }}</small>
+                    </validation-provider>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+            </b-form>
+          </validation-observer>
+        </b-card-header>
+        <b-card-body style="padding: 0rem;" />
+      </b-card>
       <div class="booking-bar">
         <span>Slot(s) : {{ slotsSelected }} • &nbsp; ₹ {{ checkoutAmt }} Plus Tax </span>
         <b-button
           v-ripple.400="'rgba(40, 199, 111, 0.3)'"
           :disabled="!canCheckout"
-          @click="checkout"
+          @click="validationForm"
         >
           Checkout →
         </b-button>
@@ -217,7 +266,7 @@
           cols="10"
         >
           <b-img
-            src="http://localhost:8080/images/loading/loading2.gif"
+            src="/images/loading/loading2.gif"
             fluid-growth
             style="height: 20rem;margin:auto"
           />
@@ -228,15 +277,94 @@
         <b-col />
       </b-row>
     </div>
+    <div v-else-if="showSummary===3">
+      <b-row
+        class="vh-100 text-center"
+        align-h="center"
+        align-v="center"
+      ><b-col />
+        <b-col
+          cols="10"
+        >
+          <b-img
+            src="/images/loading/payment.gif"
+            fluid-growth
+            style="height: 20rem;margin:auto"
+          />
+          <h2 style="margin-left: 1rem">
+            Complete payment...
+          </h2>
+        </b-col>
+        <b-col />
+      </b-row>
+    </div>
+    <div v-else-if="showSummary===4">
+      <b-row
+        class="vh-100 text-center"
+        align-h="center"
+        align-v="center"
+      ><b-col />
+        <b-col
+          cols="10"
+        >
+          <b-img
+            src="/images/loading/payment.gif"
+            fluid-growth
+            style="height: 20rem;margin:auto"
+          />
+          <h2 style="margin-left: 1rem">
+            Booking Confirmed!
+          </h2>
+        </b-col>
+        <b-col />
+      </b-row>
+    </div>
+    <div v-else-if="showSummary===5">
+      <b-row
+        class="vh-100 text-center"
+        align-h="center"
+        align-v="center"
+      ><b-col />
+        <b-col
+          cols="10"
+        >
+          <b-img
+            src="/images/loading/payment.gif"
+            fluid-growth
+            style="height: 20rem;margin:auto"
+          />
+          <b-button
+            v-ripple.400="'rgba(40, 199, 111, 0.3)'"
+            style="margin-left: 1rem"
+            :disabled="retries > 4"
+            @click="displayRazorpay"
+          >
+            Retry Payment →
+          </b-button>
+          <b-button
+            v-ripple.400="'rgba(40, 199, 111, 0.3)'"
+            style="margin-left: 1rem"
+            variant="danger"
+            @click="cancelBooking"
+          >
+            Cancel →
+          </b-button>
+        </b-col>
+        <b-col />
+      </b-row>
+    </div>
   </div>
 
 </template>
 
 <script>
 import {
-  BCardHeader, BCardBody, BCard, BButton, BImg, BRow, BCol, BDropdown, BDropdownItem, BSkeletonTable,
+  BCardHeader, BCardBody, BCard, BButton, BImg, BRow, BCol, BDropdown, BDropdownItem, BSkeletonTable, BFormInput, BFormGroup, BForm,
 } from 'bootstrap-vue'
 
+import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
+import { regex } from 'vee-validate/dist/rules'
+import { required } from '@validations'
 import VueSlickCarousel from 'vue-slick-carousel'
 // import { Carousel3d, Slide } from 'vue-carousel-3d'
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
@@ -251,6 +379,11 @@ import SlotSelectCard from './SlotSelectCard.vue'
 
 export default {
   components: {
+    ValidationProvider,
+    ValidationObserver,
+    BFormInput,
+    BFormGroup,
+    BForm,
     BCardHeader,
     BCardBody,
     BCard,
@@ -270,6 +403,11 @@ export default {
   },
   data() {
     return {
+      required,
+      retries: 0,
+      contactName: this.$store.state.user.AppActiveUser.displayName,
+      contactPhone: '',
+      currentBooking: null,
       slotsFetching: true,
       turfID: null,
       facilityID: null,
@@ -381,7 +519,6 @@ export default {
           ],
         },
       ],
-
       settings: {
         arrows: false,
         focusOnSelect: true,
@@ -424,15 +561,25 @@ export default {
     // console.log(this.$route.params)
     this.turfID = this.$route.params.turf
     this.facilityID = this.$route.params.facility
+    if (this.turfID === undefined || this.turfID === null || this.turfID === '') {
+      this.$router.go(-1)
+    }
   },
   async mounted() {
-    console.log(this.turfID, this.facilityID)
+    // console.log(this.turfID, this.facilityID)
     await this.getTurfData()
     await this.getFacilityData()
     this.checkoutDate = moment().toISOString()
     await this.getSlots()
   },
   methods: {
+    validationForm() {
+      this.$refs.bookDataForm.validate().then(success => {
+        if (success) {
+          this.checkout()
+        }
+      })
+    },
     isDateSelected(date) {
       const d1 = moment(date).format('YYYY-MM-DD')
       const d2 = moment(this.checkoutDate).format('YYYY-MM-DD')
@@ -441,9 +588,11 @@ export default {
       }
       return false
     },
-    selectFacility(x) {
+    async selectFacility(x) {
       this.facilityID = x.id
       this.selected = x
+      await this.getFacilityData()
+      await this.getSlots()
     },
     async getTurfData() {
       const result = await this.$apollo.query({
@@ -549,7 +698,7 @@ export default {
               end_time
               id
               start_time
-              bookings_aggregate(where: {reservation_date: {_eq: $date}}) {
+              booked_slots_aggregate(where: {_and: {date: {_eq: $date}, booking: {_and: {booking_status: {_in: [0, 1]}, payment_status: {_in: [processing, success]}}}}}) {
                 aggregate {
                   count
                 }
@@ -559,7 +708,7 @@ export default {
         }`,
         variables: {
           id: this.facilityID,
-          date: this.checkoutDate,
+          date: moment(this.checkoutDate).format('YYYY-MM-DD'),
         },
         fetchPolicy: 'no-cache',
       })
@@ -571,11 +720,12 @@ export default {
         id: slot.id,
         start_time: moment(slot.start_time, 'HH:mm:ss').format('hh:mm A'),
         end_time: moment(slot.end_time, 'HH:mm:ss').format('hh:mm A'),
-        disabled: slot.disabled || slot.bookings_aggregate.aggregate.count !== 0,
+        disabled: slot.disabled || slot.booked_slots_aggregate.aggregate.count !== 0,
         date: this.checkoutDate,
         price,
       }))
-      console.log(this.slots)
+      this.slots = this.slots.filter(slot => !slot.disabled)
+      // console.log(this.slots)
       this.slotsFetching = false
     },
     moment() {
@@ -646,111 +796,216 @@ export default {
         this.checkoutAmt = this.totalPrice + this.convFees - this.discount
       }
     },
+    loadScript(src) {
+      return new Promise(resolve => {
+        if (document.getElementById('razorpay').childElementCount !== 1) {
+          const script = document.createElement('script')
+          script.src = src
+          script.onload = () => {
+            resolve(true)
+          }
+          script.onerror = () => {
+            resolve(false)
+          }
+          document.getElementById('razorpay').appendChild(script)
+        } else {
+          resolve(true)
+        }
+      })
+    },
+    async displayRazorpay() {
+      const vm = this
+      const res = await this.loadScript('https://checkout.razorpay.com/v1/checkout.js')
+      if (!res) {
+        // eslint-disable-next-line no-alert
+        alert('Razorpay SDK failed to load. Are you online?')
+        return
+      }
+      const options = {
+        key: 'rzp_test_abiH700LsWApe9',
+        currency: 'INR',
+        amount: (this.currentBooking.amount * 100).toString(),
+        order_id: this.currentBooking.razorpay,
+        name: 'Booking Payment',
+        prefill: {
+          name: 'Test',
+          email: 'a@upturf.in',
+          contact: '+919999999999',
+        },
+        retry: {
+          enabled: true,
+          max_count: 5,
+        },
+        description: `Booking ID: ${this.currentBooking.id}`,
+        image: 'https://upturf.in/logo.png',
+        handler() {
+          vm.$toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Success!',
+              icon: 'CheckIcon',
+              text: 'Payment Confirmed.',
+              variant: 'success',
+            },
+          })
+          vm.showSummary = 4
+          setTimeout(() => {
+            vm.$router.push({ name: 'user-bookings' })
+          }, 3000)
+        },
+        modal: {
+          ondismiss() {
+            // console.log('Checkout form closed')
+            vm.showSummary = 5
+            vm.retries += 1
+          },
+        },
+      }
+      const paymentObject = new window.Razorpay(options)
+      paymentObject.on('payment.failed', () => {
+        vm.retries += 1
+        if (vm.retries > 4) {
+          paymentObject.close()
+        }
+      })
+      paymentObject.open()
+    },
     async checkout() {
       this.showSummary = 2
-      await this.$apollo.mutate({
-        mutation: gql`mutation ($facilityId: Int, $contactName: String, $contactPhone: String, $reservationDate: date, $reservationStartTime: timestamptz, $reservationEndTime: timestamptz, $slotId: bigint) {
-          insert_bookings_one(object: {contact_name: $contactName, contact_phone: $contactPhone, facility_id: $facilityId, reservation_date: $reservationDate, reservation_end_time: $reservationEndTime, reservation_start_time: $reservationStartTime, slot_id: $slotId, split_payment: false}) {
-            booking_status
-            created_at
-            payment_status
+      await new Promise(r => setTimeout(r, 1400))
+      const slots = []
+      this.selectedSlots.forEach(slot => {
+        slots.push(slot.id)
+      })
+      const res = await this.$apollo.mutate({
+        mutation: gql`mutation ($contactName: String, $contactPhone: String, $date: date, $facility: Int!, $slots: [bigint!]) {
+          book(contactName: $contactName, contactPhone: $contactPhone, date: $date, facility: $facility, slots: $slots) {
+            amount
+            razorpay
+            id
           }
         }`,
         variables: {
-          facilityId: this.facilityID,
+          facility: this.facilityID,
           contactName: this.contactName,
           contactPhone: this.contactPhone,
-          reservationDate: this.checkoutDate,
-          reservationStartTime: this.checkoutDate,
-          reservationEndTime: this.checkoutDate,
-          slotId: this.city,
-        },
-        update: async (cache, { data: { insert_turf_one } }) => {
-          // Read the data from our cache for this query.
-          try {
-            const data = await cache.readQuery({
-              query: gql`query {
-                      turf {
-                        id
-                        name
-                        pincode
-                        city
-                        ratings_aggregate {
-                          aggregate {
-                            avg {
-                              ratings
-                            }
-                          }
-                        }
-                        facilities_aggregate {
-                          aggregate {
-                            count
-                          }
-                        }
-                        status
-                      }
-                    }`,
-            })
-            data.turf.splice(0, 0, insert_turf_one)
-            await cache.writeQuery({
-              query: gql`query {
-                      turf {
-                        id
-                        name
-                        pincode
-                        city
-                        ratings_aggregate {
-                          aggregate {
-                            avg {
-                              ratings
-                            }
-                          }
-                        }
-                        facilities_aggregate {
-                          aggregate {
-                            count
-                          }
-                        }
-                        status
-                      }
-                    }`,
-              data,
-            })
-            this.$toast({
-              component: ToastificationContent,
-              props: {
-                title: 'Success',
-                icon: 'CheckIcon',
-                text: 'Added turf successfully!',
-                variant: 'success',
-              },
-            })
-            this.$emit('refetch-data', true)
-          } catch (e) {
-            this.$toast({
-              component: ToastificationContent,
-              props: {
-                title: 'Error adding turf',
-                icon: 'XCircleIcon',
-                text: e.message,
-                variant: 'danger',
-              },
-            })
-          }
+          date: moment(this.checkoutDate).format('YYYY-MM-DD'),
+          slots,
         },
       }).catch(e => {
+        let msg = e.message
+        if (e.message.includes('Uniqueness violation') || e.message.includes('Slot')) {
+          msg = 'Slot unavailable'
+        }
+        this.currentBooking = null
         this.$toast({
           component: ToastificationContent,
           props: {
-            title: 'Error adding turf',
+            title: 'Error Booking',
             icon: 'XCircleIcon',
-            text: e,
+            text: msg,
             variant: 'danger',
           },
         })
+        this.showSummary -= 1
       })
-      this.reset()
-      this.isAddNewUserSidebarActive = false
+      try {
+        if (res === undefined || !('data' in res) || !('book' in res.data) || !res.data.book) {
+          return
+        }
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Booking Created!',
+            icon: 'CheckIcon',
+            text: 'Complete payment within 15 minutes.',
+            variant: 'success',
+          },
+        },
+        {
+          timeout: 4000,
+        })
+        this.currentBooking = res.data.book
+        this.showSummary += 1
+        await this.displayRazorpay()
+      } catch (e) {
+        let msg = e.message
+        if (e.message.includes('Uniqueness violation')) {
+          msg = 'Slot unavailable'
+        }
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Error Booking',
+            icon: 'XCircleIcon',
+            text: msg,
+            variant: 'danger',
+          },
+        })
+        this.showSummary -= 1
+      }
+    },
+    async cancelBooking() {
+      this.showSummary = 2
+      await new Promise(r => setTimeout(r, 1400))
+      const res = await this.$apollo.mutate({
+        mutation: gql`mutation ($id: uuid!) {
+          cancel(bookingID: $id) {
+            id
+            refundID
+            status
+          }
+        }`,
+        variables: {
+          id: this.currentBooking.id,
+        },
+      }).catch(e => {
+        let msg = e.message
+        if (e.message.includes('Uniqueness violation')) {
+          msg = 'Slot unavailable'
+        }
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Error Cancelling',
+            icon: 'XCircleIcon',
+            text: msg,
+            variant: 'danger',
+          },
+        })
+        this.$router.push({ name: 'pages-turf', params: { id: this.turfID } })
+      })
+      try {
+        let text = 'Booking Cancelled.'
+        if ('refundID' in res.data && res.data.refundID) {
+          text = `${text} Refund initiated with id: ${res.data.refundID}`
+        }
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Success!',
+            icon: 'CheckIcon',
+            text,
+            variant: 'success',
+          },
+        })
+        this.$router.push({ name: 'pages-turf', params: { id: this.turfID } })
+      } catch (e) {
+        let msg = e.message
+        if (e.message.includes('Uniqueness violation')) {
+          msg = 'Slot unavailable'
+        }
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Error Cancelling',
+            icon: 'XCircleIcon',
+            text: msg,
+            variant: 'danger',
+          },
+        })
+        this.$router.push({ name: 'pages-turf', params: { id: this.turfID } })
+      }
     },
     getIcon(icon) {
       if (icon) {

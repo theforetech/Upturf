@@ -90,7 +90,7 @@ export default {
   },
   methods: {
     async getTurfs() {
-      console.log('sd')
+      // console.log('sd')
       const result = await this.$apollo.query({
         query: gql`query {
           turf(where: {status: {_neq: false}}) {
@@ -142,7 +142,7 @@ export default {
         })
         return t
       })
-      console.log(this.turfs)
+      // console.log(this.turfs)
     },
   },
 }

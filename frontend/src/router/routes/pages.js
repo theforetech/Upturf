@@ -267,7 +267,7 @@ export default [
   },
   {
     path: '/pages/components/user-bookings',
-    name: 'pages-booking',
+    name: 'user-bookings',
     component: () => import('@/views/pages/components/user/UserBookings'),
     meta: {
       layout: 'full',

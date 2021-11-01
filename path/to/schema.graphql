@@ -14,9 +14,163 @@ type FileOutput {
     user_id: String
 }
 
+type bookOutput {
+    amount: Int
+    id: String
+    razorpay: String
+}
+
+"columns and relationships of \"booked_slots\""
+type booked_slots {
+    "An object relationship"
+    booking: bookings!
+    booking_id: uuid!
+    created_at: timestamptz!
+    date: date!
+    endTime: time!
+    id: Int!
+    price: Int!
+    "An object relationship"
+    slot: slots!
+    slot_id: bigint!
+    startTime: time!
+}
+
+"aggregated selection of \"booked_slots\""
+type booked_slots_aggregate {
+    aggregate: booked_slots_aggregate_fields
+    nodes: [booked_slots!]!
+}
+
+"aggregate fields of \"booked_slots\""
+type booked_slots_aggregate_fields {
+    avg: booked_slots_avg_fields
+    count(columns: [booked_slots_select_column!], distinct: Boolean): Int!
+    max: booked_slots_max_fields
+    min: booked_slots_min_fields
+    stddev: booked_slots_stddev_fields
+    stddev_pop: booked_slots_stddev_pop_fields
+    stddev_samp: booked_slots_stddev_samp_fields
+    sum: booked_slots_sum_fields
+    var_pop: booked_slots_var_pop_fields
+    var_samp: booked_slots_var_samp_fields
+    variance: booked_slots_variance_fields
+}
+
+"aggregate avg on columns"
+type booked_slots_avg_fields {
+    id: Float
+    price: Float
+    slot_id: Float
+}
+
+"aggregate max on columns"
+type booked_slots_max_fields {
+    booking_id: uuid
+    created_at: timestamptz
+    date: date
+    id: Int
+    price: Int
+    slot_id: bigint
+}
+
+"aggregate min on columns"
+type booked_slots_min_fields {
+    booking_id: uuid
+    created_at: timestamptz
+    date: date
+    id: Int
+    price: Int
+    slot_id: bigint
+}
+
+"response of any mutation on the table \"booked_slots\""
+type booked_slots_mutation_response {
+    "number of rows affected by the mutation"
+    affected_rows: Int!
+    "data from the rows affected by the mutation"
+    returning: [booked_slots!]!
+}
+
+"aggregate stddev on columns"
+type booked_slots_stddev_fields {
+    id: Float
+    price: Float
+    slot_id: Float
+}
+
+"aggregate stddev_pop on columns"
+type booked_slots_stddev_pop_fields {
+    id: Float
+    price: Float
+    slot_id: Float
+}
+
+"aggregate stddev_samp on columns"
+type booked_slots_stddev_samp_fields {
+    id: Float
+    price: Float
+    slot_id: Float
+}
+
+"aggregate sum on columns"
+type booked_slots_sum_fields {
+    id: Int
+    price: Int
+    slot_id: bigint
+}
+
+"aggregate var_pop on columns"
+type booked_slots_var_pop_fields {
+    id: Float
+    price: Float
+    slot_id: Float
+}
+
+"aggregate var_samp on columns"
+type booked_slots_var_samp_fields {
+    id: Float
+    price: Float
+    slot_id: Float
+}
+
+"aggregate variance on columns"
+type booked_slots_variance_fields {
+    id: Float
+    price: Float
+    slot_id: Float
+}
+
 "columns and relationships of \"bookings\""
 type bookings {
-    booking_status: Boolean!
+    amount: Int
+    "An array relationship"
+    booked_slots(
+        "distinct select on columns"
+        distinct_on: [booked_slots_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [booked_slots_order_by!],
+        "filter the rows returned"
+        where: booked_slots_bool_exp
+    ): [booked_slots!]!
+    "An aggregate relationship"
+    booked_slots_aggregate(
+        "distinct select on columns"
+        distinct_on: [booked_slots_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [booked_slots_order_by!],
+        "filter the rows returned"
+        where: booked_slots_bool_exp
+    ): booked_slots_aggregate!
+    booking_status: Int!
     contact_name: String!
     contact_phone: String!
     created_at: timestamptz
@@ -24,9 +178,9 @@ type bookings {
     facility: facilities!
     facility_id: Int!
     id: uuid!
-    payment_status: payment_status_enum_enum
+    payment_status: payment_status_enum_enum!
     "An object relationship"
-    payment_status_enum: payment_status_enum
+    payment_status_enum: payment_status_enum!
     "An array relationship"
     payments(
         "distinct select on columns"
@@ -54,12 +208,7 @@ type bookings {
         where: payments_bool_exp
     ): payments_aggregate!
     reservation_date: date!
-    reservation_end_time: timestamptz!
-    reservation_start_time: timestamptz!
-    "An object relationship"
-    slot: slots!
-    slot_id: bigint!
-    split_amount: Int!
+    split_amount: Int
     split_members: Int!
     split_payment: Boolean!
     updated_at: timestamptz
@@ -91,23 +240,23 @@ type bookings_aggregate_fields {
 
 "aggregate avg on columns"
 type bookings_avg_fields {
+    amount: Float
+    booking_status: Float
     facility_id: Float
-    slot_id: Float
     split_amount: Float
     split_members: Float
 }
 
 "aggregate max on columns"
 type bookings_max_fields {
+    amount: Int
+    booking_status: Int
     contact_name: String
     contact_phone: String
     created_at: timestamptz
     facility_id: Int
     id: uuid
     reservation_date: date
-    reservation_end_time: timestamptz
-    reservation_start_time: timestamptz
-    slot_id: bigint
     split_amount: Int
     split_members: Int
     updated_at: timestamptz
@@ -116,15 +265,14 @@ type bookings_max_fields {
 
 "aggregate min on columns"
 type bookings_min_fields {
+    amount: Int
+    booking_status: Int
     contact_name: String
     contact_phone: String
     created_at: timestamptz
     facility_id: Int
     id: uuid
     reservation_date: date
-    reservation_end_time: timestamptz
-    reservation_start_time: timestamptz
-    slot_id: bigint
     split_amount: Int
     split_members: Int
     updated_at: timestamptz
@@ -141,58 +289,71 @@ type bookings_mutation_response {
 
 "aggregate stddev on columns"
 type bookings_stddev_fields {
+    amount: Float
+    booking_status: Float
     facility_id: Float
-    slot_id: Float
     split_amount: Float
     split_members: Float
 }
 
 "aggregate stddev_pop on columns"
 type bookings_stddev_pop_fields {
+    amount: Float
+    booking_status: Float
     facility_id: Float
-    slot_id: Float
     split_amount: Float
     split_members: Float
 }
 
 "aggregate stddev_samp on columns"
 type bookings_stddev_samp_fields {
+    amount: Float
+    booking_status: Float
     facility_id: Float
-    slot_id: Float
     split_amount: Float
     split_members: Float
 }
 
 "aggregate sum on columns"
 type bookings_sum_fields {
+    amount: Int
+    booking_status: Int
     facility_id: Int
-    slot_id: bigint
     split_amount: Int
     split_members: Int
 }
 
 "aggregate var_pop on columns"
 type bookings_var_pop_fields {
+    amount: Float
+    booking_status: Float
     facility_id: Float
-    slot_id: Float
     split_amount: Float
     split_members: Float
 }
 
 "aggregate var_samp on columns"
 type bookings_var_samp_fields {
+    amount: Float
+    booking_status: Float
     facility_id: Float
-    slot_id: Float
     split_amount: Float
     split_members: Float
 }
 
 "aggregate variance on columns"
 type bookings_variance_fields {
+    amount: Float
+    booking_status: Float
     facility_id: Float
-    slot_id: Float
     split_amount: Float
     split_members: Float
+}
+
+type cancelOutput {
+    id: String!
+    refundID: String
+    status: String!
 }
 
 "columns and relationships of \"facilities\""
@@ -540,6 +701,15 @@ type images_variance_fields {
 
 "mutation root"
 type mutation_root {
+    book(contactName: String, contactPhone: String, date: date, facility: Int, slots: [bigint]): bookOutput
+    cancel(bookingID: uuid!): cancelOutput
+    "delete data from the table: \"booked_slots\""
+    delete_booked_slots(
+        "filter the rows which have to be deleted"
+        where: booked_slots_bool_exp!
+    ): booked_slots_mutation_response
+    "delete single row from the table: \"booked_slots\""
+    delete_booked_slots_by_pk(id: Int!): booked_slots
     "delete data from the table: \"bookings\""
     delete_bookings(
         "filter the rows which have to be deleted"
@@ -574,7 +744,7 @@ type mutation_root {
         where: payments_bool_exp!
     ): payments_mutation_response
     "delete single row from the table: \"payments\""
-    delete_payments_by_pk(id: uuid!): payments
+    delete_payments_by_pk(id: String!): payments
     "delete data from the table: \"rating\""
     delete_rating(
         "filter the rows which have to be deleted"
@@ -624,6 +794,20 @@ type mutation_root {
     ): vendor_mutation_response
     "delete single row from the table: \"vendor\""
     delete_vendor_by_pk(user_id: String!): vendor
+    "insert data into the table: \"booked_slots\""
+    insert_booked_slots(
+        "the rows to be inserted"
+        objects: [booked_slots_insert_input!]!,
+        "on conflict condition"
+        on_conflict: booked_slots_on_conflict
+    ): booked_slots_mutation_response
+    "insert a single row into the table: \"booked_slots\""
+    insert_booked_slots_one(
+        "the row to be inserted"
+        object: booked_slots_insert_input!,
+        "on conflict condition"
+        on_conflict: booked_slots_on_conflict
+    ): booked_slots
     "insert data into the table: \"bookings\""
     insert_bookings(
         "the rows to be inserted"
@@ -792,6 +976,23 @@ type mutation_root {
         "on conflict condition"
         on_conflict: vendor_on_conflict
     ): vendor
+    "update data of the table: \"booked_slots\""
+    update_booked_slots(
+        "increments the numeric columns with given value of the filtered values"
+        _inc: booked_slots_inc_input,
+        "sets the columns of the filtered rows to the given values"
+        _set: booked_slots_set_input,
+        "filter the rows which have to be updated"
+        where: booked_slots_bool_exp!
+    ): booked_slots_mutation_response
+    "update single row of the table: \"booked_slots\""
+    update_booked_slots_by_pk(
+        "increments the numeric columns with given value of the filtered values"
+        _inc: booked_slots_inc_input,
+        "sets the columns of the filtered rows to the given values"
+        _set: booked_slots_set_input,
+        pk_columns: booked_slots_pk_columns_input!
+    ): booked_slots
     "update data of the table: \"bookings\""
     update_bookings(
         "increments the numeric columns with given value of the filtered values"
@@ -1008,6 +1209,32 @@ type payment_status_enum {
         where: bookings_bool_exp
     ): bookings_aggregate!
     description: String!
+    "An array relationship"
+    payments(
+        "distinct select on columns"
+        distinct_on: [payments_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [payments_order_by!],
+        "filter the rows returned"
+        where: payments_bool_exp
+    ): [payments!]!
+    "An aggregate relationship"
+    payments_aggregate(
+        "distinct select on columns"
+        distinct_on: [payments_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [payments_order_by!],
+        "filter the rows returned"
+        where: payments_bool_exp
+    ): payments_aggregate!
     status: String!
 }
 
@@ -1050,13 +1277,16 @@ type payments {
     booking: bookings!
     booking_id: uuid!
     created_at: timestamptz!
-    id: uuid!
-    payment_approved: Boolean!
+    id: String!
+    payment_captured: Boolean!
     payment_obj(
         "JSON select path"
         path: String
     ): json
-    payment_status: String!
+    payment_status: payment_status_enum_enum!
+    "An object relationship"
+    payment_status_enum: payment_status_enum!
+    refund_id: String
     updated_at: timestamptz!
 }
 
@@ -1077,8 +1307,8 @@ type payments_aggregate_fields {
 type payments_max_fields {
     booking_id: uuid
     created_at: timestamptz
-    id: uuid
-    payment_status: String
+    id: String
+    refund_id: String
     updated_at: timestamptz
 }
 
@@ -1086,8 +1316,8 @@ type payments_max_fields {
 type payments_min_fields {
     booking_id: uuid
     created_at: timestamptz
-    id: uuid
-    payment_status: String
+    id: String
+    refund_id: String
     updated_at: timestamptz
 }
 
@@ -1100,6 +1330,34 @@ type payments_mutation_response {
 }
 
 type query_root {
+    "An array relationship"
+    booked_slots(
+        "distinct select on columns"
+        distinct_on: [booked_slots_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [booked_slots_order_by!],
+        "filter the rows returned"
+        where: booked_slots_bool_exp
+    ): [booked_slots!]!
+    "An aggregate relationship"
+    booked_slots_aggregate(
+        "distinct select on columns"
+        distinct_on: [booked_slots_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [booked_slots_order_by!],
+        "filter the rows returned"
+        where: booked_slots_bool_exp
+    ): booked_slots_aggregate!
+    "fetch data from the table: \"booked_slots\" using primary key columns"
+    booked_slots_by_pk(id: Int!): booked_slots
     "An array relationship"
     bookings(
         "distinct select on columns"
@@ -1239,7 +1497,7 @@ type query_root {
         where: payments_bool_exp
     ): payments_aggregate!
     "fetch data from the table: \"payments\" using primary key columns"
-    payments_by_pk(id: uuid!): payments
+    payments_by_pk(id: String!): payments
     "fetch data from the table: \"rating\""
     rating(
         "distinct select on columns"
@@ -1557,31 +1815,31 @@ type rating_variance_fields {
 "columns and relationships of \"slots\""
 type slots {
     "An array relationship"
-    bookings(
+    booked_slots(
         "distinct select on columns"
-        distinct_on: [bookings_select_column!],
+        distinct_on: [booked_slots_select_column!],
         "limit the number of rows returned"
         limit: Int,
         "skip the first n rows. Use only with order_by"
         offset: Int,
         "sort the rows by one or more columns"
-        order_by: [bookings_order_by!],
+        order_by: [booked_slots_order_by!],
         "filter the rows returned"
-        where: bookings_bool_exp
-    ): [bookings!]!
+        where: booked_slots_bool_exp
+    ): [booked_slots!]!
     "An aggregate relationship"
-    bookings_aggregate(
+    booked_slots_aggregate(
         "distinct select on columns"
-        distinct_on: [bookings_select_column!],
+        distinct_on: [booked_slots_select_column!],
         "limit the number of rows returned"
         limit: Int,
         "skip the first n rows. Use only with order_by"
         offset: Int,
         "sort the rows by one or more columns"
-        order_by: [bookings_order_by!],
+        order_by: [booked_slots_order_by!],
         "filter the rows returned"
-        where: bookings_bool_exp
-    ): bookings_aggregate!
+        where: booked_slots_bool_exp
+    ): booked_slots_aggregate!
     disabled: Boolean!
     end_time: time!
     "An object relationship"
@@ -1822,6 +2080,34 @@ type sport_variance_fields {
 
 type subscription_root {
     "An array relationship"
+    booked_slots(
+        "distinct select on columns"
+        distinct_on: [booked_slots_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [booked_slots_order_by!],
+        "filter the rows returned"
+        where: booked_slots_bool_exp
+    ): [booked_slots!]!
+    "An aggregate relationship"
+    booked_slots_aggregate(
+        "distinct select on columns"
+        distinct_on: [booked_slots_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [booked_slots_order_by!],
+        "filter the rows returned"
+        where: booked_slots_bool_exp
+    ): booked_slots_aggregate!
+    "fetch data from the table: \"booked_slots\" using primary key columns"
+    booked_slots_by_pk(id: Int!): booked_slots
+    "An array relationship"
     bookings(
         "distinct select on columns"
         distinct_on: [bookings_select_column!],
@@ -1960,7 +2246,7 @@ type subscription_root {
         where: payments_bool_exp
     ): payments_aggregate!
     "fetch data from the table: \"payments\" using primary key columns"
-    payments_by_pk(id: uuid!): payments
+    payments_by_pk(id: String!): payments
     "fetch data from the table: \"rating\""
     rating(
         "distinct select on columns"
@@ -2676,6 +2962,54 @@ type vendor_mutation_response {
     returning: [vendor!]!
 }
 
+"unique or primary key constraints on table \"booked_slots\""
+enum booked_slots_constraint {
+    "unique or primary key constraint"
+    booked_slots_pkey
+    "unique or primary key constraint"
+    booked_slots_slot_id_date_key
+}
+
+"select columns of table \"booked_slots\""
+enum booked_slots_select_column {
+    "column name"
+    booking_id
+    "column name"
+    created_at
+    "column name"
+    date
+    "column name"
+    endTime
+    "column name"
+    id
+    "column name"
+    price
+    "column name"
+    slot_id
+    "column name"
+    startTime
+}
+
+"update columns of table \"booked_slots\""
+enum booked_slots_update_column {
+    "column name"
+    booking_id
+    "column name"
+    created_at
+    "column name"
+    date
+    "column name"
+    endTime
+    "column name"
+    id
+    "column name"
+    price
+    "column name"
+    slot_id
+    "column name"
+    startTime
+}
+
 "unique or primary key constraints on table \"bookings\""
 enum bookings_constraint {
     "unique or primary key constraint"
@@ -2684,6 +3018,8 @@ enum bookings_constraint {
 
 "select columns of table \"bookings\""
 enum bookings_select_column {
+    "column name"
+    amount
     "column name"
     booking_status
     "column name"
@@ -2700,12 +3036,6 @@ enum bookings_select_column {
     payment_status
     "column name"
     reservation_date
-    "column name"
-    reservation_end_time
-    "column name"
-    reservation_start_time
-    "column name"
-    slot_id
     "column name"
     split_amount
     "column name"
@@ -2721,6 +3051,8 @@ enum bookings_select_column {
 "update columns of table \"bookings\""
 enum bookings_update_column {
     "column name"
+    amount
+    "column name"
     booking_status
     "column name"
     contact_name
@@ -2736,12 +3068,6 @@ enum bookings_update_column {
     payment_status
     "column name"
     reservation_date
-    "column name"
-    reservation_end_time
-    "column name"
-    reservation_start_time
-    "column name"
-    slot_id
     "column name"
     split_amount
     "column name"
@@ -2875,6 +3201,8 @@ enum payment_status_enum_constraint {
 enum payment_status_enum_enum {
     "Payment Failed"
     failed
+    "Payment is being processed."
+    processing
     "Payment has been refunded"
     refunded
     "Payment Successful"
@@ -2912,11 +3240,13 @@ enum payments_select_column {
     "column name"
     id
     "column name"
-    payment_approved
+    payment_captured
     "column name"
     payment_obj
     "column name"
     payment_status
+    "column name"
+    refund_id
     "column name"
     updated_at
 }
@@ -2930,11 +3260,13 @@ enum payments_update_column {
     "column name"
     id
     "column name"
-    payment_approved
+    payment_captured
     "column name"
     payment_obj
     "column name"
     payment_status
+    "column name"
+    refund_id
     "column name"
     updated_at
 }
@@ -3341,6 +3673,180 @@ input bigint_comparison_exp {
     _nin: [bigint!]
 }
 
+"order by aggregate values of table \"booked_slots\""
+input booked_slots_aggregate_order_by {
+    avg: booked_slots_avg_order_by
+    count: order_by
+    max: booked_slots_max_order_by
+    min: booked_slots_min_order_by
+    stddev: booked_slots_stddev_order_by
+    stddev_pop: booked_slots_stddev_pop_order_by
+    stddev_samp: booked_slots_stddev_samp_order_by
+    sum: booked_slots_sum_order_by
+    var_pop: booked_slots_var_pop_order_by
+    var_samp: booked_slots_var_samp_order_by
+    variance: booked_slots_variance_order_by
+}
+
+"input type for inserting array relation for remote table \"booked_slots\""
+input booked_slots_arr_rel_insert_input {
+    data: [booked_slots_insert_input!]!
+    "on conflict condition"
+    on_conflict: booked_slots_on_conflict
+}
+
+"order by avg() on columns of table \"booked_slots\""
+input booked_slots_avg_order_by {
+    id: order_by
+    price: order_by
+    slot_id: order_by
+}
+
+"Boolean expression to filter rows from the table \"booked_slots\". All fields are combined with a logical 'AND'."
+input booked_slots_bool_exp {
+    _and: [booked_slots_bool_exp!]
+    _not: booked_slots_bool_exp
+    _or: [booked_slots_bool_exp!]
+    booking: bookings_bool_exp
+    booking_id: uuid_comparison_exp
+    created_at: timestamptz_comparison_exp
+    date: date_comparison_exp
+    endTime: time_comparison_exp
+    id: Int_comparison_exp
+    price: Int_comparison_exp
+    slot: slots_bool_exp
+    slot_id: bigint_comparison_exp
+    startTime: time_comparison_exp
+}
+
+"input type for incrementing numeric columns in table \"booked_slots\""
+input booked_slots_inc_input {
+    id: Int
+    price: Int
+    slot_id: bigint
+}
+
+"input type for inserting data into table \"booked_slots\""
+input booked_slots_insert_input {
+    booking: bookings_obj_rel_insert_input
+    booking_id: uuid
+    created_at: timestamptz
+    date: date
+    endTime: time
+    id: Int
+    price: Int
+    slot: slots_obj_rel_insert_input
+    slot_id: bigint
+    startTime: time
+}
+
+"order by max() on columns of table \"booked_slots\""
+input booked_slots_max_order_by {
+    booking_id: order_by
+    created_at: order_by
+    date: order_by
+    id: order_by
+    price: order_by
+    slot_id: order_by
+}
+
+"order by min() on columns of table \"booked_slots\""
+input booked_slots_min_order_by {
+    booking_id: order_by
+    created_at: order_by
+    date: order_by
+    id: order_by
+    price: order_by
+    slot_id: order_by
+}
+
+"on conflict condition type for table \"booked_slots\""
+input booked_slots_on_conflict {
+    constraint: booked_slots_constraint!
+    update_columns: [booked_slots_update_column!]! = []
+    where: booked_slots_bool_exp
+}
+
+"Ordering options when selecting data from \"booked_slots\"."
+input booked_slots_order_by {
+    booking: bookings_order_by
+    booking_id: order_by
+    created_at: order_by
+    date: order_by
+    endTime: order_by
+    id: order_by
+    price: order_by
+    slot: slots_order_by
+    slot_id: order_by
+    startTime: order_by
+}
+
+"primary key columns input for table: booked_slots"
+input booked_slots_pk_columns_input {
+    id: Int!
+}
+
+"input type for updating data in table \"booked_slots\""
+input booked_slots_set_input {
+    booking_id: uuid
+    created_at: timestamptz
+    date: date
+    endTime: time
+    id: Int
+    price: Int
+    slot_id: bigint
+    startTime: time
+}
+
+"order by stddev() on columns of table \"booked_slots\""
+input booked_slots_stddev_order_by {
+    id: order_by
+    price: order_by
+    slot_id: order_by
+}
+
+"order by stddev_pop() on columns of table \"booked_slots\""
+input booked_slots_stddev_pop_order_by {
+    id: order_by
+    price: order_by
+    slot_id: order_by
+}
+
+"order by stddev_samp() on columns of table \"booked_slots\""
+input booked_slots_stddev_samp_order_by {
+    id: order_by
+    price: order_by
+    slot_id: order_by
+}
+
+"order by sum() on columns of table \"booked_slots\""
+input booked_slots_sum_order_by {
+    id: order_by
+    price: order_by
+    slot_id: order_by
+}
+
+"order by var_pop() on columns of table \"booked_slots\""
+input booked_slots_var_pop_order_by {
+    id: order_by
+    price: order_by
+    slot_id: order_by
+}
+
+"order by var_samp() on columns of table \"booked_slots\""
+input booked_slots_var_samp_order_by {
+    id: order_by
+    price: order_by
+    slot_id: order_by
+}
+
+"order by variance() on columns of table \"booked_slots\""
+input booked_slots_variance_order_by {
+    id: order_by
+    price: order_by
+    slot_id: order_by
+}
+
 "order by aggregate values of table \"bookings\""
 input bookings_aggregate_order_by {
     avg: bookings_avg_order_by
@@ -3365,8 +3871,9 @@ input bookings_arr_rel_insert_input {
 
 "order by avg() on columns of table \"bookings\""
 input bookings_avg_order_by {
+    amount: order_by
+    booking_status: order_by
     facility_id: order_by
-    slot_id: order_by
     split_amount: order_by
     split_members: order_by
 }
@@ -3376,7 +3883,9 @@ input bookings_bool_exp {
     _and: [bookings_bool_exp!]
     _not: bookings_bool_exp
     _or: [bookings_bool_exp!]
-    booking_status: Boolean_comparison_exp
+    amount: Int_comparison_exp
+    booked_slots: booked_slots_bool_exp
+    booking_status: Int_comparison_exp
     contact_name: String_comparison_exp
     contact_phone: String_comparison_exp
     created_at: timestamptz_comparison_exp
@@ -3387,10 +3896,6 @@ input bookings_bool_exp {
     payment_status_enum: payment_status_enum_bool_exp
     payments: payments_bool_exp
     reservation_date: date_comparison_exp
-    reservation_end_time: timestamptz_comparison_exp
-    reservation_start_time: timestamptz_comparison_exp
-    slot: slots_bool_exp
-    slot_id: bigint_comparison_exp
     split_amount: Int_comparison_exp
     split_members: Int_comparison_exp
     split_payment: Boolean_comparison_exp
@@ -3401,15 +3906,18 @@ input bookings_bool_exp {
 
 "input type for incrementing numeric columns in table \"bookings\""
 input bookings_inc_input {
+    amount: Int
+    booking_status: Int
     facility_id: Int
-    slot_id: bigint
     split_amount: Int
     split_members: Int
 }
 
 "input type for inserting data into table \"bookings\""
 input bookings_insert_input {
-    booking_status: Boolean
+    amount: Int
+    booked_slots: booked_slots_arr_rel_insert_input
+    booking_status: Int
     contact_name: String
     contact_phone: String
     created_at: timestamptz
@@ -3420,10 +3928,6 @@ input bookings_insert_input {
     payment_status_enum: payment_status_enum_obj_rel_insert_input
     payments: payments_arr_rel_insert_input
     reservation_date: date
-    reservation_end_time: timestamptz
-    reservation_start_time: timestamptz
-    slot: slots_obj_rel_insert_input
-    slot_id: bigint
     split_amount: Int
     split_members: Int
     split_payment: Boolean
@@ -3434,15 +3938,14 @@ input bookings_insert_input {
 
 "order by max() on columns of table \"bookings\""
 input bookings_max_order_by {
+    amount: order_by
+    booking_status: order_by
     contact_name: order_by
     contact_phone: order_by
     created_at: order_by
     facility_id: order_by
     id: order_by
     reservation_date: order_by
-    reservation_end_time: order_by
-    reservation_start_time: order_by
-    slot_id: order_by
     split_amount: order_by
     split_members: order_by
     updated_at: order_by
@@ -3451,15 +3954,14 @@ input bookings_max_order_by {
 
 "order by min() on columns of table \"bookings\""
 input bookings_min_order_by {
+    amount: order_by
+    booking_status: order_by
     contact_name: order_by
     contact_phone: order_by
     created_at: order_by
     facility_id: order_by
     id: order_by
     reservation_date: order_by
-    reservation_end_time: order_by
-    reservation_start_time: order_by
-    slot_id: order_by
     split_amount: order_by
     split_members: order_by
     updated_at: order_by
@@ -3482,6 +3984,8 @@ input bookings_on_conflict {
 
 "Ordering options when selecting data from \"bookings\"."
 input bookings_order_by {
+    amount: order_by
+    booked_slots_aggregate: booked_slots_aggregate_order_by
     booking_status: order_by
     contact_name: order_by
     contact_phone: order_by
@@ -3493,10 +3997,6 @@ input bookings_order_by {
     payment_status_enum: payment_status_enum_order_by
     payments_aggregate: payments_aggregate_order_by
     reservation_date: order_by
-    reservation_end_time: order_by
-    reservation_start_time: order_by
-    slot: slots_order_by
-    slot_id: order_by
     split_amount: order_by
     split_members: order_by
     split_payment: order_by
@@ -3512,7 +4012,8 @@ input bookings_pk_columns_input {
 
 "input type for updating data in table \"bookings\""
 input bookings_set_input {
-    booking_status: Boolean
+    amount: Int
+    booking_status: Int
     contact_name: String
     contact_phone: String
     created_at: timestamptz
@@ -3520,9 +4021,6 @@ input bookings_set_input {
     id: uuid
     payment_status: payment_status_enum_enum
     reservation_date: date
-    reservation_end_time: timestamptz
-    reservation_start_time: timestamptz
-    slot_id: bigint
     split_amount: Int
     split_members: Int
     split_payment: Boolean
@@ -3532,56 +4030,63 @@ input bookings_set_input {
 
 "order by stddev() on columns of table \"bookings\""
 input bookings_stddev_order_by {
+    amount: order_by
+    booking_status: order_by
     facility_id: order_by
-    slot_id: order_by
     split_amount: order_by
     split_members: order_by
 }
 
 "order by stddev_pop() on columns of table \"bookings\""
 input bookings_stddev_pop_order_by {
+    amount: order_by
+    booking_status: order_by
     facility_id: order_by
-    slot_id: order_by
     split_amount: order_by
     split_members: order_by
 }
 
 "order by stddev_samp() on columns of table \"bookings\""
 input bookings_stddev_samp_order_by {
+    amount: order_by
+    booking_status: order_by
     facility_id: order_by
-    slot_id: order_by
     split_amount: order_by
     split_members: order_by
 }
 
 "order by sum() on columns of table \"bookings\""
 input bookings_sum_order_by {
+    amount: order_by
+    booking_status: order_by
     facility_id: order_by
-    slot_id: order_by
     split_amount: order_by
     split_members: order_by
 }
 
 "order by var_pop() on columns of table \"bookings\""
 input bookings_var_pop_order_by {
+    amount: order_by
+    booking_status: order_by
     facility_id: order_by
-    slot_id: order_by
     split_amount: order_by
     split_members: order_by
 }
 
 "order by var_samp() on columns of table \"bookings\""
 input bookings_var_samp_order_by {
+    amount: order_by
+    booking_status: order_by
     facility_id: order_by
-    slot_id: order_by
     split_amount: order_by
     split_members: order_by
 }
 
 "order by variance() on columns of table \"bookings\""
 input bookings_variance_order_by {
+    amount: order_by
+    booking_status: order_by
     facility_id: order_by
-    slot_id: order_by
     split_amount: order_by
     split_members: order_by
 }
@@ -4038,6 +4543,7 @@ input payment_status_enum_bool_exp {
     _or: [payment_status_enum_bool_exp!]
     bookings: bookings_bool_exp
     description: String_comparison_exp
+    payments: payments_bool_exp
     status: String_comparison_exp
 }
 
@@ -4054,6 +4560,7 @@ input payment_status_enum_enum_comparison_exp {
 input payment_status_enum_insert_input {
     bookings: bookings_arr_rel_insert_input
     description: String
+    payments: payments_arr_rel_insert_input
     status: String
 }
 
@@ -4075,6 +4582,7 @@ input payment_status_enum_on_conflict {
 input payment_status_enum_order_by {
     bookings_aggregate: bookings_aggregate_order_by
     description: order_by
+    payments_aggregate: payments_aggregate_order_by
     status: order_by
 }
 
@@ -4111,10 +4619,12 @@ input payments_bool_exp {
     booking: bookings_bool_exp
     booking_id: uuid_comparison_exp
     created_at: timestamptz_comparison_exp
-    id: uuid_comparison_exp
-    payment_approved: Boolean_comparison_exp
+    id: String_comparison_exp
+    payment_captured: Boolean_comparison_exp
     payment_obj: json_comparison_exp
-    payment_status: String_comparison_exp
+    payment_status: payment_status_enum_enum_comparison_exp
+    payment_status_enum: payment_status_enum_bool_exp
+    refund_id: String_comparison_exp
     updated_at: timestamptz_comparison_exp
 }
 
@@ -4123,10 +4633,12 @@ input payments_insert_input {
     booking: bookings_obj_rel_insert_input
     booking_id: uuid
     created_at: timestamptz
-    id: uuid
-    payment_approved: Boolean
+    id: String
+    payment_captured: Boolean
     payment_obj: json
-    payment_status: String
+    payment_status: payment_status_enum_enum
+    payment_status_enum: payment_status_enum_obj_rel_insert_input
+    refund_id: String
     updated_at: timestamptz
 }
 
@@ -4135,7 +4647,7 @@ input payments_max_order_by {
     booking_id: order_by
     created_at: order_by
     id: order_by
-    payment_status: order_by
+    refund_id: order_by
     updated_at: order_by
 }
 
@@ -4144,7 +4656,7 @@ input payments_min_order_by {
     booking_id: order_by
     created_at: order_by
     id: order_by
-    payment_status: order_by
+    refund_id: order_by
     updated_at: order_by
 }
 
@@ -4161,25 +4673,28 @@ input payments_order_by {
     booking_id: order_by
     created_at: order_by
     id: order_by
-    payment_approved: order_by
+    payment_captured: order_by
     payment_obj: order_by
     payment_status: order_by
+    payment_status_enum: payment_status_enum_order_by
+    refund_id: order_by
     updated_at: order_by
 }
 
 "primary key columns input for table: payments"
 input payments_pk_columns_input {
-    id: uuid!
+    id: String!
 }
 
 "input type for updating data in table \"payments\""
 input payments_set_input {
     booking_id: uuid
     created_at: timestamptz
-    id: uuid
-    payment_approved: Boolean
+    id: String
+    payment_captured: Boolean
     payment_obj: json
-    payment_status: String
+    payment_status: payment_status_enum_enum
+    refund_id: String
     updated_at: timestamptz
 }
 
@@ -4376,7 +4891,7 @@ input slots_bool_exp {
     _and: [slots_bool_exp!]
     _not: slots_bool_exp
     _or: [slots_bool_exp!]
-    bookings: bookings_bool_exp
+    booked_slots: booked_slots_bool_exp
     disabled: Boolean_comparison_exp
     end_time: time_comparison_exp
     facility: facilities_bool_exp
@@ -4393,7 +4908,7 @@ input slots_inc_input {
 
 "input type for inserting data into table \"slots\""
 input slots_insert_input {
-    bookings: bookings_arr_rel_insert_input
+    booked_slots: booked_slots_arr_rel_insert_input
     disabled: Boolean
     end_time: time
     facility: facilities_obj_rel_insert_input
@@ -4430,7 +4945,7 @@ input slots_on_conflict {
 
 "Ordering options when selecting data from \"slots\"."
 input slots_order_by {
-    bookings_aggregate: bookings_aggregate_order_by
+    booked_slots_aggregate: booked_slots_aggregate_order_by
     disabled: order_by
     end_time: order_by
     facility: facilities_order_by

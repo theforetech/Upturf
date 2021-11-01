@@ -26,7 +26,7 @@
       </div>
       <b-carousel-slide
         v-for="y in cardImage"
-        :key="y"
+        :key="y.url"
         class="carousal-image"
         :img-src="y.url"
       />
@@ -78,7 +78,7 @@
         <b-row align-h="center">
           <b-col
             v-for="x in sports"
-            :key="x"
+            :key="x.id"
             cols="1"
             style="padding: 0px"
           >
