@@ -1,48 +1,22 @@
 <template>
   <div>
-    <b-row>
-      <b-col>
-        <b-button>Hello</b-button>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col
-        v-for="x in turfs"
-        :key="x.id"
-        lg="3"
-        md="6"
-        xs="12"
-      >
-        <turf-card
-          :card-id="x.id"
-          :card-title="x.name"
-          :card-image="x.images"
-          :turf-avg-cost="x.cost"
-          :rating="x.rating"
-          :street="x.address"
-          :sports="x.sports"
-        />
-      </b-col>
-    </b-row>
+    <search-bar />
+
   </div>
-  <!-- / Error page-->
 </template>
 
 <script>
 /* eslint-disable global-require */
-import { BCol, BRow, BButton } from 'bootstrap-vue'
+import { } from 'bootstrap-vue'
 
-import store from '@/store/index'
+import store from '@/store'
 import gql from 'graphql-tag'
-import TurfCard from '../../card/card-advance/TurfCard.vue'
+// import TurfCard from '../../card/card-advance/TurfCard.vue'
+import SearchBar from './SearchBar.vue'
 
 export default {
   components: {
-    BRow,
-    BCol,
-    TurfCard,
-    BButton,
-
+    SearchBar,
   },
 
   data() {
@@ -96,7 +70,6 @@ export default {
   },
   methods: {
     async getTurfs() {
-      console.log('sd')
       const result = await this.$apollo.query({
         query: gql`query {
           turf(where: {status: {_neq: false}}) {
@@ -153,3 +126,6 @@ export default {
   },
 }
 </script>
+<style scoped>
+
+</style>

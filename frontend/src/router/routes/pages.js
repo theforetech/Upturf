@@ -304,11 +304,33 @@ export default [
 
   },
   {
+    path: '/user-profile',
+    name: 'user-profile',
+    component: () => import('@/views/pages/components/user/UserProfile'),
+    meta: {
+      layout: 'full',
+      pageTitle: 'Profile',
+      breadcrumb: [
+        {
+          text: 'Pages',
+        },
+        {
+          text: 'Profile',
+          active: true,
+        },
+      ],
+    },
+
+  },
+
+  {
     path: '/search',
     name: 'pages-search',
-    component: () => import('@/views/pages/components/Search'),
+    component: () => import('@/views/pages/components/Search/Search'),
     meta: {
       pageTitle: '',
+      layout: 'full',
+
       breadcrumb: [
         {
           text: 'Search',

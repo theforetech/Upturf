@@ -1,5 +1,6 @@
 <template>
   <div>
+    <search-bar />
     <b-card
       no-body
     >
@@ -43,6 +44,7 @@ import {
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import BookedCard from './BookedCard.vue'
+import SearchBar from '../Search/SearchBar.vue'
 
 export default {
   components: {
@@ -51,6 +53,7 @@ export default {
     BCardHeader,
     BCardBody,
     BookedCard,
+    SearchBar,
   },
   directives: {
     Ripple,
@@ -65,7 +68,7 @@ export default {
           facility: '3 v 3',
           slots: 3,
           amount: '3000',
-          tag: 'Upcoming',
+          tag: 'Processing',
           date: '2021 10 28',
 
         },
@@ -97,6 +100,16 @@ export default {
           slots: 1,
           amount: '5000',
           tag: 'Cancelled',
+          date: '2021 08 12',
+        },
+        {
+          id: '4',
+          turf: 'Panchsheel Club',
+          sport: 'Basketball',
+          facility: '5 v 5',
+          slots: 1,
+          amount: '5000',
+          tag: 'Refunded',
           date: '2021 08 12',
         },
       ],

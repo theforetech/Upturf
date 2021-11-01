@@ -107,14 +107,14 @@
         md="6"
         xs="12"
       >
-        <turf-card
-          :card-title="x.name"
-          :card-image="x.img"
-          :turf-avg-cost="x.cost"
-          :rating="x.rating"
-          :street="x.street"
-          :sports="x.sports"
-        />
+        <!--        <turf-card-->
+        <!--          :card-title="x.name"-->
+        <!--          :card-image="x.img"-->
+        <!--          :turf-avg-cost="x.cost"-->
+        <!--          :rating="x.rating"-->
+        <!--          :street="x.street"-->
+        <!--          :sports="x.sports"-->
+        <!--        />-->
       </b-col>
     </b-row>
   </div>
@@ -145,7 +145,7 @@ import gql from 'graphql-tag'
 
 import VueSlickCarousel from 'vue-slick-carousel'
 import SportCard from '../../card/card-advance/SportCard.vue'
-import TurfCard from '../../card/card-advance/TurfCard.vue'
+// import TurfCard from '../../card/card-advance/TurfCard.vue'
 // optional style for arrows & dots
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
@@ -161,7 +161,7 @@ export default {
     BImg,
     BMedia,
     BLink,
-    TurfCard,
+    // TurfCard,
     // BForm,
     // BInputGroup,
     // BInputGroupPrepend,

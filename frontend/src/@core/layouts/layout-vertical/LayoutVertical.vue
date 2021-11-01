@@ -4,41 +4,6 @@
     :class="[layoutClasses]"
     :data-col="isNavMenuHidden ? '1-column' : null"
   >
-    <!--    <b-navbar-->
-    <!--      variant="faded"-->
-    <!--      type="dark"-->
-    <!--      fixed="top"-->
-    <!--    >-->
-    <!--      <b-row-->
-    <!--        cols="5"-->
-    <!--        cols-sm="5"-->
-    <!--        cols-md="5"-->
-    <!--        cols-lg="5"-->
-    <!--      >-->
-    <!--        <b-col-->
-    <!--          v-for="x in navbarItems"-->
-    <!--          :key="x.name"-->
-    <!--          style="padding: 0!important;"-->
-    <!--        >-->
-    <!--          <b-button-->
-    <!--            v-ripple.200="'rgba(2, 2, 2, 0.2)'"-->
-    <!--            variant="flat-primary"-->
-    <!--            class="btn-icon rounded-circle"-->
-    <!--            @click="navigateTo(x.route)"-->
-    <!--          >-->
-    <!--            <feather-icon-->
-    <!--              :icon="x.icon"-->
-    <!--              size="23"-->
-    <!--              class="feather-icon"-->
-    <!--            />-->
-    <!--            <span class="btn-name">-->
-    <!--              {{ x.name }}-->
-    <!--            </span>-->
-    <!--          </b-button>-->
-    <!--        </b-col>-->
-    <!--      </b-row>-->
-    <!--    </b-navbar>-->
-
     <!-- Navbar -->
     <b-navbar
       :toggleable="false"
@@ -70,7 +35,6 @@
         />
       </template>
     </vertical-nav-menu>
-
     <!-- /Vertical Nav Menu -->
 
     <!-- Vertical Nav Menu Overlay -->
@@ -79,7 +43,6 @@
       :class="overlayClasses"
       @click="isVerticalMenuActive = false"
     />
-
     <!-- /Vertical Nav Menu Overlay -->
 
     <!-- Content -->
@@ -104,7 +67,6 @@
         </template>
       </component>
     </transition>
-
     <!--/ Content -->
     <!-- Footer -->
     <footer
@@ -151,10 +113,36 @@
         </b-col>
       </b-row>
     </b-navbar>
-
     <slot name="customizer" />
   </div>
 </template>
+<style scoped>
+.appbar{
+  background-color: #FCFCFC;
+  height: 4.5rem;
+  box-shadow: 0 -5px 5px -5px rgba(0,0,0,0.3);
+  visibility: hidden;
+  overflow: hidden;
+}
+@media screen and (max-width: 600px) {
+  .appbar{
+    visibility: visible;
+  }
+}
+.btn-icon{
+  height: 10rem;
+}
+.feather-icon{
+  margin-bottom: 0.7rem;
+  color: #4B485A;
+  width: 100%;
+}
+.btn-name{
+  font-size: 0.8rem;
+  text-align: center;
+  color: #4B485A;
+}
+</style>
 
 <!--<style>-->
 <!--@media (max-width: 576px) {-->
@@ -280,30 +268,3 @@ export default {
   },
 }
 </script>
-<style scoped>
-.appbar{
-  background-color: #FCFCFC;
-  height: 4.5rem;
-  box-shadow: 0 -5px 5px -5px rgba(0,0,0,0.3);
-  visibility: hidden;
-  overflow: hidden;
-}
-@media screen and (max-width: 600px) {
-  .appbar{
-    visibility: visible;
-  }
-}
-.btn-icon{
-  height: 10rem;
-}
-.feather-icon{
-  margin-bottom: 0.7rem;
-  color: #4B485A;
-  width: 100%;
-}
-.btn-name{
-  font-size: 0.8rem;
-  text-align: center;
-  color: #4B485A;
-}
-</style>

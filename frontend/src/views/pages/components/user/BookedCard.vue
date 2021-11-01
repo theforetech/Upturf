@@ -71,6 +71,21 @@
       </b-button>
 
     </b-row>
+    <b-row
+      align-h="center"
+      style="margin-top: 1rem"
+      :class="{display:statusCheck.name!=='Processing'}"
+    >
+
+      <b-button
+        v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+        variant="flat-success"
+        class="booking-btn"
+      >
+        Complete Payment
+      </b-button>
+
+    </b-row>
 
   </b-card>
 </template>
@@ -163,11 +178,19 @@ export default {
         },
         {
           name: 'Concluded',
-          color: 'secondary',
+          color: 'dark',
         },
         {
           name: 'Cancelled',
           color: 'danger',
+        },
+        {
+          name: 'Refunded',
+          color: 'secondary',
+        },
+        {
+          name: 'Processing',
+          color: 'info',
         },
       ],
     }
@@ -182,7 +205,15 @@ export default {
       return y[0]
     },
     buttonUpdate() {
-      return this.statusCheck.name !== 'Upcoming'
+      if (this.statusCheck.name === 'Processing' || this.statusCheck.name === 'Upcoming') {
+        return false
+      }
+      // if (this.statusCheck.name !== 'Upcoming') {
+      //   console.log(this.statusCheck.name)
+      //   return true
+      // }
+
+      return true
     },
     dateFormat() {
       const formattedDate = moment(this.date).format('Do MMM YYYY')
