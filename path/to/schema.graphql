@@ -15,9 +15,9 @@ type FileOutput {
 }
 
 type bookOutput {
-    amount: Int
-    id: String
-    razorpay: String
+    amount: Int!
+    id: String!
+    razorpay: String!
 }
 
 "columns and relationships of \"booked_slots\""
@@ -352,7 +352,7 @@ type bookings_variance_fields {
 
 type cancelOutput {
     id: String!
-    refundID: String
+    refund: Int
     status: String!
 }
 
@@ -1059,6 +1059,8 @@ type mutation_root {
     ): payment_status_enum
     "update data of the table: \"payments\""
     update_payments(
+        "increments the numeric columns with given value of the filtered values"
+        _inc: payments_inc_input,
         "sets the columns of the filtered rows to the given values"
         _set: payments_set_input,
         "filter the rows which have to be updated"
@@ -1066,6 +1068,8 @@ type mutation_root {
     ): payments_mutation_response
     "update single row of the table: \"payments\""
     update_payments_by_pk(
+        "increments the numeric columns with given value of the filtered values"
+        _inc: payments_inc_input,
         "sets the columns of the filtered rows to the given values"
         _set: payments_set_input,
         pk_columns: payments_pk_columns_input!
@@ -1273,20 +1277,20 @@ type payment_status_enum_mutation_response {
 
 "columns and relationships of \"payments\""
 type payments {
+    amount: numeric
     "An object relationship"
     booking: bookings!
     booking_id: uuid!
     created_at: timestamptz!
+    currency: String!
     id: String!
     payment_captured: Boolean!
-    payment_obj(
-        "JSON select path"
-        path: String
-    ): json
+    payment_id: String
     payment_status: payment_status_enum_enum!
     "An object relationship"
     payment_status_enum: payment_status_enum!
-    refund_id: String
+    refund_amount: numeric
+    refund_status: String
     updated_at: timestamptz!
 }
 
@@ -1298,26 +1302,48 @@ type payments_aggregate {
 
 "aggregate fields of \"payments\""
 type payments_aggregate_fields {
+    avg: payments_avg_fields
     count(columns: [payments_select_column!], distinct: Boolean): Int!
     max: payments_max_fields
     min: payments_min_fields
+    stddev: payments_stddev_fields
+    stddev_pop: payments_stddev_pop_fields
+    stddev_samp: payments_stddev_samp_fields
+    sum: payments_sum_fields
+    var_pop: payments_var_pop_fields
+    var_samp: payments_var_samp_fields
+    variance: payments_variance_fields
+}
+
+"aggregate avg on columns"
+type payments_avg_fields {
+    amount: Float
+    refund_amount: Float
 }
 
 "aggregate max on columns"
 type payments_max_fields {
+    amount: numeric
     booking_id: uuid
     created_at: timestamptz
+    currency: String
     id: String
-    refund_id: String
+    payment_id: String
+    refund_amount: numeric
+    refund_status: String
     updated_at: timestamptz
 }
 
 "aggregate min on columns"
 type payments_min_fields {
+    amount: numeric
     booking_id: uuid
     created_at: timestamptz
+    currency: String
     id: String
-    refund_id: String
+    payment_id: String
+    refund_amount: numeric
+    refund_status: String
     updated_at: timestamptz
 }
 
@@ -1327,6 +1353,48 @@ type payments_mutation_response {
     affected_rows: Int!
     "data from the rows affected by the mutation"
     returning: [payments!]!
+}
+
+"aggregate stddev on columns"
+type payments_stddev_fields {
+    amount: Float
+    refund_amount: Float
+}
+
+"aggregate stddev_pop on columns"
+type payments_stddev_pop_fields {
+    amount: Float
+    refund_amount: Float
+}
+
+"aggregate stddev_samp on columns"
+type payments_stddev_samp_fields {
+    amount: Float
+    refund_amount: Float
+}
+
+"aggregate sum on columns"
+type payments_sum_fields {
+    amount: numeric
+    refund_amount: numeric
+}
+
+"aggregate var_pop on columns"
+type payments_var_pop_fields {
+    amount: Float
+    refund_amount: Float
+}
+
+"aggregate var_samp on columns"
+type payments_var_samp_fields {
+    amount: Float
+    refund_amount: Float
+}
+
+"aggregate variance on columns"
+type payments_variance_fields {
+    amount: Float
+    refund_amount: Float
 }
 
 type query_root {
@@ -2483,8 +2551,6 @@ type turf {
         where: facilities_bool_exp
     ): facilities_aggregate!
     gMapsBusinessLink: String
-    gMapsLat: String
-    gMapsLon: String
     google: String
     id: bigint!
     "An array relationship"
@@ -2514,6 +2580,8 @@ type turf {
         where: images_bool_exp
     ): images_aggregate!
     instagram: String
+    lat: float8
+    lon: float8
     name: String!
     pincode: Int!
     "A computed field, executes function \"turf_rating\""
@@ -2578,6 +2646,8 @@ type turf_aggregate_fields {
 type turf_avg_fields {
     contactPhone: Float
     id: Float
+    lat: Float
+    lon: Float
     pincode: Float
 }
 
@@ -2593,11 +2663,11 @@ type turf_max_fields {
     created_at: timestamptz
     facebook: String
     gMapsBusinessLink: String
-    gMapsLat: String
-    gMapsLon: String
     google: String
     id: bigint
     instagram: String
+    lat: float8
+    lon: float8
     name: String
     pincode: Int
     state: String
@@ -2618,11 +2688,11 @@ type turf_min_fields {
     created_at: timestamptz
     facebook: String
     gMapsBusinessLink: String
-    gMapsLat: String
-    gMapsLon: String
     google: String
     id: bigint
     instagram: String
+    lat: float8
+    lon: float8
     name: String
     pincode: Int
     state: String
@@ -2643,6 +2713,8 @@ type turf_mutation_response {
 type turf_stddev_fields {
     contactPhone: Float
     id: Float
+    lat: Float
+    lon: Float
     pincode: Float
 }
 
@@ -2650,6 +2722,8 @@ type turf_stddev_fields {
 type turf_stddev_pop_fields {
     contactPhone: Float
     id: Float
+    lat: Float
+    lon: Float
     pincode: Float
 }
 
@@ -2657,6 +2731,8 @@ type turf_stddev_pop_fields {
 type turf_stddev_samp_fields {
     contactPhone: Float
     id: Float
+    lat: Float
+    lon: Float
     pincode: Float
 }
 
@@ -2664,6 +2740,8 @@ type turf_stddev_samp_fields {
 type turf_sum_fields {
     contactPhone: bigint
     id: bigint
+    lat: float8
+    lon: float8
     pincode: Int
 }
 
@@ -2671,6 +2749,8 @@ type turf_sum_fields {
 type turf_var_pop_fields {
     contactPhone: Float
     id: Float
+    lat: Float
+    lon: Float
     pincode: Float
 }
 
@@ -2678,6 +2758,8 @@ type turf_var_pop_fields {
 type turf_var_samp_fields {
     contactPhone: Float
     id: Float
+    lat: Float
+    lon: Float
     pincode: Float
 }
 
@@ -2685,6 +2767,8 @@ type turf_var_samp_fields {
 type turf_variance_fields {
     contactPhone: Float
     id: Float
+    lat: Float
+    lon: Float
     pincode: Float
 }
 
@@ -2966,8 +3050,6 @@ type vendor_mutation_response {
 enum booked_slots_constraint {
     "unique or primary key constraint"
     booked_slots_pkey
-    "unique or primary key constraint"
-    booked_slots_slot_id_date_key
 }
 
 "select columns of table \"booked_slots\""
@@ -3201,9 +3283,11 @@ enum payment_status_enum_constraint {
 enum payment_status_enum_enum {
     "Payment Failed"
     failed
-    "Payment is being processed."
+    "Payment processing"
     processing
-    "Payment has been refunded"
+    "Payment refund initiated"
+    refund_initiated
+    "Payment refunded"
     refunded
     "Payment Successful"
     success
@@ -3234,19 +3318,25 @@ enum payments_constraint {
 "select columns of table \"payments\""
 enum payments_select_column {
     "column name"
+    amount
+    "column name"
     booking_id
     "column name"
     created_at
+    "column name"
+    currency
     "column name"
     id
     "column name"
     payment_captured
     "column name"
-    payment_obj
+    payment_id
     "column name"
     payment_status
     "column name"
-    refund_id
+    refund_amount
+    "column name"
+    refund_status
     "column name"
     updated_at
 }
@@ -3254,19 +3344,25 @@ enum payments_select_column {
 "update columns of table \"payments\""
 enum payments_update_column {
     "column name"
+    amount
+    "column name"
     booking_id
     "column name"
     created_at
+    "column name"
+    currency
     "column name"
     id
     "column name"
     payment_captured
     "column name"
-    payment_obj
+    payment_id
     "column name"
     payment_status
     "column name"
-    refund_id
+    refund_amount
+    "column name"
+    refund_status
     "column name"
     updated_at
 }
@@ -3396,15 +3492,15 @@ enum turf_select_column {
     "column name"
     gMapsBusinessLink
     "column name"
-    gMapsLat
-    "column name"
-    gMapsLon
-    "column name"
     google
     "column name"
     id
     "column name"
     instagram
+    "column name"
+    lat
+    "column name"
+    lon
     "column name"
     name
     "column name"
@@ -3444,15 +3540,15 @@ enum turf_update_column {
     "column name"
     gMapsBusinessLink
     "column name"
-    gMapsLat
-    "column name"
-    gMapsLon
-    "column name"
     google
     "column name"
     id
     "column name"
     instagram
+    "column name"
+    lat
+    "column name"
+    lon
     "column name"
     name
     "column name"
@@ -4360,6 +4456,19 @@ input facilities_variance_order_by {
     weekendPrice: order_by
 }
 
+"Boolean expression to compare columns of type \"float8\". All fields are combined with logical 'AND'."
+input float8_comparison_exp {
+    _eq: float8
+    _gt: float8
+    _gte: float8
+    _in: [float8!]
+    _is_null: Boolean
+    _lt: float8
+    _lte: float8
+    _neq: float8
+    _nin: [float8!]
+}
+
 "order by aggregate values of table \"images\""
 input images_aggregate_order_by {
     avg: images_avg_order_by
@@ -4523,17 +4632,17 @@ input images_variance_order_by {
     turf_id: order_by
 }
 
-"Boolean expression to compare columns of type \"json\". All fields are combined with logical 'AND'."
-input json_comparison_exp {
-    _eq: json
-    _gt: json
-    _gte: json
-    _in: [json!]
+"Boolean expression to compare columns of type \"numeric\". All fields are combined with logical 'AND'."
+input numeric_comparison_exp {
+    _eq: numeric
+    _gt: numeric
+    _gte: numeric
+    _in: [numeric!]
     _is_null: Boolean
-    _lt: json
-    _lte: json
-    _neq: json
-    _nin: [json!]
+    _lt: numeric
+    _lte: numeric
+    _neq: numeric
+    _nin: [numeric!]
 }
 
 "Boolean expression to filter rows from the table \"payment_status_enum\". All fields are combined with a logical 'AND'."
@@ -4599,9 +4708,17 @@ input payment_status_enum_set_input {
 
 "order by aggregate values of table \"payments\""
 input payments_aggregate_order_by {
+    avg: payments_avg_order_by
     count: order_by
     max: payments_max_order_by
     min: payments_min_order_by
+    stddev: payments_stddev_order_by
+    stddev_pop: payments_stddev_pop_order_by
+    stddev_samp: payments_stddev_samp_order_by
+    sum: payments_sum_order_by
+    var_pop: payments_var_pop_order_by
+    var_samp: payments_var_samp_order_by
+    variance: payments_variance_order_by
 }
 
 "input type for inserting array relation for remote table \"payments\""
@@ -4611,52 +4728,78 @@ input payments_arr_rel_insert_input {
     on_conflict: payments_on_conflict
 }
 
+"order by avg() on columns of table \"payments\""
+input payments_avg_order_by {
+    amount: order_by
+    refund_amount: order_by
+}
+
 "Boolean expression to filter rows from the table \"payments\". All fields are combined with a logical 'AND'."
 input payments_bool_exp {
     _and: [payments_bool_exp!]
     _not: payments_bool_exp
     _or: [payments_bool_exp!]
+    amount: numeric_comparison_exp
     booking: bookings_bool_exp
     booking_id: uuid_comparison_exp
     created_at: timestamptz_comparison_exp
+    currency: String_comparison_exp
     id: String_comparison_exp
     payment_captured: Boolean_comparison_exp
-    payment_obj: json_comparison_exp
+    payment_id: String_comparison_exp
     payment_status: payment_status_enum_enum_comparison_exp
     payment_status_enum: payment_status_enum_bool_exp
-    refund_id: String_comparison_exp
+    refund_amount: numeric_comparison_exp
+    refund_status: String_comparison_exp
     updated_at: timestamptz_comparison_exp
+}
+
+"input type for incrementing numeric columns in table \"payments\""
+input payments_inc_input {
+    amount: numeric
+    refund_amount: numeric
 }
 
 "input type for inserting data into table \"payments\""
 input payments_insert_input {
+    amount: numeric
     booking: bookings_obj_rel_insert_input
     booking_id: uuid
     created_at: timestamptz
+    currency: String
     id: String
     payment_captured: Boolean
-    payment_obj: json
+    payment_id: String
     payment_status: payment_status_enum_enum
     payment_status_enum: payment_status_enum_obj_rel_insert_input
-    refund_id: String
+    refund_amount: numeric
+    refund_status: String
     updated_at: timestamptz
 }
 
 "order by max() on columns of table \"payments\""
 input payments_max_order_by {
+    amount: order_by
     booking_id: order_by
     created_at: order_by
+    currency: order_by
     id: order_by
-    refund_id: order_by
+    payment_id: order_by
+    refund_amount: order_by
+    refund_status: order_by
     updated_at: order_by
 }
 
 "order by min() on columns of table \"payments\""
 input payments_min_order_by {
+    amount: order_by
     booking_id: order_by
     created_at: order_by
+    currency: order_by
     id: order_by
-    refund_id: order_by
+    payment_id: order_by
+    refund_amount: order_by
+    refund_status: order_by
     updated_at: order_by
 }
 
@@ -4669,15 +4812,18 @@ input payments_on_conflict {
 
 "Ordering options when selecting data from \"payments\"."
 input payments_order_by {
+    amount: order_by
     booking: bookings_order_by
     booking_id: order_by
     created_at: order_by
+    currency: order_by
     id: order_by
     payment_captured: order_by
-    payment_obj: order_by
+    payment_id: order_by
     payment_status: order_by
     payment_status_enum: payment_status_enum_order_by
-    refund_id: order_by
+    refund_amount: order_by
+    refund_status: order_by
     updated_at: order_by
 }
 
@@ -4688,14 +4834,59 @@ input payments_pk_columns_input {
 
 "input type for updating data in table \"payments\""
 input payments_set_input {
+    amount: numeric
     booking_id: uuid
     created_at: timestamptz
+    currency: String
     id: String
     payment_captured: Boolean
-    payment_obj: json
+    payment_id: String
     payment_status: payment_status_enum_enum
-    refund_id: String
+    refund_amount: numeric
+    refund_status: String
     updated_at: timestamptz
+}
+
+"order by stddev() on columns of table \"payments\""
+input payments_stddev_order_by {
+    amount: order_by
+    refund_amount: order_by
+}
+
+"order by stddev_pop() on columns of table \"payments\""
+input payments_stddev_pop_order_by {
+    amount: order_by
+    refund_amount: order_by
+}
+
+"order by stddev_samp() on columns of table \"payments\""
+input payments_stddev_samp_order_by {
+    amount: order_by
+    refund_amount: order_by
+}
+
+"order by sum() on columns of table \"payments\""
+input payments_sum_order_by {
+    amount: order_by
+    refund_amount: order_by
+}
+
+"order by var_pop() on columns of table \"payments\""
+input payments_var_pop_order_by {
+    amount: order_by
+    refund_amount: order_by
+}
+
+"order by var_samp() on columns of table \"payments\""
+input payments_var_samp_order_by {
+    amount: order_by
+    refund_amount: order_by
+}
+
+"order by variance() on columns of table \"payments\""
+input payments_variance_order_by {
+    amount: order_by
+    refund_amount: order_by
 }
 
 "order by aggregate values of table \"rating\""
@@ -5123,6 +5314,8 @@ input turf_arr_rel_insert_input {
 input turf_avg_order_by {
     contactPhone: order_by
     id: order_by
+    lat: order_by
+    lon: order_by
     pincode: order_by
 }
 
@@ -5142,12 +5335,12 @@ input turf_bool_exp {
     facebook: String_comparison_exp
     facilities: facilities_bool_exp
     gMapsBusinessLink: String_comparison_exp
-    gMapsLat: String_comparison_exp
-    gMapsLon: String_comparison_exp
     google: String_comparison_exp
     id: bigint_comparison_exp
     images: images_bool_exp
     instagram: String_comparison_exp
+    lat: float8_comparison_exp
+    lon: float8_comparison_exp
     name: String_comparison_exp
     pincode: Int_comparison_exp
     ratings: rating_bool_exp
@@ -5163,6 +5356,8 @@ input turf_bool_exp {
 input turf_inc_input {
     contactPhone: bigint
     id: bigint
+    lat: float8
+    lon: float8
     pincode: Int
 }
 
@@ -5179,12 +5374,12 @@ input turf_insert_input {
     facebook: String
     facilities: facilities_arr_rel_insert_input
     gMapsBusinessLink: String
-    gMapsLat: String
-    gMapsLon: String
     google: String
     id: bigint
     images: images_arr_rel_insert_input
     instagram: String
+    lat: float8
+    lon: float8
     name: String
     pincode: Int
     ratings: rating_arr_rel_insert_input
@@ -5208,11 +5403,11 @@ input turf_max_order_by {
     created_at: order_by
     facebook: order_by
     gMapsBusinessLink: order_by
-    gMapsLat: order_by
-    gMapsLon: order_by
     google: order_by
     id: order_by
     instagram: order_by
+    lat: order_by
+    lon: order_by
     name: order_by
     pincode: order_by
     state: order_by
@@ -5233,11 +5428,11 @@ input turf_min_order_by {
     created_at: order_by
     facebook: order_by
     gMapsBusinessLink: order_by
-    gMapsLat: order_by
-    gMapsLon: order_by
     google: order_by
     id: order_by
     instagram: order_by
+    lat: order_by
+    lon: order_by
     name: order_by
     pincode: order_by
     state: order_by
@@ -5273,12 +5468,12 @@ input turf_order_by {
     facebook: order_by
     facilities_aggregate: facilities_aggregate_order_by
     gMapsBusinessLink: order_by
-    gMapsLat: order_by
-    gMapsLon: order_by
     google: order_by
     id: order_by
     images_aggregate: images_aggregate_order_by
     instagram: order_by
+    lat: order_by
+    lon: order_by
     name: order_by
     pincode: order_by
     ratings_aggregate: rating_aggregate_order_by
@@ -5307,11 +5502,11 @@ input turf_set_input {
     created_at: timestamptz
     facebook: String
     gMapsBusinessLink: String
-    gMapsLat: String
-    gMapsLon: String
     google: String
     id: bigint
     instagram: String
+    lat: float8
+    lon: float8
     name: String
     pincode: Int
     state: String
@@ -5325,6 +5520,8 @@ input turf_set_input {
 input turf_stddev_order_by {
     contactPhone: order_by
     id: order_by
+    lat: order_by
+    lon: order_by
     pincode: order_by
 }
 
@@ -5332,6 +5529,8 @@ input turf_stddev_order_by {
 input turf_stddev_pop_order_by {
     contactPhone: order_by
     id: order_by
+    lat: order_by
+    lon: order_by
     pincode: order_by
 }
 
@@ -5339,6 +5538,8 @@ input turf_stddev_pop_order_by {
 input turf_stddev_samp_order_by {
     contactPhone: order_by
     id: order_by
+    lat: order_by
+    lon: order_by
     pincode: order_by
 }
 
@@ -5346,6 +5547,8 @@ input turf_stddev_samp_order_by {
 input turf_sum_order_by {
     contactPhone: order_by
     id: order_by
+    lat: order_by
+    lon: order_by
     pincode: order_by
 }
 
@@ -5353,6 +5556,8 @@ input turf_sum_order_by {
 input turf_var_pop_order_by {
     contactPhone: order_by
     id: order_by
+    lat: order_by
+    lon: order_by
     pincode: order_by
 }
 
@@ -5360,6 +5565,8 @@ input turf_var_pop_order_by {
 input turf_var_samp_order_by {
     contactPhone: order_by
     id: order_by
+    lat: order_by
+    lon: order_by
     pincode: order_by
 }
 
@@ -5367,6 +5574,8 @@ input turf_var_samp_order_by {
 input turf_variance_order_by {
     contactPhone: order_by
     id: order_by
+    lat: order_by
+    lon: order_by
     pincode: order_by
 }
 
@@ -5612,7 +5821,7 @@ scalar date
 
 scalar float8
 
-scalar json
+scalar numeric
 
 scalar time
 

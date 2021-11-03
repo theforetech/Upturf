@@ -230,6 +230,36 @@
         </b-card-body>
       </b-card>
       <b-card
+        no-body
+        class="card-browser-states mb-2"
+      >
+        <b-card-header>
+          <div>
+            <b-card-title>
+              Map Location
+            </b-card-title>
+          </div>
+        </b-card-header>
+
+        <!-- body -->
+        <b-card-body>
+          <GmapMap
+            ref="mapRef"
+            :center="{ lat: turfData.lat, lng: turfData.lon }"
+            :zoom="18"
+            map-style-id="roadmap"
+            :options="{ disableDefaultUI: true }"
+            style="width: auto; height: 50vmin"
+          >
+            <GmapMarker
+              :position="{ lat: turfData.lat, lng: turfData.lon }"
+              :clickable="true"
+              :draggable="false"
+            />
+          </GmapMap>
+        </b-card-body>
+      </b-card>
+      <b-card
         title="Description"
         class="description"
       >
@@ -486,6 +516,8 @@ export default {
             city
             about
             contactPhone
+            lat
+            lon
             gMapsBusinessLink
             address
             images{

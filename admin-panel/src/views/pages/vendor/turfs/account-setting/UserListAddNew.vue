@@ -456,8 +456,8 @@ export default {
                   contactName
                   contactPhone
                   gMapsBusinessLink
-                  gMapsLat
-                  gMapsLon
+                  lat
+                  lon
                 }
               }`,
               variables: {
@@ -510,8 +510,8 @@ export default {
                   contactName
                   contactPhone
                   gMapsBusinessLink
-                  gMapsLat
-                  gMapsLon
+                  lat
+                  lon
                 }
               }`,
               variables: {
