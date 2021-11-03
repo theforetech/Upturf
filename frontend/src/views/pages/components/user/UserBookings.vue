@@ -1,5 +1,6 @@
 <template>
   <div>
+    <search-bar />
     <b-card
       no-body
     >
@@ -19,7 +20,7 @@
     </b-card>
     <BookedCard
       v-for="x in bookings"
-      :key="x"
+      :key="x.id"
       :turf="x.turf"
       :slots="x.slots"
       :amount="x.amount"
@@ -43,6 +44,7 @@ import {
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import BookedCard from './BookedCard.vue'
+import SearchBar from '../Search/SearchBar.vue'
 
 export default {
   components: {
@@ -51,6 +53,7 @@ export default {
     BCardHeader,
     BCardBody,
     BookedCard,
+    SearchBar,
   },
   directives: {
     Ripple,
@@ -59,15 +62,18 @@ export default {
     return {
       bookings: [
         {
+          id: '0',
           turf: 'Sirifort Stadium',
           sport: 'Football',
           facility: '3 v 3',
           slots: 3,
           amount: '3000',
-          tag: 'Upcoming',
+          tag: 'Processing',
           date: '2021 10 28',
+
         },
         {
+          id: '1',
           turf: 'Manav Rachna Sport Academy',
           sport: 'Football',
           facility: '3 v 3',
@@ -77,6 +83,7 @@ export default {
           date: '2021 10 28',
         },
         {
+          id: '2',
           turf: 'Panchsheel Club',
           sport: 'Badminton',
           facility: '1 v 1',
@@ -86,12 +93,23 @@ export default {
           date: '2021 09 22',
         },
         {
+          id: '3',
           turf: 'Panchsheel Club',
           sport: 'Basketball',
           facility: '5 v 5',
           slots: 1,
           amount: '5000',
           tag: 'Cancelled',
+          date: '2021 08 12',
+        },
+        {
+          id: '4',
+          turf: 'Panchsheel Club',
+          sport: 'Basketball',
+          facility: '5 v 5',
+          slots: 1,
+          amount: '5000',
+          tag: 'Refunded',
           date: '2021 08 12',
         },
       ],

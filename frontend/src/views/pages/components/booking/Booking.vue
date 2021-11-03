@@ -362,8 +362,7 @@ import {
   BCardHeader, BCardBody, BCard, BButton, BImg, BRow, BCol, BDropdown, BDropdownItem, BSkeletonTable, BFormInput, BFormGroup, BForm,
 } from 'bootstrap-vue'
 
-import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
-import { regex } from 'vee-validate/dist/rules'
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import { required } from '@validations'
 import VueSlickCarousel from 'vue-slick-carousel'
 // import { Carousel3d, Slide } from 'vue-carousel-3d'
@@ -372,12 +371,10 @@ import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 import moment from 'moment'
 import gql from 'graphql-tag'
 import Ripple from 'vue-ripple-directive'
-import SlotCard from './SlotCard.vue'
-import SlotSelectCard from './SlotSelectCard.vue'
 import ToastificationContent
   from '../../../../@core/components/toastification/ToastificationContent.vue'
-
-extend('regex', regex)
+import SlotCard from './SlotCard.vue'
+import SlotSelectCard from './SlotSelectCard.vue'
 
 export default {
   components: {
@@ -1043,6 +1040,7 @@ export default {
   padding-left: 0.6rem;
   font-size: 1rem;
   line-height: 1.2;
+
 }
 .active {
    background-color: #1e1e1e!important;

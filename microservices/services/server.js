@@ -217,6 +217,7 @@ app.post('/book', async (req, res, next) => {
     next(e);
   }
 });
+app.post('/book', async (req, res) => {
 
 app.post('/cleanBookings', async (req, res, next) => {
   try {
