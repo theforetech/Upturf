@@ -2,7 +2,9 @@
 
   <b-card
     style="padding: 0"
-    class="turf-card"
+    class="turf-card pointerCursor"
+    no-body
+    @click="navigateTo"
   >
     <b-carousel
       id="carousel-crossfade"
@@ -33,15 +35,19 @@
     </b-carousel>
     <template #footer>
       <div
-        style="background-color: #3b4253!important;"
+        style="background-color: #3b4253!important; cursor: pointer;"
         @click="navigateTo"
       >
-        <h1 class="turf-title w-75">
+        <h1
+          class="turf-title w-75 pointerCursor"
+          @click="navigateTo"
+        >
           {{ cardTitle }}
         </h1>
         <b-badge
           :variant="rating ? 'success' : 'info'"
-          class="badge"
+          class="badge pointerCursor"
+          @click="navigateTo"
         >
           <span>{{ rating ? rating : '-' }}</span>  <feather-icon
             icon="StarIcon"
@@ -50,47 +56,68 @@
           <!--          /><i class="fas fa-star" />-->
         </b-badge>
       </div>
-      <div style="background-color: #3b4253!important; margin-top: 2.5rem;">
+      <div
+        class="pointerCursor"
+        style="background-color: #3b4253!important; margin-top: 2.5rem;"
+        @click="navigateTo"
+      >
         <h1
-          class="turf-title w-25"
+          class="turf-title w-25 pointerCursor"
           style="float: right; text-align: right;"
+          @click="navigateTo"
         >
           <span
             v-for="x in turfAvgCost"
             :key="x"
+            class="pointerCursor"
+            @click="navigateTo"
           >₹</span>
         </h1>
         <div
           style="float: left;"
-          class="w-75"
+          class="w-75 pointerCursor"
+          @click="navigateTo"
         >
           <feather-icon
             icon="MapPinIcon"
-            class="star-icon"
+            class="star-icon pointerCursor"
+            @click="navigateTo"
           />
           &nbsp;
-          <span>{{ street }}</span>
+          <span
+            class="pointerCursor"
+            @click="navigateTo"
+          >{{ street }}</span>
         </div>
       </div>
       <div
         style="padding-top: 2.5rem !important;"
+        class="pointerCursor"
+        @click="navigateTo"
       >
-        <b-row align-h="center">
+        <b-row
+          align-h="center"
+          class="pointerCursor"
+          @click="navigateTo"
+        >
           <b-col
             v-for="x in sports"
             :key="x.id"
+            class="pointerCursor"
             cols="1"
             style="padding: 0px"
+            @click="navigateTo"
           >
             <b-img
               :src="x.image"
               alt="browser img"
-              class="mr-1"
+              class="mr-1 pointerCursor"
               width="23"
+              @click="navigateTo"
             />
           </b-col>
-        </b-row></div>
-
+        </b-row>
+      </div>
     </template>
     <b-card-text />
   </b-card>
@@ -199,7 +226,7 @@ export default {
   /*background-color: transparent;*/
   padding-left: 10px;
   padding-right: 20px;
-  padding-bottom: 8px;
+  padding-bottom: 10px;
 }
 .turf-title {
   font-size: 1.1rem;
@@ -220,5 +247,8 @@ export default {
 .carousal-image>img{
   border-radius: 1.5rem ;
   height: 18rem!important;
+}
+.pointerCursor {
+  cursor: pointer;
 }
 </style>
