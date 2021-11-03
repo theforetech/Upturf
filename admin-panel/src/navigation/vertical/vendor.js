@@ -8,7 +8,7 @@ export default [
   },
   {
     title: 'Bookings',
-    route: 'apps-calendar',
+    route: 'vendor-bookings',
     role: 'vendor',
     icon: 'CalendarIcon',
   },

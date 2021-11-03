@@ -82,7 +82,7 @@ const { backend } = require('./global-vars')
 
 Vue.prototype.$backend = backend
 
-new Vue({
+const app = new Vue({
   router,
   store,
   i18n,
@@ -93,3 +93,4 @@ new Vue({
   },
   render: h => h(App),
 }).$mount('#app')
+app.use(apolloProvider)

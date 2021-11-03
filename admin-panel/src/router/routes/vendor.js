@@ -39,6 +39,25 @@ export default [
     },
   },
   {
+    path: '/vendor/bookings',
+    name: 'vendor-bookings',
+    component: () => import('@/views/pages/vendor/bookings/Calendar'),
+    meta: {
+      resource: 'Auth',
+      action: 'read',
+      pageTitle: 'Bookings',
+      breadcrumb: [
+        {
+          text: 'Vendor Panel',
+        },
+        {
+          text: 'Bookings',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
     path: '/vendor/turfs/:id',
     name: 'vendor-turf',
     component: () => import('@/views/pages/vendor/turfs/UsersView.vue'),
