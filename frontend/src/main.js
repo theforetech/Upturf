@@ -7,6 +7,7 @@ import VueApollo from 'vue-apollo'
 import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
+import * as VueGoogleMaps from 'vue2-google-maps'
 import router from './router'
 import store from './store'
 import App from './App.vue'
@@ -36,6 +37,12 @@ import AuthPlugin from './plugins/auth'
 
 Vue.use(VueApollo)
 Vue.use(AuthPlugin)
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyCWciFpyWPPND6U3gIu6SDlpBeQeb0VxpY',
+  },
+  installComponents: true,
+})
 
 // BSV Plugin Registration
 Vue.use(ToastPlugin)

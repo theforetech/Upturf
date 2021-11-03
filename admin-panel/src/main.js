@@ -36,13 +36,13 @@ Vue.use(VueApollo)
 Vue.use(AuthPlugin)
 Vue.use(VueGoogleMaps, {
   load: {
-    // key: 'AIzaSyBs6lyDuSkz2G1X4oNlpwg4yohUVIauB4s',
+    key: 'AIzaSyCWciFpyWPPND6U3gIu6SDlpBeQeb0VxpY',
   },
   installComponents: true,
 })
 
 Vue.use(VueGmaps, {
-  // key: 'AIzaSyBs6lyDuSkz2G1X4oNlpwg4yohUVIauB4s',
+  key: 'AIzaSyCWciFpyWPPND6U3gIu6SDlpBeQeb0VxpY',
 })
 
 // BSV Plugin Registration

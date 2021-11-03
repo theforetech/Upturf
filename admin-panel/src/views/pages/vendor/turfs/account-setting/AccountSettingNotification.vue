@@ -1,57 +1,61 @@
 <template>
   <b-card>
     <b-row>
-      <b-col sm="12">
-        <h6 class="section-label mx-1 mb-2">
-          Google Maps
-        </h6>
-      </b-col>
-      <b-col sm="6">
-        <b-form-group
-          label="Business Link"
-          label-for="business-link"
-        >
-          <b-form-input
-            v-model="vm.searchPlace"
-            v-gmaps-searchbox:location.url.geometry="vm"
-            placeholder="Search For Business"
-            name="name"
-            autocomplete="off"
-          />
-        </b-form-group>
-      </b-col>
-
-      <!-- application switch -->
-      <b-col sm="12">
-        <br>
-        <h6 class="section-label mx-1 mt-2">
-          Google Maps Location
-        </h6>
-      </b-col>
-      <b-col
+      <template>
+        <b-col sm="12">
+          <h6 class="section-label mx-1 mb-2">
+            Google Maps
+          </h6>
+        </b-col>
+        <b-col sm="6">
+          <b-form-group
+            label="Business Link"
+            label-for="business-link"
+          >
+            <b-form-input
+              v-model="vm.searchPlace"
+              v-gmaps-searchbox:location.url.geometry="vm"
+              placeholder="Search For Business"
+              name="name"
+              autocomplete="off"
+            />
+          </b-form-group>
+        </b-col>
+      </template>
+      <template
         v-if="locationSelected"
-        cols="12"
-        class="mt-1 mb-2"
       >
-        <GmapMap
-          ref="mapRef"
-          :center="center"
-          :zoom="18"
-          map-style-id="roadmap"
-          :options="mapOptions"
-          style="width: 100vmin; height: 50vmin"
+
+        <!-- application switch -->
+        <b-col sm="12">
+          <br>
+          <h6 class="section-label mx-1 mt-2">
+            Google Maps Location
+          </h6>
+        </b-col>
+        <b-col
+          cols="12"
+          class="mt-1 mb-2"
         >
-          <GmapMarker
-            :position="marker.position"
-            :clickable="true"
-            :draggable="true"
-          />
-        </GmapMap>
+          <GmapMap
+            ref="mapRef"
+            :center="center"
+            :zoom="18"
+            map-style-id="roadmap"
+            :options="mapOptions"
+            style="width: auto; height: 50vmin"
+          >
+            <GmapMarker
+              :position="marker.position"
+              :clickable="true"
+              :draggable="false"
+            />
+          </GmapMap>
 
         <!--        <p>Selected Position: {{ marker.position }}</p>-->
-      </b-col>
+        </b-col>
       <!--/ application switch -->
-
+      </template>
       <!-- buttons -->
       <b-col cols="12">
         <b-button
@@ -78,7 +82,7 @@
 
 <script>
 import {
-  BButton, BRow, BCol, BCard, BFormInput,
+  BButton, BRow, BCol, BCard, BFormInput, BFormGroup,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import gql from 'graphql-tag'
@@ -86,6 +90,7 @@ import ToastificationContent from '@core/components/toastification/Toastificatio
 
 export default {
   components: {
+    BFormGroup,
     BButton,
     BRow,
     BCol,
@@ -96,7 +101,7 @@ export default {
     Ripple,
   },
   props: {
-    notificationData: {
+    socialData: {
       type: Object,
       default: () => {},
     },
@@ -108,7 +113,7 @@ export default {
         searchPlace: '',
         location: {},
       },
-      localOptions: JSON.parse(JSON.stringify(this.notificationData)),
+      localOptions: JSON.parse(JSON.stringify(this.socialData)),
       currentPlace: null,
       marker: { position: { lat: 10, lng: 10 } },
       center: { lat: 10, lng: 10 },
@@ -118,25 +123,27 @@ export default {
     }
   },
   mounted() {
+    // console.log(this.localOptions)
     if ('gMapsBusinessLink' in this.localOptions && this.localOptions.gMapsBusinessLink && this.localOptions.gMapsBusinessLink !== '') {
       // eslint-disable-next-line radix
-      this.marker.position.lat = parseInt(this.localOptions.gMapsLat)
+      this.marker.position.lat = this.localOptions.lat
       // eslint-disable-next-line radix
-      this.marker.position.lon = parseInt(this.localOptions.gMapsLon)
+      this.marker.position.lng = this.localOptions.lon
       // eslint-disable-next-line radix
-      this.center.lat = parseInt(this.localOptions.gMapsLat)
+      this.center.lat = this.localOptions.lat
       // eslint-disable-next-line radix
-      this.center.lon = parseInt(this.localOptions.gMapsLon)
+      this.center.lng = this.localOptions.lon
+      console.log(this.marker, this.center)
       this.locationSelected = true
     }
     if (!('gMapsBusinessLink' in this.localOptions)) {
       this.localOptions.gMapsBusinessLink = ''
     }
-    if (!('gMapsLat' in this.localOptions)) {
-      this.localOptions.gMapsLat = ''
+    if (!('lat' in this.localOptions)) {
+      this.localOptions.lat = ''
     }
-    if (!('gMapsLon' in this.localOptions)) {
-      this.localOptions.gMapsLon = ''
+    if (!('lon' in this.localOptions)) {
+      this.localOptions.lon = ''
     }
   },
   methods: {
@@ -162,7 +169,7 @@ export default {
     // Moves the marker to click position on the map
     handleMapClick(e) {
       this.marker.position = { lat: e.latLng.lat(), lng: e.latLng.lng() }
-      console.log(e)
+      // console.log(e)
     },
     async updateTurfData(values) {
       /**
@@ -175,10 +182,11 @@ export default {
         }
        *
        */
+      // console.log(values)
       this.loading = true
       await this.$apollo.mutate({
-        mutation: gql`mutation ($id: bigint!, $link: String, $lat: String, $lon: String) {
-         update_turf(where: {id: {_eq: $id}}, _set: { gMapsBusinessLink: $link, gMapsLat: $lat, gMapsLon: $lon }) {
+        mutation: gql`mutation ($id: bigint!, $link: String, $lat: float8, $lon: float8) {
+         update_turf(where: {id: {_eq: $id}}, _set: { gMapsBusinessLink: $link, lat: $lat, lon: $lon }) {
             returning {
                 id
             }
@@ -232,8 +240,8 @@ export default {
                   contactName
                   contactPhone
                   gMapsBusinessLink
-                  gMapsLat
-                  gMapsLon
+                  lat
+                  lon
                 }
               }`,
               variables: {
@@ -286,8 +294,8 @@ export default {
                   contactName
                   contactPhone
                   gMapsBusinessLink
-                  gMapsLat
-                  gMapsLon
+                  lat
+                  lon
                 }
               }`,
               variables: {
@@ -304,6 +312,7 @@ export default {
                 variant: 'success',
               },
             })
+            this.locationSelected = true
           } catch (e) {
             if (e.message.includes('Can\'t find field turf_by_pk')) {
               this.$toast({
@@ -322,7 +331,7 @@ export default {
                 props: {
                   title: 'Error updating turf',
                   icon: 'XCircleIcon',
-                  text: e,
+                  text: e.message,
                   variant: 'danger',
                 },
               })
@@ -335,7 +344,7 @@ export default {
           props: {
             title: 'Error updating turf',
             icon: 'XCircleIcon',
-            text: e,
+            text: e.message,
             variant: 'danger',
           },
         })
@@ -344,12 +353,12 @@ export default {
       this.loading = false
     },
     async submitForm() {
-      if (this.localOptions.gMapsBusinessLink !== this.vm.location.gMapsBusinessLink || this.localOptions.gMapsLat !== this.vm.location.gMapsLat || this.localOptions.gMapsLon !== this.vm.location.gMapsLon) {
+      if (this.localOptions.gMapsBusinessLink !== this.vm.location.url || this.localOptions.lat !== this.vm.location.geometry.location.lat || this.localOptions.lon !== this.vm.location.geometry.location.lng) {
         const data = {
           id: this.socialData.id,
-          gMapsBusinessLink: this.localOptions.gMapsBusinessLink || null,
-          gMapsLat: this.localOptions.gMapsLat || null,
-          gMapsLon: this.localOptions.gMapsLon || null,
+          link: this.vm.location.url,
+          lat: this.vm.location.geometry.location.lat(),
+          lon: this.vm.location.geometry.location.lng(),
         }
         await this.updateTurfData(data)
         this.$emit('update', data)

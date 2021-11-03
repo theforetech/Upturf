@@ -106,7 +106,7 @@
         </template>
 
         <account-setting-notification
-          :notification-data="turfData"
+          :social-data="turfData"
           @update="updateTurfData"
         />
       </b-tab>
@@ -169,8 +169,8 @@ export default {
         state: '',
         pincode: 0,
         country: 'India',
-        gMapsLat: null,
-        gMapsLon: null,
+        lat: null,
+        lon: null,
         gMapsBusinessLink: '',
         facebook: '',
         twitter: '',
@@ -237,8 +237,8 @@ export default {
             contactName
             contactPhone
             gMapsBusinessLink
-            gMapsLat
-            gMapsLon
+            lat
+            lon
           }
         }`,
         variables: {
