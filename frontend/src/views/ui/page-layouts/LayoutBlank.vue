@@ -13,7 +13,7 @@
           <span>This layout is used in Authentication &amp; Miscellaneous page. Please check the </span>
           <b-link
             class="alert-link"
-            href="https://pixinvent.com/demo/SurfATurf-vuejs-admin-dashboard-template/documentation/guide/layout/page-layout-examples.html#layout-blank"
+            href="https://pixinvent.com/demo/Upturf-vuejs-admin-dashboard-template/documentation/guide/layout/page-layout-examples.html#layout-blank"
             target="_blank"
           >Layout Blank documentation</b-link>
           <span> for more details.</span>

@@ -9,8 +9,8 @@
 /* eslint-disable global-require */
 import { } from 'bootstrap-vue'
 
-import store from '@/store'
 import gql from 'graphql-tag'
+import store from '@/store'
 // import TurfCard from '../../card/card-advance/TurfCard.vue'
 import SearchBar from './SearchBar.vue'
 

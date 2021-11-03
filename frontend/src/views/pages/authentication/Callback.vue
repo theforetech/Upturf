@@ -3,7 +3,7 @@
     <b-link class="brand-logo">
       <Vuexy-logo />
       <h2 class="brand-text text-primary ml-1">
-        Surf A Turf
+        Upturf
       </h2>
     </b-link>
 
@@ -23,11 +23,11 @@
 <script>
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 // eslint-disable-next-line no-unused-vars
-import { getHomeRouteForLoggedInUser } from '@/auth/utils'
-
 import {
   BLink,
 } from 'bootstrap-vue'
+import { getHomeRouteForLoggedInUser } from '@/auth/utils'
+
 // eslint-disable-next-line no-unused-vars
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))

@@ -121,8 +121,8 @@
 import {
   BNavItemDropdown, BDropdownItem, BDropdownDivider, BAvatar,
 } from 'bootstrap-vue'
-import { initialAbility } from '@/libs/acl/config'
 import { avatarText } from '@core/utils/filter'
+import { initialAbility } from '@/libs/acl/config'
 
 export default {
   components: {

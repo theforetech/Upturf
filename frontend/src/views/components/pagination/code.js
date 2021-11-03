@@ -394,7 +394,7 @@ export const codeAlignment = `
     <div class="my-1">
       <b-form-radio
         v-model="selected"
-        name="SurfATurf-radio"
+        name="Upturf-radio"
         value="default"
         inline
       >
@@ -402,7 +402,7 @@ export const codeAlignment = `
       </b-form-radio>
       <b-form-radio
         v-model="selected"
-        name="SurfATurf-radio"
+        name="Upturf-radio"
         value="right"
         inline
       >
@@ -410,7 +410,7 @@ export const codeAlignment = `
       </b-form-radio>
       <b-form-radio
         v-model="selected"
-        name="SurfATurf-radio"
+        name="Upturf-radio"
         value="center"
         inline
       >
@@ -418,7 +418,7 @@ export const codeAlignment = `
       </b-form-radio>
       <b-form-radio
         v-model="selected"
-        name="SurfATurf-radio"
+        name="Upturf-radio"
         value="fill"
         inline
       >

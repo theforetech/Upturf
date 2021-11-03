@@ -46,7 +46,7 @@
                 <div class="logo-wrapper">
                   <logo />
                   <h3 class="text-primary invoice-logo">
-                    SurfATurf
+                    Upturf
                   </h3>
                 </div>
                 <p class="card-text mb-25">
@@ -337,13 +337,13 @@
 
 <script>
 import { ref, onUnmounted } from '@vue/composition-api'
-import store from '@/store'
-import router from '@/router'
 import {
   BRow, BCol, BCard, BCardBody, BTableLite, BCardText, BButton, BAlert, BLink, VBToggle,
 } from 'bootstrap-vue'
 import Logo from '@core/layouts/components/Logo.vue'
 import Ripple from 'vue-ripple-directive'
+import router from '@/router'
+import store from '@/store'
 import invoiceStoreModule from '../invoiceStoreModule'
 import InvoiceSidebarSendInvoice from '../InvoiceSidebarSendInvoice.vue'
 import InvoiceSidebarAddPayment from '../InvoiceSidebarAddPayment.vue'

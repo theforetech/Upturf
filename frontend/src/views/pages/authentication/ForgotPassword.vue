@@ -7,7 +7,7 @@
         <Vuexy-logo />
 
         <h2 class="brand-text text-primary ml-1">
-          SurfATurf
+          Upturf
         </h2>
       </b-link>
       <!-- /Brand logo-->
@@ -101,8 +101,8 @@ import {
   BRow, BCol, BLink, BCardTitle, BCardText, BImg, BForm, BFormGroup, BFormInput, BButton,
 } from 'bootstrap-vue'
 import { required, email } from '@validations'
-import store from '@/store/index'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import store from '@/store/index'
 
 export default {
   components: {

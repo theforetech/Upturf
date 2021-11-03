@@ -25,7 +25,7 @@
               <b-form-input
                 id="item-name"
                 type="text"
-                placeholder="SurfATurf Admin Template"
+                placeholder="Upturf Admin Template"
               />
             </b-form-group>
           </b-col>

@@ -217,9 +217,9 @@ import {
   BBadge, BDropdown, BDropdownItem, BPagination,
 } from 'bootstrap-vue'
 import vSelect from 'vue-select'
-import store from '@/store'
 import { ref, onUnmounted } from '@vue/composition-api'
 import { avatarText } from '@core/utils/filter'
+import store from '@/store'
 import UsersListFilters from './UsersListFilters.vue'
 import useUsersList from './useUsersList'
 import userStoreModule from '../userStoreModule'

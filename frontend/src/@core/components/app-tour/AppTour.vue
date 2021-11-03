@@ -2,7 +2,7 @@
     File Name: VxTour.vue
     Description: Tour Component
     ----------------------------------------------------------------------------------------
-    Item Name: SurfATurf - Vuejs, HTML & Laravel Admin Dashboard Template
+    Item Name: Upturf - Vuejs, HTML & Laravel Admin Dashboard Template
       Author: Pixinvent
     Author URL: http://www.themeforest.net/user/pixinvent
 ========================================================================================== -->

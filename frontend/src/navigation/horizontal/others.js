@@ -48,7 +48,7 @@ export default [
       },
       {
         title: 'Documentation',
-        href: 'https://pixinvent.com/demo/SurfATurf-vuejs-admin-dashboard-template/documentation',
+        href: 'https://pixinvent.com/demo/Upturf-vuejs-admin-dashboard-template/documentation',
         icon: 'FileTextIcon',
       },
     ],

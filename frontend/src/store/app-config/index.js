@@ -5,7 +5,7 @@ export default {
   state: {
     layout: {
       isRTL: $themeConfig.layout.isRTL,
-      skin: localStorage.getItem('SurfATurf-skin') || $themeConfig.layout.skin,
+      skin: localStorage.getItem('Upturf-skin') || $themeConfig.layout.skin,
       routerTransition: $themeConfig.layout.routerTransition,
       type: $themeConfig.layout.type,
       contentWidth: $themeConfig.layout.contentWidth,
@@ -31,7 +31,7 @@ export default {
       state.layout.skin = skin
 
       // Update value in localStorage
-      localStorage.setItem('SurfATurf-skin', skin)
+      localStorage.setItem('Upturf-skin', skin)
 
       // Update DOM for dark-layout
       if (skin === 'dark') document.body.classList.add('dark-layout')

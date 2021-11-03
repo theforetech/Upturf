@@ -145,7 +145,7 @@ export const codeSize = `
       </li>
     </ul>
 
-    <h1>SurfATurf Chekbox Sizes</h1>
+    <h1>Upturf Chekbox Sizes</h1>
     <ul class="list-unstyled mb-0">
       <li class="d-inline-block mr-2 mb-1">
         <b-form-checkbox

@@ -27,8 +27,8 @@
 /* eslint-disable global-require */
 import { BCol, BRow } from 'bootstrap-vue'
 
-import store from '@/store/index'
 import gql from 'graphql-tag'
+import store from '@/store/index'
 import TurfCard from '../../card/card-advance/TurfCard.vue'
 
 export default {

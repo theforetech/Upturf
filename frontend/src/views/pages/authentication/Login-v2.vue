@@ -6,7 +6,7 @@
       <b-link class="brand-logo">
         <Vuexy-logo />
         <h2 class="brand-text text-primary ml-1">
-          SurfATurf
+          Upturf
         </h2>
       </b-link>
       <!-- /Brand logo-->
@@ -41,7 +41,7 @@
             title-tag="h2"
             class="font-weight-bold mb-1"
           >
-            Welcome to SurfATurf! 👋
+            Welcome to Upturf! 👋
           </b-card-title>
           <b-card-text class="mb-2">
             Please sign-in to your account and start the adventure
@@ -192,8 +192,8 @@ import {
 } from 'bootstrap-vue'
 import { required, email } from '@validations'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
-import store from '@/store/index'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import store from '@/store/index'
 
 export default {
   components: {

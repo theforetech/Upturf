@@ -2,7 +2,7 @@
 //     File Name: content.scss
 //     Description: Page content level SCSS for different screen size, layout and device.
 //     ----------------------------------------------------------------------------------------------
-//     Item Name: SurfATurf  - Vuejs, HTML & Laravel Admin Dashboard Template
+//     Item Name: Upturf
 //     Author: PIXINVENT
 //     Authuseror URL: http://www.themeforest.net//pixinvent
 // ================================================================================================
@@ -83,7 +83,7 @@ html {
         transition: all 0.3s ease;
         opacity: 1;
         background-color: rgba($black, 0.2);
-        border-radius: $border-radius/2;
+        border-radius: $border-radius*0.5;
       }
     }
     .content-wrapper {

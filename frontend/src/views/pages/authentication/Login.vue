@@ -6,7 +6,7 @@
       <b-link class="brand-logo">
         <Vuexy-logo />
         <h2 class="brand-text text-primary ml-1">
-          SurfATurf
+          Upturf
         </h2>
       </b-link>
       <!-- /Brand logo-->
@@ -41,7 +41,7 @@
             class="mb-1 font-weight-bold"
             title-tag="h2"
           >
-            Welcome to Surf A Turf! 👋
+            Welcome to Upturf! 👋
           </b-card-title>
           <b-card-text class="mb-2">
             Please sign-in to your account and start the adventure
@@ -133,8 +133,8 @@ import VuexyLogo from '@core/layouts/components/Logo.vue'
 import {
   BRow, BCol, BLink, BCardText, BCardTitle, BImg, BButton, BAlert, VBTooltip,
 } from 'bootstrap-vue'
-import store from '@/store/index'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import store from '@/store/index'
 // eslint-disable-next-line no-unused-vars
 import { getHomeRouteForLoggedInUser } from '@/auth/utils'
 

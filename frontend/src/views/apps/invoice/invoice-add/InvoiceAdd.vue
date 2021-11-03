@@ -23,7 +23,7 @@
                   <div class="logo-wrapper">
                     <logo />
                     <h3 class="text-primary invoice-logo">
-                      SurfATurf
+                      Upturf
                     </h3>
                   </div>
                   <b-card-text class="mb-25">
@@ -595,12 +595,12 @@ import Logo from '@core/layouts/components/Logo.vue'
 import { ref, onUnmounted } from '@vue/composition-api'
 import { heightTransition } from '@core/mixins/ui/transition'
 import Ripple from 'vue-ripple-directive'
-import store from '@/store'
 import {
   BRow, BCol, BCard, BCardBody, BButton, BCardText, BForm, BFormGroup, BFormInput, BInputGroup, BInputGroupPrepend, BFormTextarea, BFormCheckbox, BPopover, VBToggle,
 } from 'bootstrap-vue'
 import vSelect from 'vue-select'
 import flatPickr from 'vue-flatpickr-component'
+import store from '@/store'
 import invoiceStoreModule from '../invoiceStoreModule'
 import InvoiceSidebarAddNewCustomer from '../InvoiceSidebarAddNewCustomer.vue'
 

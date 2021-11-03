@@ -9,7 +9,7 @@
           <Vuexy-logo />
 
           <h2 class="brand-text text-primary ml-1">
-            SurfATurf
+            Upturf
           </h2>
         </b-link>
 

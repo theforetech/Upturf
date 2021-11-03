@@ -10,7 +10,7 @@
           <span>Please check the </span>
           <b-link
             class="alert-link"
-            href="https://pixinvent.com/demo/SurfATurf-vuejs-admin-dashboard-template/documentation/guide/layout/page-layout-examples.html#layout-without-menu"
+            href="https://pixinvent.com/demo/Upturf-vuejs-admin-dashboard-template/documentation/guide/layout/page-layout-examples.html#layout-without-menu"
             target="blank"
           >Layout Without Navigation Menu documentation</b-link>
           <span> for more details.</span>
@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import Ecommerce from '@/views/dashboard/ecommerce/Ecommerce.vue'
 import { BAlert, BLink } from 'bootstrap-vue'
+import Ecommerce from '@/views/dashboard/ecommerce/Ecommerce.vue'
 
 export default {
   components: {

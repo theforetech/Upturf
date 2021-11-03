@@ -2,12 +2,12 @@ import Vue from 'vue'
 import { ToastPlugin, ModalPlugin } from 'bootstrap-vue'
 import VueCompositionAPI from '@vue/composition-api'
 
-import i18n from '@/libs/i18n'
 import VueApollo from 'vue-apollo'
 import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import * as VueGoogleMaps from 'vue2-google-maps'
+import i18n from '@/libs/i18n'
 import router from './router'
 import store from './store'
 import App from './App.vue'
@@ -28,10 +28,10 @@ import '@/libs/tour'
 // Axios Mock Adapter
 import '@/@fake-db/db'
 
-import '@/firebase/firebaseConfig'
-
 // Auth0 Plugin
 import AuthPlugin from './plugins/auth'
+
+import './registerServiceWorker'
 
 // const { apolloClient } = require('./apollo')
 

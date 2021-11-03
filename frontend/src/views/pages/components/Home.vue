@@ -139,11 +139,11 @@ import {
   BLink, BMedia, BImg, BCarousel, BCarouselSlide, BCard, BMediaAside, BMediaBody,
   BRow, BCol,
 } from 'bootstrap-vue'
-import store from '@/store/index'
 import gql from 'graphql-tag'
 // import { Carousel, Slide } from 'vue-snap'
 
 import VueSlickCarousel from 'vue-slick-carousel'
+import store from '@/store/index'
 import SportCard from '../../card/card-advance/SportCard.vue'
 // import TurfCard from '../../card/card-advance/TurfCard.vue'
 // optional style for arrows & dots

@@ -2,6 +2,7 @@ const path = require('path')
 
 module.exports = {
   publicPath: '/',
+
   css: {
     loaderOptions: {
       sass: {
@@ -11,6 +12,7 @@ module.exports = {
       },
     },
   },
+
   configureWebpack: {
     resolve: {
       alias: {
@@ -21,6 +23,7 @@ module.exports = {
       },
     },
   },
+
   chainWebpack: config => {
     config.module
       .rule('vue')
@@ -43,5 +46,19 @@ module.exports = {
         return options
       })
   },
+
   transpileDependencies: ['vue-echarts', 'resize-detector'],
+
+  pwa: {
+    name: 'Upturf',
+    themeColor: '#172b4d',
+    msTileColor: '#172b4d',
+    appleMobileWebAppCapable: 'yes',
+    appleMobileWebAppStatusBarStyle: 'black-translucent',
+    workboxPluginMode: 'InjectManifest',
+    workboxOptions: {
+      swSrc: './src/sw.js',
+      swDest: 'service-worker.js',
+    },
+  },
 }

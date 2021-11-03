@@ -1,9 +1,9 @@
 import { ref, watch, computed } from '@vue/composition-api'
-import store from '@/store'
 
 // Notification
 import { useToast } from 'vue-toastification/composition'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import store from '@/store'
 
 export default function useInvoicesList() {
   // Use toast

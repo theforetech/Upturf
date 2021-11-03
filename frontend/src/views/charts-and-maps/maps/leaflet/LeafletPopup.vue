@@ -17,10 +17,10 @@
 </template>
 
 <script>
-import BCardCode from '@/@core/components/b-card-code/BCardCode.vue'
 import {
   LMap, LTileLayer, LMarker, LPopup,
 } from 'vue2-leaflet'
+import BCardCode from '@/@core/components/b-card-code/BCardCode.vue'
 import { codePopup } from './code'
 
 export default {

@@ -6,7 +6,7 @@
         class="ml-25"
         href="#"
         target="_blank"
-      >Surf A Turf</b-link>
+      >Upturf</b-link>
       <span class="d-none d-sm-inline-block">, All rights Reserved</span>
     </span>
 

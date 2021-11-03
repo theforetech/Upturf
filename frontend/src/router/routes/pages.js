@@ -202,7 +202,7 @@ export default [
   {
     path: '/turf/:id',
     name: 'pages-turf',
-    component: () => import('@/views/pages/components/Turf-page/TurfPage'),
+    component: () => import('@/views/pages/components/Turf-page/TurfPage.vue'),
     meta: {
       layout: 'full',
     },
@@ -210,12 +210,12 @@ export default [
   {
     path: '/',
     name: 'home',
-    component: () => import('@/views/pages/components/Home'),
+    component: () => import('@/views/pages/components/Home.vue'),
   },
   {
     path: '/categories',
     name: 'pages-categories',
-    component: () => import('@/views/pages/components/Categories'),
+    component: () => import('@/views/pages/components/Categories.vue'),
     meta: {
       pageTitle: 'Category',
       breadcrumb: [
@@ -232,7 +232,7 @@ export default [
   {
     path: '/turfs',
     name: 'pages-turfs',
-    component: () => import('@/views/pages/components/Turfs'),
+    component: () => import('@/views/pages/components/Turfs.vue'),
     meta: {
       pageTitle: 'Turfs',
       breadcrumb: [
@@ -246,7 +246,7 @@ export default [
   {
     path: '/pages/components/booking',
     name: 'booking',
-    component: () => import('@/views/pages/components/booking/Booking'),
+    component: () => import('@/views/pages/components/booking/Booking.vue'),
     meta: {
       layout: 'full',
       pageTitle: 'Booking',
@@ -268,7 +268,7 @@ export default [
   {
     path: '/pages/components/user-bookings',
     name: 'user-bookings',
-    component: () => import('@/views/pages/components/user/UserBookings'),
+    component: () => import('@/views/pages/components/user/UserBookings.vue'),
     meta: {
       layout: 'full',
       pageTitle: 'Bookings',
@@ -287,7 +287,7 @@ export default [
   {
     path: '/pages/components/summary',
     name: 'pages-summary',
-    component: () => import('@/views/pages/components/user/Summary'),
+    component: () => import('@/views/pages/components/user/Summary.vue'),
     meta: {
       layout: 'full',
       pageTitle: 'Summary',
@@ -306,7 +306,7 @@ export default [
   {
     path: '/user-profile',
     name: 'user-profile',
-    component: () => import('@/views/pages/components/user/UserProfile'),
+    component: () => import('@/views/pages/components/user/UserProfile.vue'),
     meta: {
       layout: 'full',
       pageTitle: 'Profile',
@@ -326,7 +326,7 @@ export default [
   {
     path: '/search',
     name: 'pages-search',
-    component: () => import('@/views/pages/components/Search/Search'),
+    component: () => import('@/views/pages/components/Search/Search.vue'),
     meta: {
       pageTitle: '',
       layout: 'full',

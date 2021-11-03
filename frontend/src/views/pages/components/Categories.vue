@@ -23,9 +23,9 @@
 /* eslint-disable global-require */
 import { BCol, BRow } from 'bootstrap-vue'
 
+import gql from 'graphql-tag'
 import store from '@/store/index'
 // eslint-disable-next-line no-unused-vars
-import gql from 'graphql-tag'
 // import TurfCard from '../../card/card-advance/TurfCard.vue'
 import SportCard from '../../card/card-advance/SportCard.vue'
 
