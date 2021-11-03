@@ -121,7 +121,7 @@ export default {
         })
         return t
       })
-      console.log(this.turfs)
+      
     },
   },
 }
