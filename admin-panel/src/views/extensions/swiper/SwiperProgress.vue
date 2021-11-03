@@ -40,7 +40,7 @@
 import BCardCode from '@core/components/b-card-code/BCardCode.vue'
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import { BImg } from 'bootstrap-vue'
-import 'swiper/css/swiper.css'
+import 'swiper/swiper.min.css'
 import { codeProgress } from './code'
 
 export default {

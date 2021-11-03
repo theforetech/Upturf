@@ -344,7 +344,6 @@ export default function userCalendar() {
       ? Docs: https://fullcalendar.io/docs/eventResize
     */
     eventResize({ event: resizedEvent }) {
-      console.log(resizedEvent)
       updateEvent(grabEventDataFromEventApi(resizedEvent))
     },
 

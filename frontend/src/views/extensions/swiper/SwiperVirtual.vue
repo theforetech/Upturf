@@ -74,7 +74,7 @@
 import BCardCode from '@core/components/b-card-code/BCardCode.vue'
 import { Swiper } from 'vue-awesome-swiper'
 import { BButton } from 'bootstrap-vue'
-import 'swiper/css/swiper.css'
+import 'swiper/swiper.min.css'
 import Ripple from 'vue-ripple-directive'
 import { codeVirtual } from './code'
 

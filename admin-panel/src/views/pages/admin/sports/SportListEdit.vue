@@ -214,7 +214,6 @@ export default {
   },
   mounted() {
     this.sportData = this.sport
-    console.log(this.sportData)
   },
   beforeDestroy() {
     this.$emit('reset-sport', true)

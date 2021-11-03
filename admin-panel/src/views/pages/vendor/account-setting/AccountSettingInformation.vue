@@ -296,7 +296,6 @@ export default {
       if (this.localOptions.country === null || this.localOptions.country === '') {
         return []
       }
-      console.log(City)
       return State.getStatesOfCountry('IN')
     },
     cities() {

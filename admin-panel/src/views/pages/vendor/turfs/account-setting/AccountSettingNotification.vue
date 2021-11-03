@@ -133,7 +133,6 @@ export default {
       this.center.lat = this.localOptions.lat
       // eslint-disable-next-line radix
       this.center.lng = this.localOptions.lon
-      console.log(this.marker, this.center)
       this.locationSelected = true
     }
     if (!('gMapsBusinessLink' in this.localOptions)) {

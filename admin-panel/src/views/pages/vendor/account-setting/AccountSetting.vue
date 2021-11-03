@@ -265,7 +265,6 @@ export default {
           update: async (cache, { data: { insert_vendor_one } }) => {
             // Read the data from our cache for this query.
             try {
-              console.log(insert_vendor_one)
               const data = await cache.readQuery({
                 query: gql`query {
                     vendor {

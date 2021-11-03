@@ -157,5 +157,5 @@ export default {
 
 <style lang="scss">
 @import '@core/scss/vue/libs/swiper.scss';
-@import '~swiper/css/swiper.css';
+@import '~swiper/swiper.min.css';
 </style>

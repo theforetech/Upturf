@@ -19,7 +19,7 @@ export const codeDefault = `
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import { BImg } from 'bootstrap-vue'
-import 'swiper/css/swiper.css'
+import 'swiper/swiper.min.css'
 
 export default {
   components: {
@@ -79,7 +79,7 @@ export const codeAutoplay = `
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import { BImg } from 'bootstrap-vue'
-import 'swiper/css/swiper.css'
+import 'swiper/swiper.min.css'
 
 export default {
   components: {
@@ -160,7 +160,7 @@ export const codeCenterSlides = `
 
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
-import 'swiper/css/swiper.css'
+import 'swiper/swiper.min.css'
 
 export default {
   components: {
@@ -217,7 +217,7 @@ export const codeCenterSlides2 = `
 
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
-import 'swiper/css/swiper.css'
+import 'swiper/swiper.min.css'
 
 export default {
   components: {
@@ -270,7 +270,7 @@ export const codeCoverflowEffect = `
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import { BImg } from 'bootstrap-vue'
-import 'swiper/css/swiper.css'
+import 'swiper/swiper.min.css'
 
 export default {
   components: {
@@ -343,7 +343,7 @@ export const codeCube = `
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import { BImg } from 'bootstrap-vue'
-import 'swiper/css/swiper.css'
+import 'swiper/swiper.min.css'
 
 export default {
   components: {
@@ -417,7 +417,7 @@ export const codeFadeEffect = `
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import { BImg } from 'bootstrap-vue'
-import 'swiper/css/swiper.css'
+import 'swiper/swiper.min.css'
 
 export default {
   components: {
@@ -505,7 +505,7 @@ export const codeGallery = `
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import { BImg } from 'bootstrap-vue'
-import 'swiper/css/swiper.css'
+import 'swiper/swiper.min.css'
 
 export default {
   components: {
@@ -595,7 +595,7 @@ export const codeLazy = `
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import { BImg } from 'bootstrap-vue'
-import 'swiper/css/swiper.css'
+import 'swiper/swiper.min.css'
 
 export default {
   components: {
@@ -660,7 +660,7 @@ export const codeMultipleSlides = `
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import { BImg } from 'bootstrap-vue'
-import 'swiper/css/swiper.css'
+import 'swiper/swiper.min.css'
 
 export default {
   components: {
@@ -721,7 +721,7 @@ export const codeMultiRowSlides = `
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import { BImg } from 'bootstrap-vue'
-import 'swiper/css/swiper.css'
+import 'swiper/swiper.min.css'
 
 export default {
   components: {
@@ -819,7 +819,7 @@ export const codeNavigation = `
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import { BImg } from 'bootstrap-vue'
-import 'swiper/css/swiper.css'
+import 'swiper/swiper.min.css'
 
 export default {
   components: {
@@ -878,7 +878,7 @@ export const codePagination = `
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import { BImg } from 'bootstrap-vue'
-import 'swiper/css/swiper.css'
+import 'swiper/swiper.min.css'
 
 export default {
   components: {
@@ -973,7 +973,7 @@ export const codeParallax = `
 <script>
 import { BImg} from 'bootstrap-vue'
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
-import 'swiper/css/swiper.css'
+import 'swiper/swiper.min.css'
 
 export default {
   components: {
@@ -1042,7 +1042,7 @@ export const codeProgress = `
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import { BImg } from 'bootstrap-vue'
-import 'swiper/css/swiper.css'
+import 'swiper/swiper.min.css'
 
 export default {
   components: {
@@ -1105,7 +1105,7 @@ export const codeResponsive = `
 <script>
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import { BImg } from 'bootstrap-vue'
-import 'swiper/css/swiper.css'
+import 'swiper/swiper.min.css'
 
 export default {
   components: {
@@ -1238,7 +1238,7 @@ export const codeVirtual = `
 import BCardCode from '@core/components/b-card-code/BCardCode.vue'
 import { Swiper } from 'vue-awesome-swiper'
 import { BButton } from 'bootstrap-vue'
-import 'swiper/css/swiper.css'
+import 'swiper/swiper.min.css'
 import Ripple from 'vue-ripple-directive'
 import { codeVirtual } from './code'
 
