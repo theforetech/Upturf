@@ -1,6 +1,6 @@
 {
   "background_color": "#332727",
-  "display": "fullScreen",
+  "display": "standalone",
   "icons": [
     {
       "src": "/android-chrome-36x36.png?v=v21",

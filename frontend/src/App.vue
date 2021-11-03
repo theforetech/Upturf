@@ -9,6 +9,7 @@
     </component>
 
     <scroll-to-top v-if="enableScrollToTop" />
+    <PWAPrompt />
   </div>
 </template>
 
@@ -20,6 +21,7 @@ import { $themeColors, $themeBreakpoints, $themeConfig } from '@themeConfig'
 import { provideToast } from 'vue-toastification/composition'
 import { watch } from '@vue/composition-api'
 import useAppConfig from '@core/app-config/useAppConfig'
+import PWAPrompt from 'vue2-ios-pwa-prompt'
 
 import { useWindowSize, useCssVar } from '@vueuse/core'
 
@@ -36,6 +38,7 @@ export default {
     LayoutHorizontal,
     LayoutVertical,
     LayoutFull,
+    PWAPrompt,
 
     ScrollToTop,
   },
