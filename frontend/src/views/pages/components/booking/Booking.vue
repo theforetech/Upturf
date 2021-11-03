@@ -362,8 +362,7 @@ import {
   BCardHeader, BCardBody, BCard, BButton, BImg, BRow, BCol, BDropdown, BDropdownItem, BSkeletonTable, BFormInput, BFormGroup, BForm,
 } from 'bootstrap-vue'
 
-import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
-import { regex } from 'vee-validate/dist/rules'
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import { required } from '@validations'
 import VueSlickCarousel from 'vue-slick-carousel'
 // import { Carousel3d, Slide } from 'vue-carousel-3d'

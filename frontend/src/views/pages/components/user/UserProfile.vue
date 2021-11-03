@@ -43,7 +43,9 @@ export default {
     BButton,
     BCardHeader,
     BCardBody,
+    // eslint-disable-next-line vue/no-unused-components
     BRow,
+    // eslint-disable-next-line vue/no-unused-components
     BCol,
   },
   directives: {
