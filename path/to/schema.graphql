@@ -1482,6 +1482,36 @@ type query_root {
     ): facilities_aggregate!
     "fetch data from the table: \"facilities\" using primary key columns"
     facilities_by_pk(id: Int!): facilities
+    "execute function \"get_nearby_turfs\" which returns \"turf\""
+    get_nearby_turfs(
+        "input parameters for function \"get_nearby_turfs\""
+        args: get_nearby_turfs_args!,
+        "distinct select on columns"
+        distinct_on: [turf_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [turf_order_by!],
+        "filter the rows returned"
+        where: turf_bool_exp
+    ): [turf!]!
+    "execute function \"get_nearby_turfs\" and query aggregates on result of table type \"turf\""
+    get_nearby_turfs_aggregate(
+        "input parameters for function \"get_nearby_turfs\""
+        args: get_nearby_turfs_args!,
+        "distinct select on columns"
+        distinct_on: [turf_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [turf_order_by!],
+        "filter the rows returned"
+        where: turf_bool_exp
+    ): turf_aggregate!
     "An array relationship"
     images(
         "distinct select on columns"
@@ -2231,6 +2261,36 @@ type subscription_root {
     ): facilities_aggregate!
     "fetch data from the table: \"facilities\" using primary key columns"
     facilities_by_pk(id: Int!): facilities
+    "execute function \"get_nearby_turfs\" which returns \"turf\""
+    get_nearby_turfs(
+        "input parameters for function \"get_nearby_turfs\""
+        args: get_nearby_turfs_args!,
+        "distinct select on columns"
+        distinct_on: [turf_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [turf_order_by!],
+        "filter the rows returned"
+        where: turf_bool_exp
+    ): [turf!]!
+    "execute function \"get_nearby_turfs\" and query aggregates on result of table type \"turf\""
+    get_nearby_turfs_aggregate(
+        "input parameters for function \"get_nearby_turfs\""
+        args: get_nearby_turfs_args!,
+        "distinct select on columns"
+        distinct_on: [turf_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [turf_order_by!],
+        "filter the rows returned"
+        where: turf_bool_exp
+    ): turf_aggregate!
     "An array relationship"
     images(
         "distinct select on columns"
@@ -4467,6 +4527,12 @@ input float8_comparison_exp {
     _lte: float8
     _neq: float8
     _nin: [float8!]
+}
+
+input get_nearby_turfs_args {
+    bound: Int
+    latitude: float8
+    longitude: float8
 }
 
 "order by aggregate values of table \"images\""

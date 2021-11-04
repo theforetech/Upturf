@@ -4,6 +4,9 @@ import VueCompositionAPI from '@vue/composition-api'
 
 import VueApollo from 'vue-apollo'
 import { ApolloClient } from 'apollo-client'
+import { setContext } from 'apollo-link-context'
+// eslint-disable-next-line no-unused-vars
+import { ApolloLink, concat, from } from 'apollo-link'
 import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import * as VueGoogleMaps from 'vue2-google-maps'
@@ -81,27 +84,46 @@ async function waitUntilAuth(authService) {
   })
 }
 
-const getHeaders = async () => {
-  const headers = {}
+// eslint-disable-next-line no-async-promise-executor
+const getHeaders = async () => new Promise(async (resolve, reject) => {
   const instance = await getInstance()
   await waitUntilAuth(instance)
-  const token = await instance.getTokenSilently()
-  if (token) {
-    headers.authorization = `Bearer ${token}`
+  await instance.getTokenSilently()
+  try {
+    let token = await instance.getIdTokenClaims() || null
+    // eslint-disable-next-line no-underscore-dangle
+    token = token.__raw
+    console.log(token)
+    resolve(token)
+  } catch (e) {
+    reject(e)
   }
-  return headers
-}
+})
 
 // HTTP connection to the API
 const httpLink = createHttpLink({
   uri: 'https://backend.upturf.in/v1/graphql',
-  fetch,
-  headers: getHeaders(),
+  // fetch,
+  // headers: getHeaders(),
 })
+
+const authMiddleware = setContext((operation, { headers }) => getHeaders().then(token => {
+  console.log('token')
+  console.log(token)
+  const head = {
+    ...headers,
+    authorization: `Bearer ${token}` || null,
+  }
+  return {
+    headers: head,
+  }
+}).catch(() => ({
+  headers,
+})))
 
 // Create the apollo client
 const apolloClient = new ApolloClient({
-  link: httpLink,
+  link: concat(authMiddleware, httpLink),
   cache: new InMemoryCache({
     addTypename: true,
   }),
