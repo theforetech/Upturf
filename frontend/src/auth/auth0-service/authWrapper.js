@@ -25,7 +25,24 @@ export const useAuth0 = ({
         auth0Client: null,
         popupOpen: false,
         error: null,
-        ability: null,
+        ability: new Ability([
+          {
+            action: 'read',
+            subject: 'Auth',
+          },
+          {
+            action: 'read',
+            subject: 'Home',
+          },
+          {
+            action: 'read',
+            subject: 'Turf',
+          },
+          {
+            action: 'read',
+            subject: 'Sports',
+          },
+        ]),
       }
     },
     async created() {
@@ -122,6 +139,47 @@ export const useAuth0 = ({
         } catch (e) {
           this.error = e
         } finally {
+          this.isAuthenticated = await this.auth0Client.isAuthenticated()
+          this.user = await this.auth0Client.getUser()
+          if (this.user) {
+            this.ability = new Ability([{
+              action: 'manage',
+              subject: 'all',
+            }])
+            await store.commit('user/UPDATE_USER_INFO', {
+              ability: [{
+                action: 'manage',
+                subject: 'all',
+              }],
+              displayName: this.user.name,
+              email: this.user.email,
+              emailVerified: this.user.email_verified,
+              photoURL: this.user.picture,
+              providerId: this.user.sub.substr(0, this.user.sub.indexOf('|')),
+              uid: this.user.sub,
+              userRole: this.user['https://hasura.io/jwt/claims']['x-hasura-default-role'],
+              role: this.user['https://hasura.io/jwt/claims']['x-hasura-default-role'],
+            })
+          } else {
+            this.ability = new Ability([
+              {
+                action: 'read',
+                subject: 'Auth',
+              },
+              {
+                action: 'read',
+                subject: 'Home',
+              },
+              {
+                action: 'read',
+                subject: 'Turf',
+              },
+              {
+                action: 'read',
+                subject: 'Sports',
+              },
+            ])
+          }
           this.loading = false
         }
       },
@@ -138,6 +196,24 @@ export const useAuth0 = ({
         return this.auth0Client.getTokenWithPopup(o)
       },
       logout(o) {
+        this.ability = new Ability([
+          {
+            action: 'read',
+            subject: 'Auth',
+          },
+          {
+            action: 'read',
+            subject: 'Home',
+          },
+          {
+            action: 'read',
+            subject: 'Turf',
+          },
+          {
+            action: 'read',
+            subject: 'Sports',
+          },
+        ])
         return this.auth0Client.logout(o)
       },
     },

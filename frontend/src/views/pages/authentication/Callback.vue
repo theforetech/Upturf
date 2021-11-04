@@ -36,9 +36,11 @@ export default {
   },
   async created() {
     // await this.$auth.handleAuthentication()
-    // await sleep(3000)
-    if (await this.$auth.isAuthenticated) await this.$router.push('/')
-    // .then(() => { window.location.reload() })
+    await sleep(500)
+    if (await this.$auth.isAuthenticated) {
+      await this.$router.push('/')
+        .then(() => { window.location.reload() })
+    }
   },
 }
 </script>

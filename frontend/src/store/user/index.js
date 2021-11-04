@@ -40,7 +40,11 @@ export default {
   state: {
     AppActiveUser: getUserInfo(),
   },
-  getters: {},
+  getters: {
+    getActiveUser(state) {
+      return state.AppActiveUser
+    },
+  },
   mutations: {
     // Updates user info in state and localstorage
     async UPDATE_USER_INFO(state, payload) {

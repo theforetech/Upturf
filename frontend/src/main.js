@@ -42,7 +42,7 @@ Vue.use(Auth0Plugin, {
       appState && appState.targetUrl
         ? appState.targetUrl
         : window.location.pathname,
-    )
+    ).then(() => { window.location.reload() })
   },
 })
 

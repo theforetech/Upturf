@@ -123,6 +123,7 @@ import {
 } from 'bootstrap-vue'
 import { avatarText } from '@core/utils/filter'
 // import { initialAbility } from '@/libs/acl/config'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -133,9 +134,14 @@ export default {
   },
   data() {
     return {
-      userInfo: JSON.parse(localStorage.getItem('userInfo')),
       avatarText,
     }
+  },
+  computed: {
+    ...mapGetters({ userInfo: 'user/getActiveUser' }),
+  },
+  mounted() {
+    console.log(this.userInfo)
   },
   methods: {
     logout() {
