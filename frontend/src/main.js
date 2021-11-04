@@ -7,17 +7,16 @@ import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import * as VueGoogleMaps from 'vue2-google-maps'
+import { domain, clientId, audience } from './auth/auth0.json'
 import i18n from '@/libs/i18n'
 import router from './router'
 import store from './store'
 import App from './App.vue'
-
 // Global Components
 import './global-components'
 
 // 3rd party plugins
 import '@axios'
-import '@/libs/acl'
 import '@/libs/portal-vue'
 import '@/libs/clipboard'
 import '@/libs/toastification'
@@ -28,15 +27,26 @@ import '@/libs/tour'
 // Axios Mock Adapter
 import '@/@fake-db/db'
 
-// Auth0 Plugin
-import AuthPlugin from './plugins/auth'
+import { Auth0Plugin, getInstance } from './auth/auth0-service'
 
 import './registerServiceWorker'
 
-// const { apolloClient } = require('./apollo')
-
 Vue.use(VueApollo)
-Vue.use(AuthPlugin)
+
+Vue.use(Auth0Plugin, {
+  domain,
+  clientId,
+  audience,
+  onRedirectCallback: appState => {
+    console.log(appState)
+    router.push(
+      appState && appState.targetUrl
+        ? appState.targetUrl
+        : window.location.pathname,
+    )
+  },
+})
+
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyCWciFpyWPPND6U3gIu6SDlpBeQeb0VxpY',
@@ -61,9 +71,22 @@ require('@core/scss/core.scss')
 // import assets styles
 require('@/assets/scss/style.scss')
 
-const getHeaders = () => {
+async function waitUntilAuth(authService) {
+  return new Promise(resolve => {
+    const interval = setInterval(() => {
+      if (authService && authService.auth0Client !== null) {
+        resolve(true)
+        clearInterval(interval)
+      }
+    }, 50)
+  })
+}
+
+const getHeaders = async () => {
   const headers = {}
-  const token = window.localStorage.getItem('apollo-token')
+  const instance = await getInstance()
+  await waitUntilAuth(instance)
+  const token = await instance.getTokenSilently()
   if (token) {
     headers.authorization = `Bearer ${token}`
   }

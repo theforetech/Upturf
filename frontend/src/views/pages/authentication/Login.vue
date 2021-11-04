@@ -171,7 +171,7 @@ export default {
   methods: {
     checkLogin() {
       // If user is already logged in notify
-      if (this.$auth.isAuthenticated()) {
+      if (this.$auth.isAuthenticated) {
         this.$toast({
           component: ToastificationContent,
           props: {
@@ -180,7 +180,7 @@ export default {
             variant: 'warning',
           },
         })
-        this.$router.push(this.$route.query.redirect || getHomeRouteForLoggedInUser(this.$store.state.user.AppActiveUser.userRole))
+        this.$router.push(this.$route.query.redirect || getHomeRouteForLoggedInUser(this.$auth.user.role))
         return false
       }
       return true
@@ -188,10 +188,10 @@ export default {
     loginAuth0() {
       if (!this.checkLogin()) return
       if (this.$route.query.redirect) {
-        this.$auth.login(this.$route.query.redirect)
+        this.$auth.loginWithRedirect({ appState: { targetUrl: this.$route.query.redirect } })
         return
       }
-      this.$auth.login('no-redirect')
+      this.$auth.loginWithRedirect()
     },
   },
 }

@@ -10,6 +10,7 @@
     "build-deploy": "vue-cli-service build && firebase deploy --only hosting:surfaturf-foretech"
   },
   "dependencies": {
+    "@auth0/auth0-spa-js": "^1.19.2",
     "@casl/ability": "4.1.6",
     "@casl/vue": "1.1.1",
     "@fullcalendar/daygrid": "5.5.0",

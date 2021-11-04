@@ -2,9 +2,9 @@
   <div class="misc-wrapper">
     <b-link class="brand-logo">
       <Vuexy-logo />
-      <h2 class="brand-text text-primary ml-1">
-        Upturf
-      </h2>
+      <!--      <h2 class="brand-text text-primary ml-1">-->
+      <!--        Upturf-->
+      <!--      </h2>-->
     </b-link>
 
     <div class="misc-inner p-2 p-sm-3">
@@ -38,7 +38,7 @@ export default {
     BLink,
   },
   created() {
-    if (this.$auth.isAuthenticated()) {
+    if (this.$auth.isAuthenticated) {
       if (this.$store.state.app.redirectAfterLogin) {
         const url = this.$store.state.app.redirectAfterLogin
         this.$store.commit('app/UPDATE_REDIRECT', null)

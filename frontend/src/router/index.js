@@ -2,17 +2,12 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 // Routes
-import { canNavigate } from '@/libs/acl/routeProtection'
-// eslint-disable-next-line no-unused-vars
 import { getHomeRouteForLoggedInUser } from '@/auth/utils'
-import AuthService from '@/auth'
-import apps from './routes/apps'
-import dashboard from './routes/dashboard'
-import uiElements from './routes/ui-elements/index'
+import { getInstance } from '@/auth/auth0-service/authWrapper'
+/* eslint-disable */
+// import AuthService from '@/auth'
 import pages from './routes/pages'
-import chartsMaps from './routes/charts-maps'
-import formsTable from './routes/forms-tables'
-import others from './routes/others'
+/* eslint-enable */
 
 Vue.use(VueRouter)
 
@@ -24,13 +19,7 @@ const router = new VueRouter({
   },
   routes: [
     { path: '/', redirect: { name: 'home' } },
-    ...apps,
-    ...dashboard,
     ...pages,
-    ...chartsMaps,
-    ...formsTable,
-    ...uiElements,
-    ...others,
     {
       path: '*',
       redirect: 'error-404',
@@ -38,26 +27,51 @@ const router = new VueRouter({
   ],
 })
 
-// http://localhost:8080/login?redirect=%2Fpages%2Fcomponents%2Fcategories
+async function waitUntilAuth(authService) {
+  return new Promise(resolve => {
+    const interval = setInterval(() => {
+      if (authService.auth0Client !== null) {
+        resolve(true)
+        clearInterval(interval)
+      }
+    }, 50)
+  })
+}
 
+// eslint-disable-next-line consistent-return,import/prefer-default-export
 router.beforeEach(async (to, from, next) => {
-  const isLoggedIn = AuthService.isAuthenticated()
-  if (!canNavigate(to)) {
-    // Redirect to login if not logged in
-    if (!isLoggedIn) return next({ name: 'auth-login', query: { redirect: to.path } })
+  const authService = getInstance()
+  // eslint-disable-next-line no-empty
+  await waitUntilAuth(authService)
+  const fn2 = () => {
+    const isLoggedIn = authService.isAuthenticated
+    if (!authService.canNavigate(to)) {
+      // Redirect to login if not logged in
+      if (!isLoggedIn) return next({ name: 'auth-login', query: { redirect: to.path } })
 
-    // If logged in => not authorized
-    return next({ name: 'redirect-to-dashboard' })
+      // If logged in => not authorized
+      return next({ name: 'redirect-to-dashboard' })
+    }
+    // Redirect if logged in
+    if (to.query.redirect && isLoggedIn) {
+      return next(to.query.redirect)
+    }
+    if (to.meta.redirectIfLoggedIn && isLoggedIn) {
+      return next(getHomeRouteForLoggedInUser(authService.user.role))
+    }
+    return next()
   }
-  // Redirect if logged in
-  if (to.query.redirect && isLoggedIn) {
-    return next(to.query.redirect)
+  const fn = () => {
+    if (authService.isAuthenticated) {
+      return fn2()
+    }
+    return next({ name: 'auth-login', query: { redirect: to.path } })
   }
-  if (to.meta.redirectIfLoggedIn && isLoggedIn) {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-    return next(getHomeRouteForLoggedInUser(userInfo ? userInfo.userRole : null))
+
+  if (!authService.loading && to.name !== 'auth-login') {
+    return fn()
   }
-  return next()
+  return fn2()
 })
 
 // ? For splash screen

@@ -122,7 +122,7 @@ import {
   BNavItemDropdown, BDropdownItem, BDropdownDivider, BAvatar,
 } from 'bootstrap-vue'
 import { avatarText } from '@core/utils/filter'
-import { initialAbility } from '@/libs/acl/config'
+// import { initialAbility } from '@/libs/acl/config'
 
 export default {
   components: {
@@ -139,20 +139,7 @@ export default {
   },
   methods: {
     logout() {
-      // Reset ability
-      this.$ability.update(initialAbility)
-      this.$auth.logOut()
-      // // Remove userInfo from localStorage
-      // // ? You just removed token from localStorage. If you like, you can also make API call to backend to blacklist used token
-      // localStorage.removeItem(useJwt.jwtConfig.storageTokenKeyName)
-      // localStorage.removeItem(useJwt.jwtConfig.storageRefreshTokenKeyName)
-      //
-      // // Remove userInfo from localStorage
-      // localStorage.removeItem('userInfo')
-      //
-      //
-      // // Redirect to login page
-      // this.$router.push({ name: 'auth-login' })
+      this.$auth.logout()
     },
   },
 }

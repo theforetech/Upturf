@@ -13,7 +13,7 @@ const userDefaults = {
   userRole: 'admin',
 }
 
-const userInfoLocalStorage = JSON.parse(localStorage.getItem('userInfo')) || {}
+const userInfoLocalStorage = {}
 
 // Set default values for active-user
 // More data can be added by auth provider or other plugins/packages
@@ -27,10 +27,10 @@ const getUserInfo = () => {
     userInfo[key] = userInfoLocalStorage[key] ? userInfoLocalStorage[key] : userDefaults[key]
   })
 
-  // Include properties from localStorage
-  Object.keys(userInfoLocalStorage).forEach(key => {
-    if (userInfo[key] === undefined && userInfoLocalStorage[key] !== null) userInfo[key] = userInfoLocalStorage[key]
-  })
+  // // Include properties from localStorage
+  // Object.keys(userInfoLocalStorage).forEach(key => {
+  //   if (userInfo[key] === undefined && userInfoLocalStorage[key] !== null) userInfo[key] = userInfoLocalStorage[key]
+  // })
 
   return userInfo
 }
@@ -45,7 +45,7 @@ export default {
     // Updates user info in state and localstorage
     async UPDATE_USER_INFO(state, payload) {
       // Get Data localStorage
-      const userInfo = await JSON.parse(await localStorage.getItem('userInfo')) || state.AppActiveUser
+      const userInfo = state.AppActiveUser
 
       // eslint-disable-next-line no-restricted-syntax
       for (const property of Object.keys(payload)) {
@@ -58,7 +58,7 @@ export default {
         }
       }
       // Store data in localStorage
-      await localStorage.setItem('userInfo', JSON.stringify(userInfo))
+      // await localStorage.setItem('userInfo', JSON.stringify(userInfo))
     },
   },
   actions: {
