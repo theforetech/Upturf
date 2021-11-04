@@ -214,6 +214,15 @@ export const useAuth0 = ({
             subject: 'Sports',
           },
         ])
+        if (!o) {
+          // eslint-disable-next-line no-param-reassign
+          o = {
+            returnTo: window.location.origin,
+          }
+        } else if (!('returnTo' in o)) {
+          // eslint-disable-next-line no-param-reassign
+          o.returnTo = window.location.origin
+        }
         return this.auth0Client.logout(o)
       },
     },
