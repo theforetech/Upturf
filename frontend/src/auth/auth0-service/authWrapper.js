@@ -105,6 +105,7 @@ export const useAuth0 = ({
           this.isAuthenticated = await this.auth0Client.isAuthenticated()
           this.error = null
         } catch (e) {
+          // eslint-disable-next-line no-console
           console.error(e)
           this.error = e
         } finally {

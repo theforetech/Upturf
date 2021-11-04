@@ -6,6 +6,7 @@
  * NOTE: If you have different pages to navigate based on user ability then this function can be useful. However, you need to update it.
  * @param {String} userRole Role of user
  */
+// eslint-disable-next-line import/prefer-default-export
 export const getHomeRouteForLoggedInUser = userRole => {
   if (userRole === 'user') return { path: '/' }
   return { name: 'access-control' }

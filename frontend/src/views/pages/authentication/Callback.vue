@@ -23,7 +23,6 @@ import VuexyLogo from '@core/layouts/components/Logo.vue'
 import {
   BLink,
 } from 'bootstrap-vue'
-import { getHomeRouteForLoggedInUser } from '@/auth/utils'
 
 // eslint-disable-next-line no-unused-vars
 function sleep(ms) {
