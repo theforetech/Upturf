@@ -36,7 +36,7 @@ export default {
   },
   async created() {
     // await this.$auth.handleAuthentication()
-    await sleep(500)
+    // await sleep(500)
     if (await this.$auth.isAuthenticated) {
       await this.$router.push('/')
         .then(() => { window.location.reload() })

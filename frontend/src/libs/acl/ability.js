@@ -15,7 +15,6 @@ const existingAbility = () => {
   const { can, rules } = new AbilityBuilder(Ability)
   // const instance = getInstance()
   const instance = undefined
-  console.log(instance)
   if (instance !== undefined && instance.isAuthenticated) {
     can('manage', 'all')
   } else {

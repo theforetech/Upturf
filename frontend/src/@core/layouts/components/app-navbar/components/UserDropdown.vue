@@ -140,9 +140,6 @@ export default {
   computed: {
     ...mapGetters({ userInfo: 'user/getActiveUser' }),
   },
-  mounted() {
-    console.log(this.userInfo)
-  },
   methods: {
     logout() {
       this.$auth.logout()
