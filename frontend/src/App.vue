@@ -3,6 +3,7 @@
     id="app"
     class="h-100"
     :class="[skinClasses]"
+    :style="{overflow:(overflowVal)? 'hidden': 'visible'}"
   >
     <component :is="layout">
       <router-view />
@@ -21,11 +22,15 @@ import { $themeColors, $themeBreakpoints, $themeConfig } from '@themeConfig'
 import { provideToast } from 'vue-toastification/composition'
 import { watch } from '@vue/composition-api'
 import useAppConfig from '@core/app-config/useAppConfig'
+<<<<<<< Updated upstream
 import PWAPrompt from 'vue2-ios-pwa-prompt'
 
+=======
+>>>>>>> Stashed changes
 import { useWindowSize, useCssVar } from '@vueuse/core'
 
 import store from '@/store'
+import { mapGetters } from 'vuex'
 
 const LayoutVertical = () => import('@/layouts/vertical/LayoutVertical.vue')
 const LayoutHorizontal = () => import('@/layouts/horizontal/LayoutHorizontal.vue')
@@ -52,6 +57,7 @@ export default {
     contentLayoutType() {
       return this.$store.state.appConfig.layout.type
     },
+    ...mapGetters({ overflowVal: 'app/overflowHidden' }),
   },
   beforeCreate() {
     // Set colors in theme

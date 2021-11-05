@@ -241,5 +241,8 @@ export default {
 .display {
   display:none;
 }
-
+.user-booking{
+  margin: 0rem 0!important;
+  border-bottom: 1px solid rgba(32, 32, 35,0.3);
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div
     class="base"
-    style="width: 100%;overflow: hidden;"
+    style="width: 100%;overflow: hidden!important;"
   >
     <b-row
       class="rows"
@@ -206,6 +206,7 @@ import {
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 // import VuePlaceAutocomplete from 'vue-place-autocomplete'
+import { mapMutations } from 'vuex'
 import AddressCard from './AddressCard.vue'
 
 export default {
@@ -289,7 +290,6 @@ export default {
     enableDone() {
       return Object.keys(this.selectedAddress).length === 0
     },
-
   },
   mounted() {
     // this.cross()
@@ -301,6 +301,8 @@ export default {
     toggleBottom() {
       this.isOpen = !this.isOpen
       this.selectedAddress = this.finalAddress
+      if (this.isOpen) this.$store.commit('app/UPDATE_OVERFLOW_HIDDEN', true)
+      else this.$store.commit('app/UPDATE_OVERFLOW_HIDDEN', false)
     },
     selectAddress(item) {
       this.selectedAddress = item
@@ -313,7 +315,9 @@ export default {
       this.finalAddress = this.selectedAddress
       this.isOpen = false
     },
-
+    ...mapMutations([
+      'app/UPDATE_OVERFLOW_HIDDEN',
+    ]),
   },
 
 }
@@ -377,6 +381,7 @@ export default {
   height: 100%;
   width: 100%;
   transition-delay: 0.3s;
+  user-select: none;
   visibility: hidden;
 }
 .open-overlay{

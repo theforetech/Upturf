@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="overflow: hidden;">
     <search-bar />
     <b-card
       no-body
@@ -19,6 +19,7 @@
       </b-card-header>
     </b-card>
     <BookedCard
+
       v-for="x in bookings"
       :key="x.id"
       :turf="x.turf"
