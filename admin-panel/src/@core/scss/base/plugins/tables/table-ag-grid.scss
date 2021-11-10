@@ -119,7 +119,7 @@
 .filter-btn {
   padding: 1.2rem !important;
   border-radius: 5rem;
-  font-size: 0.95rem;
+  font-size: 0.6rem;
 
   &:after {
     background-image: url(str-replace(str-replace($chevron-down, 'currentColor', $body-color), '#', '%23'));
