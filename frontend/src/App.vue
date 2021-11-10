@@ -22,15 +22,11 @@ import { $themeColors, $themeBreakpoints, $themeConfig } from '@themeConfig'
 import { provideToast } from 'vue-toastification/composition'
 import { watch } from '@vue/composition-api'
 import useAppConfig from '@core/app-config/useAppConfig'
-<<<<<<< Updated upstream
 import PWAPrompt from 'vue2-ios-pwa-prompt'
 
-=======
->>>>>>> Stashed changes
 import { useWindowSize, useCssVar } from '@vueuse/core'
-
-import store from '@/store'
 import { mapGetters } from 'vuex'
+import store from '@/store'
 
 const LayoutVertical = () => import('@/layouts/vertical/LayoutVertical.vue')
 const LayoutHorizontal = () => import('@/layouts/horizontal/LayoutHorizontal.vue')
