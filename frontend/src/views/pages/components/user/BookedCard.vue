@@ -38,7 +38,7 @@
           align-h="end"
         >
           <b-badge :variant="statusCheck.color">
-            {{ statusCheck.name }}
+            {{ statusCheck.name !== 'Refund Initiated' ? statusCheck.name : 'Cancelled' }}
           </b-badge>
           <h2 style="font-size: 1rem;color:#202023;padding-top: 0.6rem">
             ₹ {{ amount }}
@@ -51,6 +51,16 @@
     </b-container>
 
     <b-row align-h="center">
+      <b-button
+        v-if="statusCheck.name === 'Refund Initiated'"
+        v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+        :disabled="true"
+        variant="flat-secondary"
+        class="booking-btn"
+        style="color:#202023;"
+      >
+        Refund Initiated
+      </b-button>
 
       <b-button
         v-ripple.400="'rgba(255, 255, 255, 0.15)'"
@@ -115,37 +125,37 @@ export default {
   },
   props: {
     turf: {
-      type: String,
+      type: [String, Number],
       required: true,
       default: '',
     },
     amount: {
-      type: String,
+      type: [String, Number],
       required: true,
       default: '',
     },
     slots: {
-      type: Number,
+      type: [String, Number],
       required: true,
       default: 0,
     },
     sport: {
-      type: String,
+      type: [String, Number],
       required: true,
       default: '',
     },
     facility: {
-      type: String,
+      type: [String, Number],
       required: true,
       default: '',
     },
     tag: {
-      type: String,
+      type: [String, Number],
       required: true,
       default: '',
     },
     date: {
-      type: String,
+      type: [String, Number],
       required: true,
       default: '',
     },
@@ -154,19 +164,19 @@ export default {
     return {
       sportImg: [
         {
-          name: 'Badminton',
+          name: 'badminton',
           img: '/images/sports/Badminton.png',
         },
         {
-          name: 'Football',
+          name: 'football',
           img: '/images/sports/Football.png',
         },
         {
-          name: 'Rugby',
+          name: 'rugby',
           img: '/images/sports/Rugby.png',
         },
         {
-          name: 'Basketball',
+          name: 'basketball',
           img: '/images/sports/Basketball.png',
         },
 
@@ -189,6 +199,10 @@ export default {
           color: 'secondary',
         },
         {
+          name: 'Refund Initiated',
+          color: 'secondary',
+        },
+        {
           name: 'Processing',
           color: 'info',
         },
@@ -197,7 +211,7 @@ export default {
   },
   computed: {
     url() {
-      const x = this.sportImg.filter(elem => elem.name === this.sport)
+      const x = this.sportImg.filter(elem => elem.name === this.sport.toLowerCase())
       return x[0].img
     },
     statusCheck() {

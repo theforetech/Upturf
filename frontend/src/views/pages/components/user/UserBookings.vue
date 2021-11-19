@@ -17,17 +17,27 @@
         </b-button> <span style="color:#202023;margin: auto;font-size: 1.3rem;font-weight: 500">Your Bookings</span>
       </b-card-header>
     </b-card>
+    <!--    <BookedCard-->
+    <!--      v-for="x in bookingsOld"-->
+    <!--      :key="x.id"-->
+    <!--      :turf="x.turf"-->
+    <!--      :slots="x.slots"-->
+    <!--      :amount="x.amount"-->
+    <!--      :facility="x.facility"-->
+    <!--      :sport="x.sport"-->
+    <!--      :tag="x.tag"-->
+    <!--      :date="x.date"-->
+    <!--    />-->
     <BookedCard
-
       v-for="x in bookings"
       :key="x.id"
-      :turf="x.turf"
-      :slots="x.slots"
+      :turf="x.facility.turf.name"
+      :slots="x.booked_slots_aggregate.aggregate.count"
       :amount="x.amount"
-      :facility="x.facility"
-      :sport="x.sport"
-      :tag="x.tag"
-      :date="x.date"
+      :facility="x.facility.type"
+      :sport="x.facility.sport.name"
+      :tag="getTag(x.booking_status, x.payment_status, x.reservation_date, x.booked_slots[0].startTime)"
+      :date="x.reservation_date"
     />
     <b-card>
       <b-card-body />
@@ -43,6 +53,8 @@ import {
   BCardBody,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
+import gql from 'graphql-tag'
+import moment from 'moment'
 import BookedCard from './BookedCard.vue'
 
 export default {
@@ -58,7 +70,8 @@ export default {
   },
   data() {
     return {
-      bookings: [
+      bookings: [],
+      bookingsOld: [
         {
           id: '0',
           turf: 'Sirifort Stadium',
@@ -113,7 +126,69 @@ export default {
       ],
     }
   },
+  mounted() {
+    this.getBookings()
+  },
   methods: {
+    getTag(booking, payment, date, startTime) {
+      if (booking === 1 && payment === 'success') {
+        const now = moment()
+        const then = moment(`${date} ${startTime.slice(0, -3)}`)
+        if (then.isBefore(now)) {
+          return 'Concluded'
+        }
+        return 'Upcoming'
+      } if (booking === 0 && payment === 'processing') {
+        return 'Processing'
+      } if (booking === 2 && payment === 'refund_initiated') {
+        return 'Refund Initiated'
+      } if (booking === 2 && payment === 'refunded') {
+        return 'Refunded'
+      }
+      if (booking === 2) {
+        return 'Cancelled'
+      }
+      return 'Processing'
+    },
+    async getBookings() {
+      const result = await this.$apollo.query({
+        query: gql`query {
+          bookings {
+            id
+            amount
+            payment_status
+            booking_status
+            split_payment
+            split_members
+            split_amount
+            reservation_date
+            facility {
+              id
+              sport {
+                id
+                name
+              }
+              type
+              price
+              turf {
+                id
+                name
+              }
+            }
+            booked_slots_aggregate {
+              aggregate {
+                count(columns: slot_id)
+              }
+            }
+            booked_slots(order_by: {startTime: asc}, limit: 1) {
+              startTime
+            }
+          }
+        }`,
+      })
+      this.bookings = result.data.bookings
+      console.log(this.bookings)
+    },
     navigateBack() {
       // this.$router.go(-1)
       this.$router.push({

@@ -794,6 +794,13 @@ type mutation_root {
     ): vendor_mutation_response
     "delete single row from the table: \"vendor\""
     delete_vendor_by_pk(user_id: String!): vendor
+    "delete data from the table: \"wishlist\""
+    delete_wishlist(
+        "filter the rows which have to be deleted"
+        where: wishlist_bool_exp!
+    ): wishlist_mutation_response
+    "delete single row from the table: \"wishlist\""
+    delete_wishlist_by_pk(turf_id: bigint!, user_id: String!): wishlist
     "insert data into the table: \"booked_slots\""
     insert_booked_slots(
         "the rows to be inserted"
@@ -976,6 +983,20 @@ type mutation_root {
         "on conflict condition"
         on_conflict: vendor_on_conflict
     ): vendor
+    "insert data into the table: \"wishlist\""
+    insert_wishlist(
+        "the rows to be inserted"
+        objects: [wishlist_insert_input!]!,
+        "on conflict condition"
+        on_conflict: wishlist_on_conflict
+    ): wishlist_mutation_response
+    "insert a single row into the table: \"wishlist\""
+    insert_wishlist_one(
+        "the row to be inserted"
+        object: wishlist_insert_input!,
+        "on conflict condition"
+        on_conflict: wishlist_on_conflict
+    ): wishlist
     "update data of the table: \"booked_slots\""
     update_booked_slots(
         "increments the numeric columns with given value of the filtered values"
@@ -1181,6 +1202,23 @@ type mutation_root {
         _set: vendor_set_input,
         pk_columns: vendor_pk_columns_input!
     ): vendor
+    "update data of the table: \"wishlist\""
+    update_wishlist(
+        "increments the numeric columns with given value of the filtered values"
+        _inc: wishlist_inc_input,
+        "sets the columns of the filtered rows to the given values"
+        _set: wishlist_set_input,
+        "filter the rows which have to be updated"
+        where: wishlist_bool_exp!
+    ): wishlist_mutation_response
+    "update single row of the table: \"wishlist\""
+    update_wishlist_by_pk(
+        "increments the numeric columns with given value of the filtered values"
+        _inc: wishlist_inc_input,
+        "sets the columns of the filtered rows to the given values"
+        _set: wishlist_set_input,
+        pk_columns: wishlist_pk_columns_input!
+    ): wishlist
     uploadFile(base64str: String!, name: String!, sportID: Int, turfID: bigint, type: String!, userID: String): FileOutput
 }
 
@@ -1792,6 +1830,34 @@ type query_root {
     ): vendor_aggregate!
     "fetch data from the table: \"vendor\" using primary key columns"
     vendor_by_pk(user_id: String!): vendor
+    "fetch data from the table: \"wishlist\""
+    wishlist(
+        "distinct select on columns"
+        distinct_on: [wishlist_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [wishlist_order_by!],
+        "filter the rows returned"
+        where: wishlist_bool_exp
+    ): [wishlist!]!
+    "fetch aggregated fields from the table: \"wishlist\""
+    wishlist_aggregate(
+        "distinct select on columns"
+        distinct_on: [wishlist_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [wishlist_order_by!],
+        "filter the rows returned"
+        where: wishlist_bool_exp
+    ): wishlist_aggregate!
+    "fetch data from the table: \"wishlist\" using primary key columns"
+    wishlist_by_pk(turf_id: bigint!, user_id: String!): wishlist
 }
 
 "columns and relationships of \"rating\""
@@ -2571,6 +2637,34 @@ type subscription_root {
     ): vendor_aggregate!
     "fetch data from the table: \"vendor\" using primary key columns"
     vendor_by_pk(user_id: String!): vendor
+    "fetch data from the table: \"wishlist\""
+    wishlist(
+        "distinct select on columns"
+        distinct_on: [wishlist_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [wishlist_order_by!],
+        "filter the rows returned"
+        where: wishlist_bool_exp
+    ): [wishlist!]!
+    "fetch aggregated fields from the table: \"wishlist\""
+    wishlist_aggregate(
+        "distinct select on columns"
+        distinct_on: [wishlist_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [wishlist_order_by!],
+        "filter the rows returned"
+        where: wishlist_bool_exp
+    ): wishlist_aggregate!
+    "fetch data from the table: \"wishlist\" using primary key columns"
+    wishlist_by_pk(turf_id: bigint!, user_id: String!): wishlist
 }
 
 "columns and relationships of \"turf\""
@@ -2679,6 +2773,32 @@ type turf {
     vendor_id: String!
     "An object relationship"
     vendor_profile: vendor!
+    "An array relationship"
+    wishlists(
+        "distinct select on columns"
+        distinct_on: [wishlist_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [wishlist_order_by!],
+        "filter the rows returned"
+        where: wishlist_bool_exp
+    ): [wishlist!]!
+    "An aggregate relationship"
+    wishlists_aggregate(
+        "distinct select on columns"
+        distinct_on: [wishlist_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [wishlist_order_by!],
+        "filter the rows returned"
+        where: wishlist_bool_exp
+    ): wishlist_aggregate!
 }
 
 "aggregated selection of \"turf\""
@@ -2970,6 +3090,32 @@ type user_profile {
     "An object relationship"
     user: user!
     user_id: String!
+    "An array relationship"
+    wishlists(
+        "distinct select on columns"
+        distinct_on: [wishlist_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [wishlist_order_by!],
+        "filter the rows returned"
+        where: wishlist_bool_exp
+    ): [wishlist!]!
+    "An aggregate relationship"
+    wishlists_aggregate(
+        "distinct select on columns"
+        distinct_on: [wishlist_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [wishlist_order_by!],
+        "filter the rows returned"
+        where: wishlist_bool_exp
+    ): wishlist_aggregate!
 }
 
 "aggregated selection of \"user_profile\""
@@ -3104,6 +3250,97 @@ type vendor_mutation_response {
     affected_rows: Int!
     "data from the rows affected by the mutation"
     returning: [vendor!]!
+}
+
+"columns and relationships of \"wishlist\""
+type wishlist {
+    "An object relationship"
+    turf: turf!
+    turf_id: bigint!
+    user_id: String!
+    "An object relationship"
+    user_profile: user_profile!
+}
+
+"aggregated selection of \"wishlist\""
+type wishlist_aggregate {
+    aggregate: wishlist_aggregate_fields
+    nodes: [wishlist!]!
+}
+
+"aggregate fields of \"wishlist\""
+type wishlist_aggregate_fields {
+    avg: wishlist_avg_fields
+    count(columns: [wishlist_select_column!], distinct: Boolean): Int!
+    max: wishlist_max_fields
+    min: wishlist_min_fields
+    stddev: wishlist_stddev_fields
+    stddev_pop: wishlist_stddev_pop_fields
+    stddev_samp: wishlist_stddev_samp_fields
+    sum: wishlist_sum_fields
+    var_pop: wishlist_var_pop_fields
+    var_samp: wishlist_var_samp_fields
+    variance: wishlist_variance_fields
+}
+
+"aggregate avg on columns"
+type wishlist_avg_fields {
+    turf_id: Float
+}
+
+"aggregate max on columns"
+type wishlist_max_fields {
+    turf_id: bigint
+    user_id: String
+}
+
+"aggregate min on columns"
+type wishlist_min_fields {
+    turf_id: bigint
+    user_id: String
+}
+
+"response of any mutation on the table \"wishlist\""
+type wishlist_mutation_response {
+    "number of rows affected by the mutation"
+    affected_rows: Int!
+    "data from the rows affected by the mutation"
+    returning: [wishlist!]!
+}
+
+"aggregate stddev on columns"
+type wishlist_stddev_fields {
+    turf_id: Float
+}
+
+"aggregate stddev_pop on columns"
+type wishlist_stddev_pop_fields {
+    turf_id: Float
+}
+
+"aggregate stddev_samp on columns"
+type wishlist_stddev_samp_fields {
+    turf_id: Float
+}
+
+"aggregate sum on columns"
+type wishlist_sum_fields {
+    turf_id: bigint
+}
+
+"aggregate var_pop on columns"
+type wishlist_var_pop_fields {
+    turf_id: Float
+}
+
+"aggregate var_samp on columns"
+type wishlist_var_samp_fields {
+    turf_id: Float
+}
+
+"aggregate variance on columns"
+type wishlist_variance_fields {
+    turf_id: Float
 }
 
 "unique or primary key constraints on table \"booked_slots\""
@@ -3755,6 +3992,30 @@ enum vendor_update_column {
     user_id
     "column name"
     website
+}
+
+"unique or primary key constraints on table \"wishlist\""
+enum wishlist_constraint {
+    "unique or primary key constraint"
+    wishlist_pkey
+    "unique or primary key constraint"
+    wishlist_user_id_turf_id_key
+}
+
+"select columns of table \"wishlist\""
+enum wishlist_select_column {
+    "column name"
+    turf_id
+    "column name"
+    user_id
+}
+
+"update columns of table \"wishlist\""
+enum wishlist_update_column {
+    "column name"
+    turf_id
+    "column name"
+    user_id
 }
 
 "Boolean expression to compare columns of type \"Boolean\". All fields are combined with logical 'AND'."
@@ -5416,6 +5677,7 @@ input turf_bool_exp {
     updated_at: timestamptz_comparison_exp
     vendor_id: String_comparison_exp
     vendor_profile: vendor_bool_exp
+    wishlists: wishlist_bool_exp
 }
 
 "input type for incrementing numeric columns in table \"turf\""
@@ -5455,6 +5717,7 @@ input turf_insert_input {
     updated_at: timestamptz
     vendor_id: String
     vendor_profile: vendor_obj_rel_insert_input
+    wishlists: wishlist_arr_rel_insert_input
 }
 
 "order by max() on columns of table \"turf\""
@@ -5549,6 +5812,7 @@ input turf_order_by {
     updated_at: order_by
     vendor_id: order_by
     vendor_profile: vendor_order_by
+    wishlists_aggregate: wishlist_aggregate_order_by
 }
 
 "primary key columns input for table: turf"
@@ -5719,6 +5983,7 @@ input user_profile_bool_exp {
     phone_number: String_comparison_exp
     user: user_bool_exp
     user_id: String_comparison_exp
+    wishlists: wishlist_bool_exp
 }
 
 "input type for inserting data into table \"user_profile\""
@@ -5728,6 +5993,7 @@ input user_profile_insert_input {
     phone_number: String
     user: user_obj_rel_insert_input
     user_id: String
+    wishlists: wishlist_arr_rel_insert_input
 }
 
 "input type for inserting object relation for remote table \"user_profile\""
@@ -5751,6 +6017,7 @@ input user_profile_order_by {
     phone_number: order_by
     user: user_order_by
     user_id: order_by
+    wishlists_aggregate: wishlist_aggregate_order_by
 }
 
 "primary key columns input for table: user_profile"
@@ -5878,6 +6145,131 @@ input vendor_set_input {
     state: String
     user_id: String
     website: String
+}
+
+"order by aggregate values of table \"wishlist\""
+input wishlist_aggregate_order_by {
+    avg: wishlist_avg_order_by
+    count: order_by
+    max: wishlist_max_order_by
+    min: wishlist_min_order_by
+    stddev: wishlist_stddev_order_by
+    stddev_pop: wishlist_stddev_pop_order_by
+    stddev_samp: wishlist_stddev_samp_order_by
+    sum: wishlist_sum_order_by
+    var_pop: wishlist_var_pop_order_by
+    var_samp: wishlist_var_samp_order_by
+    variance: wishlist_variance_order_by
+}
+
+"input type for inserting array relation for remote table \"wishlist\""
+input wishlist_arr_rel_insert_input {
+    data: [wishlist_insert_input!]!
+    "on conflict condition"
+    on_conflict: wishlist_on_conflict
+}
+
+"order by avg() on columns of table \"wishlist\""
+input wishlist_avg_order_by {
+    turf_id: order_by
+}
+
+"Boolean expression to filter rows from the table \"wishlist\". All fields are combined with a logical 'AND'."
+input wishlist_bool_exp {
+    _and: [wishlist_bool_exp!]
+    _not: wishlist_bool_exp
+    _or: [wishlist_bool_exp!]
+    turf: turf_bool_exp
+    turf_id: bigint_comparison_exp
+    user_id: String_comparison_exp
+    user_profile: user_profile_bool_exp
+}
+
+"input type for incrementing numeric columns in table \"wishlist\""
+input wishlist_inc_input {
+    turf_id: bigint
+}
+
+"input type for inserting data into table \"wishlist\""
+input wishlist_insert_input {
+    turf: turf_obj_rel_insert_input
+    turf_id: bigint
+    user_id: String
+    user_profile: user_profile_obj_rel_insert_input
+}
+
+"order by max() on columns of table \"wishlist\""
+input wishlist_max_order_by {
+    turf_id: order_by
+    user_id: order_by
+}
+
+"order by min() on columns of table \"wishlist\""
+input wishlist_min_order_by {
+    turf_id: order_by
+    user_id: order_by
+}
+
+"on conflict condition type for table \"wishlist\""
+input wishlist_on_conflict {
+    constraint: wishlist_constraint!
+    update_columns: [wishlist_update_column!]! = []
+    where: wishlist_bool_exp
+}
+
+"Ordering options when selecting data from \"wishlist\"."
+input wishlist_order_by {
+    turf: turf_order_by
+    turf_id: order_by
+    user_id: order_by
+    user_profile: user_profile_order_by
+}
+
+"primary key columns input for table: wishlist"
+input wishlist_pk_columns_input {
+    turf_id: bigint!
+    user_id: String!
+}
+
+"input type for updating data in table \"wishlist\""
+input wishlist_set_input {
+    turf_id: bigint
+    user_id: String
+}
+
+"order by stddev() on columns of table \"wishlist\""
+input wishlist_stddev_order_by {
+    turf_id: order_by
+}
+
+"order by stddev_pop() on columns of table \"wishlist\""
+input wishlist_stddev_pop_order_by {
+    turf_id: order_by
+}
+
+"order by stddev_samp() on columns of table \"wishlist\""
+input wishlist_stddev_samp_order_by {
+    turf_id: order_by
+}
+
+"order by sum() on columns of table \"wishlist\""
+input wishlist_sum_order_by {
+    turf_id: order_by
+}
+
+"order by var_pop() on columns of table \"wishlist\""
+input wishlist_var_pop_order_by {
+    turf_id: order_by
+}
+
+"order by var_samp() on columns of table \"wishlist\""
+input wishlist_var_samp_order_by {
+    turf_id: order_by
+}
+
+"order by variance() on columns of table \"wishlist\""
+input wishlist_variance_order_by {
+    turf_id: order_by
 }
 
 
