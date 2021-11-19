@@ -1,5 +1,21 @@
 export default [
   {
+    path: '/vendor',
+    name: 'dashboard-vendor',
+    component: () => import('@/views/dashboard/ecommerce/Ecommerce.vue'),
+    meta: {
+      layout: 'full',
+      resource: 'Vendor',
+      action: 'read',
+      pageTitle: 'Create Profile',
+      breadcrumb: [
+        {
+          text: 'Vendor Panel',
+        },
+      ],
+    },
+  },
+  {
     path: '/create-profile',
     name: 'vendor-create-profile',
     component: () => import('@/views/pages/vendor/account-setting/AccountSetting'),

@@ -1,6 +1,6 @@
 {
   "domain": "surfaturf.eu.auth0.com",
   "clientId": "blCpkaEk7luSoowp5rTVooy4odg5otSW",
-  "audience": "",
+  "audience": "panel",
   "serverUrl": ""
 }

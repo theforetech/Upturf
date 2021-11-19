@@ -14,7 +14,6 @@ import './global-components'
 
 // 3rd party plugins
 import '@axios'
-import '@/libs/acl'
 import '@/libs/portal-vue'
 import '@/libs/clipboard'
 import '@/libs/toastification'
@@ -28,12 +27,26 @@ import '@/@fake-db/db'
 import '@/firebase/firebaseConfig'
 
 // Auth0 Plugin
-import AuthPlugin from './plugins/auth'
+import { Auth0Plugin } from './auth/auth0-service'
+import { audience, clientId, domain } from "../../frontend/src/auth/auth0.json";
 
 // const { apolloClient } = require('./apollo')
 
 Vue.use(VueApollo)
-Vue.use(AuthPlugin)
+
+Vue.use(Auth0Plugin, {
+  domain,
+  clientId,
+  audience,
+  onRedirectCallback: appState => {
+    router.push(
+      appState && appState.targetUrl
+        ? appState.targetUrl
+        : window.location.pathname,
+    ).then(() => { window.location.reload() })
+  },
+})
+
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyCWciFpyWPPND6U3gIu6SDlpBeQeb0VxpY',
@@ -61,18 +74,6 @@ require('@core/scss/core.scss')
 
 // import assets styles
 require('@/assets/scss/style.scss')
-
-// const getHeaders = () => {
-//   const headers = {}
-//   const token = window.localStorage.getItem('apollo-token')
-//   // console.log(token)
-//   if (token) {
-//     headers.authorization = `Bearer ${token}`
-//   }
-//   // console.log(headers)
-//   return headers
-// }
-
 // HTTP connection to the API
 const { apolloProvider } = require('./apollo')
 

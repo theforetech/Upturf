@@ -10,6 +10,7 @@ import { ApolloLink, concat, from } from 'apollo-link'
 import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import * as VueGoogleMaps from 'vue2-google-maps'
+// import SecureLS from 'secure-ls'
 import { domain, clientId, audience } from './auth/auth0.json'
 import i18n from '@/libs/i18n'
 import router from './router'
@@ -35,6 +36,25 @@ import { Auth0Plugin, getInstance } from './auth/auth0-service'
 import './registerServiceWorker'
 
 Vue.use(VueApollo)
+// const ls = new SecureLS({ encodingType: 'aes' })
+// const secureLocalCache = {
+//   get(key) {
+//     return JSON.parse(ls.get(key))
+//   },
+//
+//   set(key, value) {
+//     ls.set(key, JSON.stringify(value))
+//   },
+//
+//   remove(key) {
+//     ls.remove(key)
+//   },
+//
+//   // Optional
+//   allKeys() {
+//     return ls.getAllKeys()
+//   },
+// }
 
 Vue.use(Auth0Plugin, {
   domain,
@@ -47,6 +67,9 @@ Vue.use(Auth0Plugin, {
         : window.location.pathname,
     ).then(() => { window.location.reload() })
   },
+  useRefreshTokens: true,
+  cacheLocation: 'localstorage',
+  // cache: secureLocalCache,
 })
 
 Vue.use(VueGoogleMaps, {
@@ -93,7 +116,6 @@ const getHeaders = async () => new Promise(async (resolve, reject) => {
     let token = await instance.getIdTokenClaims() || null
     // eslint-disable-next-line no-underscore-dangle
     token = token.__raw
-    console.log(token)
     resolve(token)
   } catch (e) {
     reject(e)
@@ -108,8 +130,6 @@ const httpLink = createHttpLink({
 })
 
 const authMiddleware = setContext((operation, { headers }) => getHeaders().then(token => {
-  console.log('token')
-  console.log(token)
   const head = {
     ...headers,
     authorization: `Bearer ${token}` || null,

@@ -1,5 +1,21 @@
 export default [
   {
+    path: '/admin',
+    name: 'dashboard-admin',
+    component: () => import('@/views/dashboard/analytics/Analytics.vue'),
+    meta: {
+      layout: 'full',
+      resource: 'Admin',
+      action: 'read',
+      pageTitle: 'Create Profile',
+      breadcrumb: [
+        {
+          text: 'Admin Panel',
+        },
+      ],
+    },
+  },
+  {
     path: '/sports',
     name: 'sports',
     component: () => import('@/views/pages/admin/sports/SportList.vue'),
