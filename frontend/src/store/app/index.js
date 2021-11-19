@@ -6,6 +6,7 @@ export default {
     windowWidth: 0,
     shallShowOverlay: false,
     redirectAfterLogin: null,
+    overflowHidden: false,
   },
   getters: {
     currentBreakPoint: state => {
@@ -16,6 +17,7 @@ export default {
       if (windowWidth >= $themeBreakpoints.sm) return 'sm'
       return 'xs'
     },
+    overflowHidden: state => state.overflowHidden,
   },
   mutations: {
     UPDATE_REDIRECT(state, val) {
@@ -26,6 +28,9 @@ export default {
     },
     TOGGLE_OVERLAY(state, val) {
       state.shallShowOverlay = val !== undefined ? val : !state.shallShowOverlay
+    },
+    UPDATE_OVERFLOW_HIDDEN(state, val) {
+      state.overflowHidden = val
     },
   },
   actions: {},
