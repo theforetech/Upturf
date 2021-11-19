@@ -161,6 +161,7 @@
     <div
       class="overlay-dark"
       :class="{'open-overlay':isOpen}"
+      style="position: fixed!important; height: 100vh!important;"
       @click="toggleBottom('closepopup')"
     />
     <div
@@ -696,21 +697,18 @@ export default {
           img: '/images/sports/Basketball.png',
         },
       ],
+      filters: true,
+      search: true,
     }
   },
-  watch: {
-    $route() {
-      this.calcFilters = false
-    },
-  },
   computed: {
-    ...mapGetters({ userInfo: 'user/getActiveUser' }),
-    filters() {
-      return 'filters' in this.$route.meta && this.$route.meta.filters
-    },
-    search() {
-      return 'search' in this.$route.meta && this.$route.meta.search
-    },
+    ...mapGetters({ userInfo: 'user/getActiveUser', overflowVal: 'app/overflowHidden' }),
+    // filters() {
+    //   return 'filters' in this.$route.matched[0].meta && this.$route.matched[0].meta.filters
+    // },
+    // search() {
+    //   return 'search' in this.$route.matched[0].meta && this.$route.matched[0].meta.search
+    // },
     // sportSelect() {
     //   const x = this.sportImg.filter(item => item.name === this.sport)
     //   return x[0].img
@@ -738,17 +736,26 @@ export default {
       return Object.keys(this.selectedTimeslots).length === 0
     },
   },
+  watch: {
+    $route(val) {
+      this.filters = 'filters' in val.matched[0].meta && val.matched[0].meta.filters
+      this.search = 'search' in val.matched[0].meta && val.matched[0].meta.search
+      this.calcFilters = false
+    },
+  },
   mounted() {
+    this.filters = 'filters' in this.$route.matched[0].meta && this.$route.matched[0].meta.filters
+    this.search = 'search' in this.$route.matched[0].meta && this.$route.matched[0].meta.search
+    // console.log(this.filters, this.search)
     // this.cross()
   },
   methods: {
     onFocus() {
-      if (!this.filters) {
+      if (!this.filters && !this.calcFilters) {
         this.calcFilters = this.calcFilters ? this.searchQuery !== '' : true
       }
     },
     navigateTo(page) {
-      console.log(page)
       this.$router.push({
         name: page,
       })

@@ -46,6 +46,7 @@
     <div
       class="sidenav-overlay"
       :class="overlayClasses"
+      style="display: block!important;"
       @click="isVerticalMenuActive = false"
     />
     <!-- /Vertical Nav Menu Overlay -->
@@ -169,6 +170,7 @@ import LayoutContentRendererDefault from '@core/layouts/components/layout-conten
 import LayoutContentRendererLeft from '@core/layouts/components/layout-content-renderer/LayoutContentRendererLeft.vue'
 import LayoutContentRendererLeftDetached from '@core/layouts/components/layout-content-renderer/LayoutContentRendererLeftDetached.vue'
 import Ripple from 'vue-ripple-directive'
+import { mapGetters } from 'vuex'
 import VerticalNavMenu from './components/vertical-nav-menu/VerticalNavMenu.vue'
 import useVerticalLayout from './useVerticalLayout'
 import mixinVerticalLayout from './mixinVerticalLayout'
@@ -195,10 +197,11 @@ export default {
   mixins: [mixinVerticalLayout],
   data() {
     return {
-      header: false,
+      header: true,
     }
   },
   computed: {
+    ...mapGetters({ overflowVal: 'app/overflowHidden' }),
     layoutContentRenderer() {
       const rendererType = this.$route.meta.contentRenderer
       if (rendererType === 'sidebar-left') return 'layout-content-renderer-left'
@@ -206,8 +209,13 @@ export default {
       return 'layout-content-renderer-default'
     },
   },
+  watch: {
+    $route(val) {
+      this.header = 'header' in val.matched[0].meta && val.matched[0].meta.header
+    },
+  },
   mounted() {
-    this.header = 'header' in this.$route.meta && this.$route.meta.header
+    this.header = 'header' in this.$route.matched[0].meta && this.$route.matched[0].meta.header
   },
   methods: {
     navigateTo(route) {

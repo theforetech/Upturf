@@ -148,6 +148,7 @@ export default [
     name: 'wishlist',
     component: () => import('@/views/pages/components/Wishlist.vue'),
     meta: {
+      header: true,
       pageTitle: 'Wishlist',
       breadcrumb: [
         {

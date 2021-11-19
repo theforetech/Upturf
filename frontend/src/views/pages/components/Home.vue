@@ -357,7 +357,6 @@ export default {
         })
         return t
       })
-      console.log(this.turfs)
     },
     async getSports() {
       const result = await this.$apollo.query({

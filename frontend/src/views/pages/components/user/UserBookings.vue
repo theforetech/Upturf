@@ -187,7 +187,6 @@ export default {
         }`,
       })
       this.bookings = result.data.bookings
-      console.log(this.bookings)
     },
     navigateBack() {
       // this.$router.go(-1)
