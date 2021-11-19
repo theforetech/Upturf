@@ -427,7 +427,7 @@ html {
 @include media-breakpoint-down(xs) {
   html body .app-content {
     padding: calc(#{$content-padding} - 0.8rem + #{$navbar-height} + #{$floating-nav-margin})
-      calc(#{$content-padding} - 0.8rem) 0 calc(#{$content-padding} - 0.8rem) !important; // - 0.8rem to reduce padding in small screen
+      calc(#{$content-padding} - 0.8rem) calc(#{$content-padding}) calc(#{$content-padding} - 0.8rem) !important; // - 0.8rem to reduce padding in small screen
   }
 
   // For static navbar

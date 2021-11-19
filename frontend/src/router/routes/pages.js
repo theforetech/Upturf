@@ -101,19 +101,26 @@ export default [
     path: '/',
     name: 'home',
     component: () => import('@/views/pages/components/Home.vue'),
+    meta: {
+      header: true,
+      search: true,
+      filters: false,
+    },
   },
   {
     path: '/categories',
     name: 'pages-categories',
     component: () => import('@/views/pages/components/Categories.vue'),
     meta: {
-      pageTitle: 'Category',
+      header: true,
+      search: true,
+      pageTitle: 'Sports',
       breadcrumb: [
         {
           text: 'Pages',
         },
         {
-          text: 'Category',
+          text: 'Sports',
           active: true,
         },
       ],
@@ -123,11 +130,28 @@ export default [
     path: '/turfs',
     name: 'pages-turfs',
     component: () => import('@/views/pages/components/Turfs.vue'),
+    header: true,
+    search: true,
+    filters: true,
     meta: {
       pageTitle: 'Turfs',
       breadcrumb: [
         {
           text: 'Turfs',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: '/wishlist',
+    name: 'wishlist',
+    component: () => import('@/views/pages/components/Wishlist.vue'),
+    meta: {
+      pageTitle: 'Wishlist',
+      breadcrumb: [
+        {
+          text: 'Wishlist',
           active: true,
         },
       ],
@@ -156,7 +180,7 @@ export default [
     },
   },
   {
-    path: '/user-bookings',
+    path: '/bookings',
     name: 'user-bookings',
     component: () => import('@/views/pages/components/user/UserBookings.vue'),
     meta: {
@@ -194,7 +218,7 @@ export default [
 
   },
   {
-    path: '/user-profile',
+    path: '/profile',
     name: 'user-profile',
     component: () => import('@/views/pages/components/user/UserProfile.vue'),
     meta: {

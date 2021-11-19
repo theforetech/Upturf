@@ -1,14 +1,13 @@
 <template>
   <div
-    class="base"
-    style="width: 100%;overflow: hidden!important;"
+    class="base header-navbar navbar navbar-shadow"
+    style="width: 100%;overflow: hidden!important; display: block !important;"
   >
     <b-row
       class="rows"
       align-v="center"
       style="padding-top: 0.6rem"
     >
-
       <b-col style="padding-right: 0">
         <b-button
           v-ripple.400="'rgba(30, 30, 30, 0.15)'"
@@ -38,17 +37,28 @@
         cols="3"
         align-self="center"
       >
-        <b-avatar
-          button
-          variant="flat-dark"
-          text="BA"
-          src="/images/avatars/me.png"
-          class="align-baseline profile"
-          size="3rem"
-        />
+        <b-button
+          variant="flat-success"
+          class="btn-icon rounded-circle"
+          @click="navigateTo('user-profile')"
+        >
+          <b-avatar
+            size="40"
+            class="align-baseline profile"
+            :src="userInfo.photoURL"
+            variant="light-primary"
+          >
+            <feather-icon
+              v-if="!userInfo.displayName"
+              icon="UserIcon"
+              size="22"
+            />
+          </b-avatar>
+        </b-button>
       </b-col>
     </b-row>
     <b-row
+      v-if="search"
       class="rows"
       align-h="center"
       style="padding-bottom: 0;height: 3.6rem;"
@@ -57,8 +67,12 @@
         label-for="vi-search-bar"
         class="searchBar"
       >
-        <b-input-group class="input-group-merge searchInput">
-          <b-input-group-prepend is-text>
+        <b-input-group
+          class="input-group-merge searchInput"
+        >
+          <b-input-group-prepend
+            is-text
+          >
             <feather-icon
               icon="SearchIcon"
               class="searchIcon"
@@ -66,13 +80,27 @@
           </b-input-group-prepend>
           <b-form-input
             id="vi-first-name"
+            v-model="searchQuery"
             placeholder="Search for Turfs, Sports, etc . . ."
             class="searchInput field"
+            @focus.native="onFocus"
           />
+          <b-input-group-append v-if="searchQuery !== ''">
+            <b-button
+              variant="outline-primary"
+              class="btn-icon"
+            >
+              <feather-icon
+                icon="ArrowRightIcon"
+                class="searchIcon"
+              />
+            </b-button>
+          </b-input-group-append>
         </b-input-group>
       </b-form-group>
     </b-row>
     <b-row
+      v-if="search && (filters || calcFilters)"
       class="rows"
       style="padding-top: 0.2rem"
     >
@@ -248,7 +276,10 @@
           </b-row>
         </div>
       </div>
-      <div v-show="whichPopup==='date'">
+      <div
+        v-show="whichPopup==='date'"
+        style="margin-bottom: 6rem;"
+      >
         <b-row style="margin-top:1rem;margin-bottom: 1rem;">
           <b-col
             style="margin-left:1rem;"
@@ -457,11 +488,11 @@
 
 <script>
 import {
-  BRow, BButton, BFormGroup, BInputGroup, BFormInput, BInputGroupPrepend, BCol, BAvatar, BCalendar, BFormCheckbox, BImg, BFormRadioGroup,
+  BRow, BButton, BFormGroup, BInputGroup, BFormInput, BInputGroupPrepend, BInputGroupAppend, BCol, BAvatar, BCalendar, BFormCheckbox, BImg, BFormRadioGroup,
 } from 'bootstrap-vue'
+import { mapGetters, mapMutations } from 'vuex'
 import Ripple from 'vue-ripple-directive'
 // import VuePlaceAutocomplete from 'vue-place-autocomplete'
-import { mapMutations } from 'vuex'
 import moment from 'moment'
 import AddressCard from './AddressCard.vue'
 
@@ -474,6 +505,7 @@ export default {
     BInputGroup,
     BFormInput,
     BInputGroupPrepend,
+    BInputGroupAppend,
     BAvatar,
     AddressCard,
     BCalendar,
@@ -484,7 +516,6 @@ export default {
   directives: {
     Ripple,
   },
-
   data() {
     const now = new Date()
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
@@ -495,6 +526,8 @@ export default {
     maxDate.setDate(maxDate.getDate() + 10)
 
     return {
+      calcFilters: false,
+      searchQuery: '',
       value: '',
       min: minDate,
       max: maxDate,
@@ -523,41 +556,42 @@ export default {
       ],
       whichPopup: '',
       popups: ['location', 'date', 'sport', 'amenities', 'timings', 'closepopup', 'sort'],
-      addresses: [{
-        id: '0',
-        type: 'Home',
-        tag: 'Home',
-        address: 'Charmwood Village, Eros Garden, Faridabad, Haryana',
-        pincode: '121009',
-      },
-      {
-        id: '1',
-        type: 'Home',
-        tag: 'Home',
-        address: 'Grandeur Appts, Gali number 5, third floor, Allahbad',
-        pincode: '200229',
-      },
-      {
-        id: '2',
-        type: 'Home',
-        tag: 'Home',
-        address: 'Kachchi Bowling, Hyderbad',
-        pincode: '200229',
-      },
-      {
-        id: '3',
-        type: 'Home',
-        tag: 'Home',
-        address: 'Kachchi Bowling, Hyderbad',
-        pincode: '200229',
-      },
-      {
-        id: '4',
-        type: 'Home',
-        tag: 'Home',
-        address: 'Kachchi Bowling, Hyderbad',
-        pincode: '200229',
-      },
+      addresses: [
+        {
+          id: '0',
+          type: 'Home',
+          tag: 'Home',
+          address: 'Charmwood Village, Eros Garden, Faridabad, Haryana',
+          pincode: '121009',
+        },
+        {
+          id: '1',
+          type: 'Home',
+          tag: 'Home',
+          address: 'Grandeur Appts, Gali number 5, third floor, Allahbad',
+          pincode: '200229',
+        },
+        {
+          id: '2',
+          type: 'Home',
+          tag: 'Home',
+          address: 'Kachchi Bowling, Hyderbad',
+          pincode: '200229',
+        },
+        {
+          id: '3',
+          type: 'Home',
+          tag: 'Home',
+          address: 'Kachchi Bowling, Hyderbad',
+          pincode: '200229',
+        },
+        {
+          id: '4',
+          type: 'Home',
+          tag: 'Home',
+          address: 'Kachchi Bowling, Hyderbad',
+          pincode: '200229',
+        },
       ],
       filterbtns: [
         {
@@ -664,7 +698,19 @@ export default {
       ],
     }
   },
+  watch: {
+    $route() {
+      this.calcFilters = false
+    },
+  },
   computed: {
+    ...mapGetters({ userInfo: 'user/getActiveUser' }),
+    filters() {
+      return 'filters' in this.$route.meta && this.$route.meta.filters
+    },
+    search() {
+      return 'search' in this.$route.meta && this.$route.meta.search
+    },
     // sportSelect() {
     //   const x = this.sportImg.filter(item => item.name === this.sport)
     //   return x[0].img
@@ -696,6 +742,17 @@ export default {
     // this.cross()
   },
   methods: {
+    onFocus() {
+      if (!this.filters) {
+        this.calcFilters = this.calcFilters ? this.searchQuery !== '' : true
+      }
+    },
+    navigateTo(page) {
+      console.log(page)
+      this.$router.push({
+        name: page,
+      })
+    },
     // removeX() {
     //   this.$emit('clicke', true)
     // },

@@ -1,40 +1,45 @@
 <template>
+  <!--  <div-->
+  <!--    class="vertical-layout h-100"-->
+  <!--    :class="[layoutClasses]"-->
+  <!--    :data-col="isNavMenuHidden ? '1-column' : null"-->
+  <!--  >-->
   <div
-    class="vertical-layout h-100"
-    :class="[layoutClasses]"
-    :data-col="isNavMenuHidden ? '1-column' : null"
+    class="vertical-layout h-100 vertical-overlay-menu menu-hide navbar-floating footer-static"
+    :data-col="null"
   >
+    <SearchBar v-if="header" />
     <!-- Navbar -->
-    <b-navbar
-      :toggleable="false"
-      :variant="navbarBackgroundColor"
-      class="header-navbar navbar navbar-shadow align-items-center"
-      :class="[navbarTypeClass]"
-    >
-      <slot
-        name="navbar"
-        :toggleVerticalMenuActive="toggleVerticalMenuActive"
-        :navbarBackgroundColor="navbarBackgroundColor"
-        :navbarTypeClass="[...navbarTypeClass, 'header-navbar navbar navbar-shadow align-items-center']"
-      >
-        <app-navbar-vertical-layout :toggle-vertical-menu-active="toggleVerticalMenuActive" />
-      </slot>
-    </b-navbar>
-    <!--/ Navbar -->
+    <!--    <b-navbar-->
+    <!--      :toggleable="false"-->
+    <!--      :variant="navbarBackgroundColor"-->
+    <!--      class="header-navbar navbar navbar-shadow align-items-center"-->
+    <!--      :class="[navbarTypeClass]"-->
+    <!--    >-->
+    <!--      <slot-->
+    <!--        name="navbar"-->
+    <!--        :toggleVerticalMenuActive="toggleVerticalMenuActive"-->
+    <!--        :navbarBackgroundColor="navbarBackgroundColor"-->
+    <!--        :navbarTypeClass="[...navbarTypeClass, 'header-navbar navbar navbar-shadow align-items-center']"-->
+    <!--      >-->
+    <!--        <app-navbar-vertical-layout :toggle-vertical-menu-active="toggleVerticalMenuActive" />-->
+    <!--      </slot>-->
+    <!--    </b-navbar>-->
+    <!--    &lt;!&ndash;/ Navbar &ndash;&gt;-->
 
-    <!-- Vertical Nav Menu -->
-    <vertical-nav-menu
-      v-if="!isNavMenuHidden"
-      :is-vertical-menu-active="isVerticalMenuActive"
-      :toggle-vertical-menu-active="toggleVerticalMenuActive"
-    >
-      <template #header="slotProps">
-        <slot
-          name="vertical-menu-header"
-          v-bind="slotProps"
-        />
-      </template>
-    </vertical-nav-menu>
+    <!--    &lt;!&ndash; Vertical Nav Menu &ndash;&gt;-->
+    <!--    <vertical-nav-menu-->
+    <!--      v-if="!isNavMenuHidden"-->
+    <!--      :is-vertical-menu-active="isVerticalMenuActive"-->
+    <!--      :toggle-vertical-menu-active="toggleVerticalMenuActive"-->
+    <!--    >-->
+    <!--      <template #header="slotProps">-->
+    <!--        <slot-->
+    <!--          name="vertical-menu-header"-->
+    <!--          v-bind="slotProps"-->
+    <!--        />-->
+    <!--      </template>-->
+    <!--    </vertical-nav-menu>-->
     <!-- /Vertical Nav Menu -->
 
     <!-- Vertical Nav Menu Overlay -->
@@ -85,10 +90,10 @@
       class="appbar"
     >
       <b-row
-        cols="5"
-        cols-sm="5"
-        cols-md="5"
-        cols-lg="5"
+        cols="4"
+        cols-sm="4"
+        cols-md="4"
+        cols-lg="4"
       >
         <b-col
           v-for="x in navbarItems"
@@ -167,10 +172,12 @@ import Ripple from 'vue-ripple-directive'
 import VerticalNavMenu from './components/vertical-nav-menu/VerticalNavMenu.vue'
 import useVerticalLayout from './useVerticalLayout'
 import mixinVerticalLayout from './mixinVerticalLayout'
+import SearchBar from '@/views/pages/components/Search/SearchBar.vue'
 
 export default {
   components: {
     // AppBreadcrumb,
+    SearchBar,
     AppNavbarVerticalLayout,
     AppFooter,
     VerticalNavMenu,
@@ -186,6 +193,11 @@ export default {
     Ripple,
   },
   mixins: [mixinVerticalLayout],
+  data() {
+    return {
+      header: false,
+    }
+  },
   computed: {
     layoutContentRenderer() {
       const rendererType = this.$route.meta.contentRenderer
@@ -193,6 +205,9 @@ export default {
       if (rendererType === 'sidebar-left-detached') return 'layout-content-renderer-left-detached'
       return 'layout-content-renderer-default'
     },
+  },
+  mounted() {
+    this.header = 'header' in this.$route.meta && this.$route.meta.header
   },
   methods: {
     navigateTo(route) {
@@ -229,27 +244,22 @@ export default {
         {
           name: 'Explore',
           icon: 'SearchIcon',
-          route: 'pages-categories',
+          route: 'home',
         },
         {
-          name: 'Wishlist',
-          icon: 'HeartIcon',
-          route: '',
-        },
-        {
-          name: 'Turfs',
+          name: 'Sports',
           icon: 'DribbbleIcon',
-          route: 'pages-turfs',
+          route: 'pages-categories',
         },
         {
           name: 'Bookings',
           icon: 'BookIcon',
-          route: '',
+          route: 'user-bookings',
         },
         {
-          name: 'Profile',
-          icon: 'UserIcon',
-          route: '',
+          name: 'Wishlist',
+          icon: 'HeartIcon',
+          route: 'wishlist',
         },
       ],
       isVerticalMenuActive,

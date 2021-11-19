@@ -107,14 +107,15 @@
         md="6"
         xs="12"
       >
-        <!--        <turf-card-->
-        <!--          :card-title="x.name"-->
-        <!--          :card-image="x.img"-->
-        <!--          :turf-avg-cost="x.cost"-->
-        <!--          :rating="x.rating"-->
-        <!--          :street="x.street"-->
-        <!--          :sports="x.sports"-->
-        <!--        />-->
+        <turf-card
+          :card-id="x.id"
+          :card-title="x.name"
+          :card-image="x.images"
+          :turf-avg-cost="x.cost"
+          :rating="x.rating"
+          :street="x.address"
+          :sports="x.sports"
+        />
       </b-col>
     </b-row>
   </div>
@@ -145,7 +146,7 @@ import gql from 'graphql-tag'
 import VueSlickCarousel from 'vue-slick-carousel'
 import store from '@/store/index'
 import SportCard from '../../card/card-advance/SportCard.vue'
-// import TurfCard from '../../card/card-advance/TurfCard.vue'
+import TurfCard from '../../card/card-advance/TurfCard.vue'
 // optional style for arrows & dots
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
@@ -161,7 +162,7 @@ export default {
     BImg,
     BMedia,
     BLink,
-    // TurfCard,
+    TurfCard,
     // BForm,
     // BInputGroup,
     // BInputGroupPrepend,
@@ -300,8 +301,64 @@ export default {
   },
   mounted() {
     this.getSports()
+    this.getTurfs()
   },
   methods: {
+    async getTurfs() {
+      // console.log('sd')
+      const result = await this.$apollo.query({
+        query: gql`query {
+          turf(where: {status: {_neq: false}}, limit: 8) {
+            id
+            name
+            pincode
+            city
+            address
+            images{
+              url
+            }
+            facilities {
+              sport{
+                id
+                name
+                images{
+                  url
+                }
+              }
+            }
+            ratings_aggregate {
+              aggregate {
+                avg {
+                  ratings
+                }
+              }
+            }
+          }
+        }`,
+      })
+      this.turfs = result.data.turf.map(turf => {
+        const t = {
+          ...turf,
+          rating: turf.ratings_aggregate.aggregate.avg.ratings,
+          sports: [],
+        }
+        delete t.ratings_aggregate
+        delete t.facilities
+        const dict = {}
+        turf.facilities.forEach(facility => {
+          if (!(facility.sport.id in dict)) {
+            dict[facility.sport.id] = true
+            t.sports.push({
+              id: facility.sport.id,
+              name: facility.sport.name,
+              image: facility.sport.images[0].url,
+            })
+          }
+        })
+        return t
+      })
+      console.log(this.turfs)
+    },
     async getSports() {
       const result = await this.$apollo.query({
         query: gql`query {

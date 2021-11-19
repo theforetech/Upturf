@@ -1,6 +1,5 @@
 <template>
   <div style="overflow: hidden;">
-    <search-bar />
     <b-card
       no-body
     >
@@ -45,7 +44,6 @@ import {
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import BookedCard from './BookedCard.vue'
-import SearchBar from '../Search/SearchBar.vue'
 
 export default {
   components: {
@@ -54,7 +52,6 @@ export default {
     BCardHeader,
     BCardBody,
     BookedCard,
-    SearchBar,
   },
   directives: {
     Ripple,
@@ -116,10 +113,12 @@ export default {
       ],
     }
   },
-
   methods: {
     navigateBack() {
-      this.$router.go(-1)
+      // this.$router.go(-1)
+      this.$router.push({
+        name: 'home',
+      })
     },
   },
 }

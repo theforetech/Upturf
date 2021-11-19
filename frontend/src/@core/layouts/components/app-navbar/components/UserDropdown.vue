@@ -5,12 +5,12 @@
     class="dropdown-user"
   >
     <template #button-content>
-      <div class="d-sm-flex d-none user-nav">
-        <p class="user-name font-weight-bolder mb-0">
-          {{ userInfo.displayName || userInfo.username }}
-        </p>
-        <!--        <span class="user-status">{{ userInfo.role }}</span>-->
-      </div>
+      <!--      <div class="d-sm-flex d-none user-nav">-->
+      <!--        <p class="user-name font-weight-bolder mb-0">-->
+      <!--          {{ userInfo.displayName || userInfo.username }}-->
+      <!--        </p>-->
+      <!--        &lt;!&ndash;        <span class="user-status">{{ userInfo.role }}</span>&ndash;&gt;-->
+      <!--      </div>-->
       <b-avatar
         size="40"
         :src="userInfo.photoURL"

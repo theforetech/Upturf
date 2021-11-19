@@ -553,7 +553,7 @@ export default {
       const turf = result.data.turf_by_pk
       const t = {
         ...turf,
-        rating: turf.ratings_aggregate.aggregate.avg.ratings,
+        rating: turf.ratings_aggregate ? turf.ratings_aggregate.aggregate.avg.ratings : null,
         sports: [],
       }
       delete t.ratings_aggregate

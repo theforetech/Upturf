@@ -174,7 +174,7 @@ export default {
     },
     cardImage: {
       type: Array,
-      default: () => [{}],
+      default: () => [],
     },
     turfAvgCost: {
       type: Number,
