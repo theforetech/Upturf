@@ -130,10 +130,10 @@ export default [
     path: '/turfs',
     name: 'pages-turfs',
     component: () => import('@/views/pages/components/Turfs.vue'),
-    header: true,
-    search: true,
-    filters: true,
     meta: {
+      header: true,
+      search: true,
+      filters: true,
       pageTitle: 'Turfs',
       breadcrumb: [
         {

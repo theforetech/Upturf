@@ -1,3 +1,4 @@
+<!--suppress ALL -->
 <template>
   <div>
     <b-row>
@@ -28,6 +29,7 @@
 import { BCol, BRow } from 'bootstrap-vue'
 
 import gql from 'graphql-tag'
+import { mapGetters } from 'vuex'
 import store from '@/store/index'
 import TurfCard from '../../card/card-advance/TurfCard.vue'
 
@@ -75,6 +77,16 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      filterDate: 'filters/date',
+      filterLocation: 'filters/location',
+      filterSortBy: 'filters/sortBy',
+      filterLoading: 'filters/loading',
+      filterAmenities: 'filters/amenities',
+      filterSports: 'filters/sports',
+      filterTimings: 'filters/timings',
+      filterFourPlus: 'filters/ratingFourPlus',
+    }),
     imgUrl() {
       if (store.state.appConfig.layout.skin === 'dark') {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
@@ -89,10 +101,15 @@ export default {
   },
   methods: {
     async getTurfs() {
-      // console.log('sd')
+      let filters = '{status: {_neq: false}'
+      if (this.filterSports.length !== 0) {
+        filters += ', facilities: {sport: {name: {_in: $sports}}}'
+      }
+      filters += '}'
+      console.log(filters)
       const result = await this.$apollo.query({
-        query: gql`query {
-          turf(where: {status: {_neq: false}}) {
+        query: gql`query ($sports: [String!]) {
+          turf(where: ${filters}) {
             id
             name
             pincode
@@ -119,6 +136,10 @@ export default {
             }
           }
         }`,
+        variables: {
+          sports: this.filterSports,
+        },
+        fetchPolicy: 'no-cache',
       })
       this.turfs = result.data.turf.map(turf => {
         const t = {

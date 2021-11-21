@@ -128,7 +128,7 @@
               class="ml-20"
             />
             <feather-icon
-              v-if="x.tag==='rating'&& rating4===true "
+              v-if="x.tag==='rating'&& filterFourPlus"
               icon="XIcon"
               class="ml-20"
             />
@@ -157,7 +157,6 @@
 
       <!--      </b-col>-->
     </b-row>
-
     <div
       class="overlay-dark"
       :class="{'open-overlay':isOpen}"
@@ -297,7 +296,7 @@
               variant="dark"
               style="float:right;margin-right: 1rem;font-size: 0.9rem;padding: 0.8rem 0.9rem"
               :disabled="enableDateDone"
-              @click="finalSelectionDate()"
+              @click="finalSelectionDate"
             >
               Done
             </b-button>
@@ -307,7 +306,6 @@
           <b-calendar
             v-model="filterbtns[0].name"
             initial-date
-            :date-format-options="{ year: 'numeric', month: 'short', day: '2-digit', weekday: 'short' }"
             :min="min"
             :max="max"
             locale="en"
@@ -332,7 +330,7 @@
               variant="dark"
               style="float:right;margin-right: 1rem;font-size: 0.9rem;padding: 0.8rem 0.9rem"
               :disabled="enableSportDone"
-              @click="finalSelectionSport()"
+              @click="finalSelectionSport"
             >
               Done
             </b-button>
@@ -378,7 +376,7 @@
               variant="dark"
               style="float:right;margin-right: 1rem;font-size: 0.9rem;padding: 0.8rem 0.9rem"
               :disabled="enableAmenitiesDone"
-              @click="finalSelectionAmenities()"
+              @click="finalSelectionAmenities"
             >
               Done
             </b-button>
@@ -396,10 +394,8 @@
               <h1 style="font-size: 1.3rem;display: inline;">
                 {{ options.text }}
               </h1>
-
             </b-form-checkbox>
           </div>
-
         </b-row>
       </div>
       <div v-show="whichPopup==='timings'">
@@ -419,7 +415,7 @@
               variant="dark"
               style="float:right;margin-right: 1rem;font-size: 0.9rem;padding: 0.8rem 0.9rem"
               :disabled="enableTimeDone"
-              @click="finalSelectionTime()"
+              @click="finalSelectionTime"
             >
               Done
             </b-button>
@@ -460,7 +456,7 @@
               variant="dark"
               style="float:right;margin-right: 1rem;font-size: 0.9rem;padding: 0.8rem 0.9rem"
               :disabled="enableSortDone"
-              @click="finalSelectionSort()"
+              @click="finalSelectionSort"
             >
               Done
             </b-button>
@@ -478,13 +474,10 @@
               stacked
             />
           </div>
-
         </b-row>
       </div>
     </div>
-
   </div>
-
 </template>
 
 <script>
@@ -638,23 +631,23 @@ export default {
       timeSlots: [
         {
           text: '6 AM to 9 AM',
-          value: '6am9am',
+          value: '06-09',
         },
         {
           text: '9 AM to 12 PM',
-          value: '9am12pm',
+          value: '09-12',
         },
         {
           text: '3 PM to 6 PM',
-          value: '3pm6pm',
+          value: '15-18',
         },
         {
           text: '6 PM to 9PM',
-          value: '6pm9pm',
+          value: '18-21',
         },
         {
           text: '9 PM to 12AM',
-          value: '9pm12am',
+          value: '21-00',
         },
       ],
       amenities: [
@@ -668,11 +661,11 @@ export default {
         },
         {
           text: 'Clay Court',
-          value: 'claycourt',
+          value: 'clay-court',
         },
         {
           text: 'Fully Sanitized',
-          value: 'sanitized',
+          value: 'fully-sanitized',
         },
       ],
       optionsSport: [
@@ -702,7 +695,19 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ userInfo: 'user/getActiveUser', overflowVal: 'app/overflowHidden' }),
+    ...mapGetters({
+      userInfo: 'user/getActiveUser',
+      overflowVal: 'app/overflowHidden',
+      filterDate: 'filters/date',
+      filterSearchQuery: 'filters/searchQuery',
+      filterLocation: 'filters/location',
+      filterSortBy: 'filters/sortBy',
+      filterLoading: 'filters/loading',
+      filterAmenities: 'filters/amenities',
+      filterSports: 'filters/sports',
+      filterTimings: 'filters/timings',
+      filterFourPlus: 'filters/ratingFourPlus',
+    }),
     // filters() {
     //   return 'filters' in this.$route.matched[0].meta && this.$route.matched[0].meta.filters
     // },
@@ -714,8 +719,8 @@ export default {
     //   return x[0].img
     // },
     formattedDate() {
-      if (this.filterbtns[0].name === 'Date') return moment().format('ddd, MMM DD, YYYY')
-      return moment(this.filterbtns[0].name, 'YYYY-MM-DD').format('ddd, MMM DD, YYYY')
+      if (this.filterbtns[0].name === 'Date') return moment().format('YYYY-MM-DD')
+      return moment(this.filterbtns[0].name, 'YYYY-MM-DD').format('YYYY-MM-DD')
     },
     enableDone() {
       return Object.keys(this.selectedAddress).length === 0
@@ -742,14 +747,42 @@ export default {
       this.search = 'search' in val.matched[0].meta && val.matched[0].meta.search
       this.calcFilters = false
     },
+    filterSports(val) {
+      this.selectedSports = val
+    },
+    filterAmenities(val) {
+      this.selectedAmenities = val
+    },
+    filterTimings(val) {
+      this.selectedTimeslots = val
+    },
+    searchQuery(val) {
+      this.updateSearchQuery(val)
+    },
   },
   mounted() {
     this.filters = 'filters' in this.$route.matched[0].meta && this.$route.matched[0].meta.filters
     this.search = 'search' in this.$route.matched[0].meta && this.$route.matched[0].meta.search
+    this.selectedSports = this.filterSports
+    this.selectedAmenities = this.filterAmenities
+    this.selectedTimeslots = this.filterTimings
+    this.selectedSort = this.filterSortBy
+    this.searchQuery = this.filterSearchQuery
     // console.log(this.filters, this.search)
     // this.cross()
   },
   methods: {
+    ...mapMutations({
+      updateFilterDate: 'filters/UPDATE_DATE',
+      updateSearchQuery: 'filters/UPDATE_SEARCH',
+      updateFilterLocation: 'filters/UPDATE_LOCATION',
+      updateFilterSortBy: 'filters/UPDATE_SORT_BY',
+      updateFilterLoading: 'filters/UPDATE_LOADING',
+      updateFilterAmenities: 'filters/UPDATE_AMENITIES',
+      updateFilterSports: 'filters/UPDATE_SPORTS',
+      updateFilterTimings: 'filters/UPDATE_TIMINGS',
+      updateFilterFourPlus: 'filters/TOGGLE_FOUR_PLUS',
+    }),
     onFocus() {
       if (!this.filters && !this.calcFilters) {
         this.calcFilters = this.calcFilters ? this.searchQuery !== '' : true
@@ -775,10 +808,8 @@ export default {
           }
         }
       } else {
-        this.rating4 = !this.rating4
+        this.updateFilterFourPlus()
       }
-
-      // console.log(this.whichPopup)
     },
     moment() {
       return moment()
@@ -795,23 +826,23 @@ export default {
       this.isOpen = false
     },
     finalSelectionSport() {
-      this.finalSport = this.selectedSports
+      this.updateFilterSports(this.selectedSports)
       this.isOpen = false
     },
     finalSelectionAmenities() {
-      this.finalAmenities = this.selectedAmenities
+      this.updateFilterAmenities(this.selectedAmenities)
       this.isOpen = false
     },
     finalSelectionSort() {
-      this.finalSort = this.selectedSort
+      this.updateFilterSortBy(this.selectedSort)
       this.isOpen = false
     },
     finalSelectionDate() {
-      this.finalDate = this.formattedDate
+      this.updateFilterDate(this.formattedDate)
       this.isOpen = false
     },
     finalSelectionTime() {
-      this.finalTime = this.selectedTimeslots
+      this.updateFilterTimings(this.selectedTimeslots)
       this.isOpen = false
     },
     ...mapMutations([
