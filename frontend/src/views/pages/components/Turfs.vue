@@ -1,7 +1,7 @@
 <!--suppress ALL -->
 <template>
   <div>
-    <b-row>
+    <b-row v-if="turfs.length > 0">
       <b-col
         v-for="x in turfs"
         :key="x.id"
@@ -10,6 +10,7 @@
         xs="12"
       >
         <turf-card
+          :key="x.id"
           :card-id="x.id"
           :card-title="x.name"
           :card-image="x.images"
@@ -20,13 +21,26 @@
         />
       </b-col>
     </b-row>
+    <div v-else>
+      <b-alert
+        variant="warning"
+        show
+      >
+        <h4 class="alert-heading">
+          Ah?
+        </h4>
+        <div class="alert-body">
+          <span>Doctors say not to play much with filters.</span>
+        </div>
+      </b-alert>
+    </div>
   </div>
   <!-- / Error page-->
 </template>
 
 <script>
 /* eslint-disable global-require */
-import { BCol, BRow } from 'bootstrap-vue'
+import { BCol, BRow, BAlert } from 'bootstrap-vue'
 
 import gql from 'graphql-tag'
 import { mapGetters } from 'vuex'
@@ -37,10 +51,9 @@ export default {
   components: {
     BRow,
     BCol,
+    BAlert,
     TurfCard,
-
   },
-
   data() {
     return {
       turfs2: [
@@ -76,6 +89,20 @@ export default {
       downImg: require('@/assets/images/pages/error.svg'),
     }
   },
+  watch: {
+    filterSports() {
+      this.getTurfs()
+    },
+    filterAmenities() {
+      this.getTurfs()
+    },
+    filterTimings() {
+      this.getTurfs()
+    },
+    // searchQuery(val) {
+    //   this.updateSearchQuery(val)
+    // },
+  },
   computed: {
     ...mapGetters({
       filterDate: 'filters/date',
@@ -102,13 +129,37 @@ export default {
   methods: {
     async getTurfs() {
       let filters = '{status: {_neq: false}'
+      const variables = {}
+      const timings = {
+        '06-09': ['06:00:00', '07:00:00', '08:00:00', '09:00:00'],
+        '09-12': ['09:00:00', '10:00:00', '11:00:00', '12:00:00'],
+        '15-18': ['15:00:00', '16:00:00', '17:00:00', '18:00:00'],
+        '18-21': ['18:00:00', '19:00:00', '20:00:00', '21:00:00'],
+        '21-00': ['21:00:00', '22:00:00', '23:00:00', '00:00:00'],
+      }
       if (this.filterSports.length !== 0) {
-        filters += ', facilities: {sport: {name: {_in: $sports}}}'
+        variables.sports = this.filterSports
+        filters += ', facilities: {sport: {name: {_in: $sports}}'
+      }
+      if (this.filterTimings.length !== 0) {
+        variables.startTimes = []
+        this.filterTimings.forEach(timing => {
+          variables.startTimes = [...variables.startTimes, ...timings[timing]]
+        })
+        if (this.filterSports.length === 0) {
+          filters += ', facilities: {slots: {start_time: {_in: $startTimes}}'
+        } else {
+          filters += ', slots: {start_time: {_in: $startTimes}}'
+        }
+      }
+      // filters += '}'
+      if (this.filterTimings.length !== 0 || this.filterSports.length !== 0) {
+        filters += '}'
       }
       filters += '}'
       console.log(filters)
       const result = await this.$apollo.query({
-        query: gql`query ($sports: [String!]) {
+        query: gql`query ($sports: [String!], $startTimes: [time!]) {
           turf(where: ${filters}) {
             id
             name
@@ -136,9 +187,7 @@ export default {
             }
           }
         }`,
-        variables: {
-          sports: this.filterSports,
-        },
+        variables,
         fetchPolicy: 'no-cache',
       })
       this.turfs = result.data.turf.map(turf => {
@@ -162,7 +211,6 @@ export default {
         })
         return t
       })
-      // console.log(this.turfs)
     },
   },
 }

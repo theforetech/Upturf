@@ -28,7 +28,7 @@
       </div>
       <b-carousel-slide
         v-for="y in cardImage"
-        :key="y.url"
+        :key="cardId+y.url"
         class="carousal-image"
         :img-src="y.url"
       />

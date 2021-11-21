@@ -91,6 +91,7 @@ export default {
   methods: {
     navigateTo() {
       // TODO remove this
+      this.$store.commit('filters/UPDATE_SPORTS', [this.sportTitle])
       this.$router.push({ name: 'pages-turfs' })
       // this.$router.push(`/sport/${this.name}`)
     },

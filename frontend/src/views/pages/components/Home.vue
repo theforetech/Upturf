@@ -308,7 +308,7 @@ export default {
       // console.log('sd')
       const result = await this.$apollo.query({
         query: gql`query {
-          turf(where: {status: {_neq: false}}, limit: 8) {
+          turf(where: {status: {_neq: false}}, limit: 5) {
             id
             name
             pincode

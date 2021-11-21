@@ -726,19 +726,19 @@ export default {
       return Object.keys(this.selectedAddress).length === 0
     },
     enableSportDone() {
-      return Object.keys(this.selectedSports).length === 0
+      return this.selectedSports === this.filterSports
     },
     enableAmenitiesDone() {
-      return Object.keys(this.selectedAmenities).length === 0
+      return this.selectedAmenities === this.filterAmenities
     },
     enableSortDone() {
-      return this.selectedSort === this.finalSort
+      return this.selectedSort === this.filterAmenities
     },
     enableDateDone() {
       return this.filterbtns[0].name === 'date'
     },
     enableTimeDone() {
-      return Object.keys(this.selectedTimeslots).length === 0
+      return this.selectedTimeslots === this.filterTimings
     },
   },
   watch: {
@@ -823,26 +823,32 @@ export default {
     },
     finalSelection() {
       this.finalAddress = this.selectedAddress
+      this.$store.commit('app/UPDATE_OVERFLOW_HIDDEN', false)
       this.isOpen = false
     },
     finalSelectionSport() {
       this.updateFilterSports(this.selectedSports)
+      this.$store.commit('app/UPDATE_OVERFLOW_HIDDEN', false)
       this.isOpen = false
     },
     finalSelectionAmenities() {
       this.updateFilterAmenities(this.selectedAmenities)
+      this.$store.commit('app/UPDATE_OVERFLOW_HIDDEN', false)
       this.isOpen = false
     },
     finalSelectionSort() {
       this.updateFilterSortBy(this.selectedSort)
+      this.$store.commit('app/UPDATE_OVERFLOW_HIDDEN', false)
       this.isOpen = false
     },
     finalSelectionDate() {
       this.updateFilterDate(this.formattedDate)
+      this.$store.commit('app/UPDATE_OVERFLOW_HIDDEN', false)
       this.isOpen = false
     },
     finalSelectionTime() {
       this.updateFilterTimings(this.selectedTimeslots)
+      this.$store.commit('app/UPDATE_OVERFLOW_HIDDEN', false)
       this.isOpen = false
     },
     ...mapMutations([
@@ -863,7 +869,6 @@ export default {
 }
 .searchBar{
   width: 98%;
-
 }
 .filter-row{
   overflow-x:auto;
