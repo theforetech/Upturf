@@ -11,6 +11,7 @@ import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import * as VueGoogleMaps from 'vue2-google-maps'
 // import SecureLS from 'secure-ls'
+import VueGmaps from 'vue-gmaps'
 import { domain, clientId, audience } from './auth/auth0.json'
 import i18n from '@/libs/i18n'
 import router from './router'
@@ -70,6 +71,10 @@ Vue.use(Auth0Plugin, {
   useRefreshTokens: true,
   cacheLocation: 'localstorage',
   // cache: secureLocalCache,
+})
+
+Vue.use(VueGmaps, {
+  key: 'AIzaSyCWciFpyWPPND6U3gIu6SDlpBeQeb0VxpY',
 })
 
 Vue.use(VueGoogleMaps, {

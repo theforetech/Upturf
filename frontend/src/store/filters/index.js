@@ -4,7 +4,7 @@ export default {
   namespaced: true,
   state: {
     loading: false,
-    location: null,
+    location: JSON.parse(localStorage.getItem('location')) || null,
     searchQuery: '',
     turfs: [],
     sortBy: 'popularity', // popularity/ratingh2l/pricel2h/priceh2l
@@ -35,6 +35,7 @@ export default {
     },
     UPDATE_LOCATION(state, val) {
       state.location = val
+      localStorage.setItem('location', JSON.stringify(val))
     },
     UPDATE_DATE(state, val) {
       state.date = val

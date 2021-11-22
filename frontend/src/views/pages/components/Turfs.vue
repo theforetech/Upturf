@@ -157,9 +157,12 @@ export default {
         filters += '}'
       }
       filters += '}'
-      // console.log(filters)
-      const result = await this.$apollo.query({
-        query: gql`query ($sports: [String!], $startTimes: [time!]) {
+      if (this.filterLocation) {
+        variables.lat = this.filterLocation.lat
+        variables.lon = this.filterLocation.lon
+        variables.bound = 20
+      }
+      const q1 = gql`query ($sports: [String!], $startTimes: [time!]) {
           turf(where: ${filters}) {
             id
             name
@@ -186,11 +189,44 @@ export default {
               }
             }
           }
-        }`,
+        }`
+      const q2 = gql`query ($sports: [String!], $startTimes: [time!], $bound: Int, $lat: float8, $lon: float8) {
+          get_nearby_turfs(where: ${filters}, args: {bound: $bound, latitude: $lat, longitude: $lon}) {
+            id
+            name
+            pincode
+            city
+            address
+            images{
+              url
+            }
+            facilities {
+              sport{
+                id
+                name
+                images{
+                  url
+                }
+              }
+            }
+            ratings_aggregate {
+              aggregate {
+                avg {
+                  ratings
+                }
+              }
+            }
+          }
+        }`
+      // console.log(filters)
+      const result = await this.$apollo.query({
+        query: !this.filterLocation ? q1 : q2,
         variables,
         fetchPolicy: 'no-cache',
       })
-      this.turfs = result.data.turf.map(turf => {
+      // console.log(result.data.turf)
+      const res = !this.filterLocation ? result.data.turf : result.data.get_nearby_turfs
+      this.turfs = res.map(turf => {
         const t = {
           ...turf,
           rating: turf.ratings_aggregate.aggregate.avg.ratings,
@@ -205,7 +241,7 @@ export default {
             t.sports.push({
               id: facility.sport.id,
               name: facility.sport.name,
-              image: facility.sport.images[0].url,
+              image: facility.sport.images.length > 0 && facility.sport.images[0].url,
             })
           }
         })

@@ -20,14 +20,14 @@
             style="color: #7367F0"
           />
           <span
-            v-if="Object.keys(finalAddress).length === 0"
+            v-if="filterLocation === null"
           >
             Pick your location . .
           </span>
           <span
             v-else
           >
-            {{ finalAddress.address.slice(0,27) }} . .
+            {{ ('name' in filterLocation) ? filterLocation.name : filterLocation.lat+','+filterLocation.lon }} . .
           </span>
 
         </b-button>
@@ -230,8 +230,11 @@
                   </b-input-group-prepend>
                   <b-form-input
                     id="vi-location"
+                    v-model="vm.searchPlace"
+                    v-gmaps-searchbox:location.name.geometry="vm"
                     placeholder="Search your location..."
                     class="searchInput field"
+                    name="name"
                   />
                 </b-input-group>
               </b-form-group>
@@ -244,6 +247,7 @@
               v-ripple.400="'rgba(210, 151, 240, 0.15)'"
               variant="flat-primary"
               style="margin-left: 0.5rem"
+              @click="geolocate"
             >
               <feather-icon
                 icon="CrosshairIcon"
@@ -252,28 +256,28 @@
               Use Current Location
             </b-button>
           </b-row>
-          <b-row style="margin-top:1.6rem;margin-bottom: 1rem;">
-            <b-col
-              style="margin-left:1rem;"
-            >
-              <h1 style="font-size: 1.1rem;">
-                Your Saved Locations
-              </h1>
-            </b-col>
-          </b-row>
-          <b-row>
-            <address-card
-              v-for="x in addresses"
-              :key="x.id"
-              :type="x.type"
-              :tag="x.tag"
-              :address="x.address"
-              :pincode="x.pincode"
-              :color="itemSelected(x)"
-              style="width: 100%"
-              @select="selectAddress(x)"
-            />
-          </b-row>
+          <!--          <b-row style="margin-top:1.6rem;margin-bottom: 1rem;">-->
+          <!--            <b-col-->
+          <!--              style="margin-left:1rem;"-->
+          <!--            >-->
+          <!--              <h1 style="font-size: 1.1rem;">-->
+          <!--                Your Saved Locations-->
+          <!--              </h1>-->
+          <!--            </b-col>-->
+          <!--          </b-row>-->
+          <!--          <b-row>-->
+          <!--            <address-card-->
+          <!--              v-for="x in addresses"-->
+          <!--              :key="x.id"-->
+          <!--              :type="x.type"-->
+          <!--              :tag="x.tag"-->
+          <!--              :address="x.address"-->
+          <!--              :pincode="x.pincode"-->
+          <!--              :color="itemSelected(x)"-->
+          <!--              style="width: 100%"-->
+          <!--              @select="selectAddress(x)"-->
+          <!--            />-->
+          <!--          </b-row>-->
         </div>
       </div>
       <div
@@ -501,6 +505,7 @@ export default {
     BInputGroupPrepend,
     BInputGroupAppend,
     BAvatar,
+    // eslint-disable-next-line vue/no-unused-components
     AddressCard,
     BCalendar,
     BFormCheckbox,
@@ -520,12 +525,16 @@ export default {
     maxDate.setDate(maxDate.getDate() + 10)
 
     return {
+      isOpen: false,
       calcFilters: false,
+      vm: {
+        searchPlace: '',
+        location: {},
+      },
       searchQuery: '',
       value: '',
       min: minDate,
       max: maxDate,
-      isOpen: false,
       finalDate: moment().format('ddd, MMM DD, YYYY'),
       selectedSort: 'popularity',
       finalSort: 'popularity',
@@ -723,7 +732,8 @@ export default {
       return moment(this.filterbtns[0].name, 'YYYY-MM-DD').format('YYYY-MM-DD')
     },
     enableDone() {
-      return Object.keys(this.selectedAddress).length === 0
+      return false
+      // return Object.keys(this.selectedAddress).length === 0
     },
     enableSportDone() {
       return this.selectedSports === this.filterSports
@@ -783,6 +793,15 @@ export default {
       updateFilterTimings: 'filters/UPDATE_TIMINGS',
       updateFilterFourPlus: 'filters/TOGGLE_FOUR_PLUS',
     }),
+    geolocate() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+          this.$store.commit('filters/UPDATE_LOCATION', { lat: position.coords.latitude, lon: position.coords.longitude })
+          this.$store.commit('app/UPDATE_OVERFLOW_HIDDEN', false)
+          this.isOpen = false
+        })
+      }
+    },
     onFocus() {
       if (!this.filters && !this.calcFilters) {
         this.calcFilters = this.calcFilters ? this.searchQuery !== '' : true
@@ -821,8 +840,14 @@ export default {
       // console.log()
       return item.id === this.selectedAddress.id
     },
-    finalSelection() {
-      this.finalAddress = this.selectedAddress
+    async finalSelection() {
+      const lat = await this.vm.location.geometry.location.lat()
+      const lon = await this.vm.location.geometry.location.lng()
+      this.$store.commit('filters/UPDATE_LOCATION', {
+        lat,
+        lon,
+        name: this.vm.location.name,
+      })
       this.$store.commit('app/UPDATE_OVERFLOW_HIDDEN', false)
       this.isOpen = false
     },
