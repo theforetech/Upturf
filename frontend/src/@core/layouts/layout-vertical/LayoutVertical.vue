@@ -250,14 +250,14 @@ export default {
     return {
       navbarItems: [
         {
-          name: 'Explore',
-          icon: 'SearchIcon',
+          name: 'Curated',
+          icon: 'DribbbleIcon',
           route: 'home',
         },
         {
-          name: 'Sports',
-          icon: 'DribbbleIcon',
-          route: 'pages-categories',
+          name: 'Explore',
+          icon: 'SearchIcon',
+          route: 'pages-turfs',
         },
         {
           name: 'Bookings',

@@ -157,7 +157,7 @@ export default {
         filters += '}'
       }
       filters += '}'
-      console.log(filters)
+      // console.log(filters)
       const result = await this.$apollo.query({
         query: gql`query ($sports: [String!], $startTimes: [time!]) {
           turf(where: ${filters}) {
