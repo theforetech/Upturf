@@ -29,6 +29,7 @@ import PWAPrompt from 'vue2-ios-pwa-prompt'
 
 import { useWindowSize, useCssVar } from '@vueuse/core'
 import { mapGetters } from 'vuex'
+import update from '@/mixins/update'
 import store from '@/store'
 
 const LayoutVertical = () => import('@/layouts/vertical/LayoutVertical.vue')
@@ -37,7 +38,6 @@ const LayoutFull = () => import('@/layouts/full/LayoutFull.vue')
 
 export default {
   components: {
-
     // Layouts
     LayoutHorizontal,
     LayoutVertical,
@@ -45,6 +45,83 @@ export default {
     PWAPrompt,
 
     ScrollToTop,
+  },
+  mixins: [update],
+  watch: {
+    updateExists(oldVal, newVal) {
+      if (!oldVal && newVal) {
+        this.$swal({
+          title: 'New Update Available!',
+          text: 'Do you want to get it now?',
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonText: 'Update!',
+          customClass: {
+            confirmButton: 'btn btn-primary',
+            cancelButton: 'btn btn-outline-danger ml-1',
+          },
+          buttonsStyling: false,
+        }).then(result => {
+          if (result.value) {
+            this.refreshApp()
+            this.$swal({
+              icon: 'success',
+              title: 'Hurray!',
+              text: 'Upturf will be updated.',
+              customClass: {
+                confirmButton: 'btn btn-success',
+              },
+            })
+          } else if (result.dismiss === 'cancel') {
+            this.$swal({
+              title: 'Update soon!',
+              text: 'Get the latest features with the update :)',
+              icon: 'error',
+              customClass: {
+                confirmButton: 'btn btn-success',
+              },
+            })
+          }
+        })
+      }
+    },
+  },
+  mounted() {
+    if (this.updateExists) {
+      this.$swal({
+        title: 'New Update Available!',
+        text: 'Do you want to get it now?',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'Update!',
+        customClass: {
+          confirmButton: 'btn btn-primary',
+          cancelButton: 'btn btn-outline-danger ml-1',
+        },
+        buttonsStyling: false,
+      }).then(result => {
+        if (result.value) {
+          this.refreshApp()
+          this.$swal({
+            icon: 'success',
+            title: 'Hurray!',
+            text: 'Upturf will be updated.',
+            customClass: {
+              confirmButton: 'btn btn-success',
+            },
+          })
+        } else if (result.dismiss === 'cancel') {
+          this.$swal({
+            title: 'Update soon!',
+            text: 'Get the latest features with the update :)',
+            icon: 'error',
+            customClass: {
+              confirmButton: 'btn btn-success',
+            },
+          })
+        }
+      })
+    }
   },
   // ! We can move this computed: layout & contentLayoutType once we get to use Vue 3
   // Currently, router.currentRoute is not reactive and doesn't trigger any change

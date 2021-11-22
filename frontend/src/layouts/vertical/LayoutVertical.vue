@@ -17,6 +17,7 @@ import { $themeConfig } from '@themeConfig'
 
 export default {
   components: {
+    // eslint-disable-next-line vue/no-unused-components
     AppCustomizer,
     LayoutVertical,
   },
