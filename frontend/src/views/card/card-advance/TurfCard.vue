@@ -4,7 +4,6 @@
     style="padding: 0"
     class="turf-card pointerCursor"
     no-body
-    @click="navigateTo"
   >
     <b-carousel
       id="carousel-crossfade"
@@ -12,16 +11,23 @@
       fade
       style="transform: scale(1.025);"
     >
-      <div style="position:absolute;z-index: 2;width: 100%;margin-top: 15px; ">
+      <div
+        v-if="!loading"
+        style="position:absolute;z-index: 10;width: 100%;margin-top: 15px;"
+      >
         <b-button
           v-ripple.400="'rgba(0, 0, 0, 0.15)'"
           variant="gradient-secondary"
           class="btn-wishlist"
-          style="float: right;aspect-ratio:1/1;border-radius:50%;padding:0.5rem;background-image: linear-gradient(47deg, #fff, #f8f8f8)!important;margin-right:1rem;box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );"
+          :style="{ backgroundImage: isInWishlist ? 'linear-gradient(47deg, red, orangered)!important' : 'linear-gradient(47deg, #fff, #f8f8f8)!important' }"
+          style="float: right;aspect-ratio:1/1;border-radius:50%;padding:0.5rem;margin-right:1rem;box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );"
+          @click="toggleWishlist"
         >
           <feather-icon
             icon="HeartIcon"
             size="18"
+            :style="{ stroke: isInWishlist ? 'white' : 'red', fill: isInWishlist ? 'white' : 'white' }"
+            style="stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"
             class="text-danger"
           />
         </b-button>
@@ -146,7 +152,9 @@ import {
   BCard, BCardText, BCarousel, BCarouselSlide, BBadge, BImg, BRow, BCol, BButton,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
+import { mapGetters } from 'vuex'
 
+// eslint-disable-next-line no-unused-vars
 export default {
   components: {
     BCard,
@@ -195,12 +203,23 @@ export default {
   },
   data() {
     return {
-      wishlist: false,
+      loading: false,
     }
+  },
+  computed: {
+    ...mapGetters({ userProfile: 'user/getUserProfile' }),
+    isInWishlist() {
+      return this.$store.state.user.userProfile[0].wishlists.includes(this.cardId)
+    },
+  },
+  mounted() {
+    this.profile = this.$store.state.user.userProfile
   },
   methods: {
     toggleWishlist() {
-      this.wishlist = !this.wishlist
+      this.$store.dispatch('user/updateWishlist', {
+        apollo: this.$apollo, userId: this.$store.state.user.AppActiveUser.uid, turfId: this.cardId, type: this.isInWishlist ? 'remove' : 'insert',
+      })
     },
     navigateTo() {
       this.$router.push({ name: 'pages-turf', params: { id: this.cardId } })

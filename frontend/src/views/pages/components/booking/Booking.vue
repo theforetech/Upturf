@@ -951,7 +951,7 @@ export default {
         mutation: gql`mutation ($id: uuid!) {
           cancel(bookingID: $id) {
             id
-            refundID
+            refund
             status
           }
         }`,

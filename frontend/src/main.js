@@ -166,7 +166,7 @@ Vue.config.productionTip = false
 const { backend } = require('./global-vars')
 
 Vue.prototype.$backend = backend
-
+Vue.prototype.$delay = ms => new Promise(res => setTimeout(res, ms))
 new Vue({
   router,
   store,

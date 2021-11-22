@@ -5,10 +5,6 @@
       <!-- Brand logo-->
       <b-link class="brand-logo">
         <Vuexy-logo />
-
-        <h2 class="brand-text text-primary ml-1">
-          Upturf
-        </h2>
       </b-link>
       <!-- /Brand logo-->
 
@@ -41,9 +37,6 @@
           <b-card-title class="mb-1">
             Adventure starts here 🚀
           </b-card-title>
-          <b-card-text class="mb-2">
-            Make your app management easy and fun!
-          </b-card-text>
 
           <!-- form -->
           <validation-observer
@@ -78,71 +71,80 @@
 
               <!-- email -->
               <b-form-group
-                label="Email"
-                label-for="register-email"
+                label="Phone Number"
+                label-for="phone"
               >
                 <validation-provider
                   #default="{ errors }"
-                  name="Email"
-                  vid="email"
-                  rules="required|email"
-                >
-                  <b-form-input
-                    id="register-email"
-                    v-model="userEmail"
-                    name="register-email"
-                    :state="errors.length > 0 ? false:null"
-                    placeholder="john@example.com"
-                  />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
-
-              <!-- password -->
-              <b-form-group
-                label-for="register-password"
-                label="Password"
-              >
-                <validation-provider
-                  #default="{ errors }"
-                  name="Password"
-                  vid="password"
+                  name="Phone"
+                  vid="phone"
                   rules="required"
                 >
-                  <b-input-group
-                    class="input-group-merge"
-                    :class="errors.length > 0 ? 'is-invalid':null"
-                  >
-                    <b-form-input
-                      id="register-password"
-                      v-model="password"
-                      class="form-control-merge"
-                      :type="passwordFieldType"
-                      :state="errors.length > 0 ? false:null"
-                      name="register-password"
-                      placeholder="············"
+                  <b-input-group>
+                    <b-input-group-prepend is-text>
+                      IN (+91)
+                    </b-input-group-prepend>
+                    <cleave
+                      id="phone"
+                      v-model="phone"
+                      class="form-control"
+                      :raw="false"
+                      :options="phoneOptions"
+                      placeholder="77991 44423"
                     />
-                    <b-input-group-append is-text>
-                      <feather-icon
-                        :icon="passwordToggleIcon"
-                        class="cursor-pointer"
-                        @click="togglePasswordVisibility"
-                      />
-                    </b-input-group-append>
                   </b-input-group>
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
 
-              <b-form-group>
-                <b-form-checkbox
-                  id="register-privacy-policy"
-                  v-model="status"
-                  name="checkbox-1"
+              <b-form-group
+                v-b-tooltip.hover.right="'Search and select Location below! This doesn\'t need to be a full address.'"
+                label-for="vi-search-bar"
+                class="searchBar"
+                label="Default Location (for nearby Turfs)"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  name="Search"
+                  vid="search"
+                  rules="required"
                 >
-                  I agree to
-                  <b-link>privacy policy & terms</b-link>
-                </b-form-checkbox>
+                  <b-input-group
+                    class="input-group-merge searchInput"
+                  >
+                    <b-form-input
+                      id="vi-location"
+                      v-model="vm.location.name"
+                      placeholder="Your location will display here on selection"
+                      class="searchInput field"
+                      name="name"
+                      :disabled="true"
+                    />
+                  </b-input-group>
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+
+              <b-form-group
+                label-for="vi-search-bar"
+                class="searchBar"
+              >
+                <b-input-group class="input-group-merge searchInput">
+                  <b-input-group-prepend is-text>
+                    <feather-icon
+                      icon="SearchIcon"
+                      class="searchIcon"
+                    />
+                  </b-input-group-prepend>
+                  <b-form-input
+                    id="vi-location"
+                    v-model="vm.searchPlace"
+                    v-gmaps-searchbox:location.name.geometry.address_components="vm"
+                    placeholder="Search your location..."
+                    class="searchInput field"
+                    name="name"
+                  />
+                </b-input-group>
               </b-form-group>
 
               <b-button
@@ -150,52 +152,12 @@
                 block
                 type="submit"
                 :disabled="invalid"
+                @click="register"
               >
-                Sign up
+                Create Profile
               </b-button>
             </b-form>
           </validation-observer>
-
-          <p class="text-center mt-2">
-            <span>Already have an account?</span>
-            <b-link :to="{name:'auth-login'}">
-              <span>&nbsp;Sign in instead</span>
-            </b-link>
-          </p>
-
-          <!-- divider -->
-          <div class="divider my-2">
-            <div class="divider-text">
-              or
-            </div>
-          </div>
-
-          <div class="auth-footer-btn d-flex justify-content-center">
-            <b-button
-              variant="facebook"
-              href="javascript:void(0)"
-            >
-              <feather-icon icon="FacebookIcon" />
-            </b-button>
-            <b-button
-              variant="twitter"
-              href="javascript:void(0)"
-            >
-              <feather-icon icon="TwitterIcon" />
-            </b-button>
-            <b-button
-              variant="google"
-              href="javascript:void(0)"
-            >
-              <feather-icon icon="MailIcon" />
-            </b-button>
-            <b-button
-              variant="github"
-              href="javascript:void(0)"
-            >
-              <feather-icon icon="GithubIcon" />
-            </b-button>
-          </div>
         </b-col>
       </b-col>
     <!-- /Register-->
@@ -207,41 +169,54 @@
 /* eslint-disable global-require */
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
+import Ripple from 'vue-ripple-directive'
 import {
-  BRow, BCol, BLink, BButton, BForm, BFormCheckbox, BFormGroup, BFormInput, BInputGroup, BInputGroupAppend, BImg, BCardTitle, BCardText,
+  BRow, BCol, BLink, BButton, VBTooltip, BForm, BFormGroup, BFormInput, BInputGroupPrepend, BImg, BCardTitle, BInputGroup,
 } from 'bootstrap-vue'
 import { required, email } from '@validations'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
+import Cleave from 'vue-cleave-component'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'cleave.js/dist/addons/cleave-phone.in'
+import gql from 'graphql-tag'
+// import moment from 'moment'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import store from '@/store/index'
-import useJwt from '@/auth/jwt/useJwt'
 
 export default {
   components: {
+    BInputGroupPrepend,
     VuexyLogo,
+    Cleave,
     BRow,
     BImg,
     BCol,
     BLink,
     BButton,
     BForm,
-    BCardText,
     BCardTitle,
-    BFormCheckbox,
     BFormGroup,
     BFormInput,
     BInputGroup,
-    BInputGroupAppend,
     // validations
     ValidationProvider,
     ValidationObserver,
   },
+  directives: {
+    'b-tooltip': VBTooltip,
+    Ripple,
+  },
   mixins: [togglePasswordVisibility],
   data() {
     return {
+      vm: {
+        searchPlace: '',
+        location: {},
+      },
+      phoneOptions: { phone: true, phoneRegionCode: 'IN' },
       status: '',
-      name: 'ADmIn',
-      userEmail: 'admin@demo.com',
-      password: 'admin',
+      name: '',
+      phone: null,
       sideImg: require('@/assets/images/pages/register-v2.svg'),
       // validation
       required,
@@ -249,9 +224,6 @@ export default {
     }
   },
   computed: {
-    passwordToggleIcon() {
-      return this.passwordFieldType === 'password' ? 'EyeIcon' : 'EyeOffIcon'
-    },
     imgUrl() {
       if (store.state.appConfig.layout.skin === 'dark') {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
@@ -263,24 +235,81 @@ export default {
   },
   methods: {
     register() {
-      this.$refs.registerForm.validate().then(success => {
+      this.$refs.registerForm.validate().then(async success => {
         if (success) {
-          useJwt.register({
-            name: this.name,
-            email: this.userEmail,
-            password: this.password,
-            role: 'admin',
+          const lat = this.vm.location.geometry.location.lat()
+          const lon = this.vm.location.geometry.location.lng()
+          const locName = this.vm.location.name
+          let city = ''
+          this.vm.location.address_components.forEach(comp => {
+            if (comp.types.includes('administrative_area_level_2')) {
+              city = comp.long_name
+            }
           })
-            .then(response => {
-              useJwt.setToken(response.data.accessToken)
-              useJwt.setRefreshToken(response.data.refreshToken)
-              localStorage.setItem('userInfo', JSON.stringify(response.data.userInfo))
-              this.$ability.update(response.data.userInfo.ability)
-              this.$router.push('/')
+          const res = await this.$apollo.mutate({
+            mutation: gql`mutation ($name: String!, $phone: String!, $lat: float8!, $lon: float8!, $locName: String, $defaultCity: String) {
+              insert_user_profile_one(object: { name: $name, phone_number: $phone, lat: $lat, lon: $lon, default_city: $defaultCity, locName: $locName }) {
+                default_city
+                lat
+                locName
+                lon
+                name
+                phone_number
+                wishlists {
+                  turf_id
+                }
+              }
+            }`,
+            variables: {
+              name: this.name,
+              phone: this.phone,
+              defaultCity: city,
+              lat,
+              lon,
+              locName,
+            },
+          }).catch(e => {
+            const msg = e.message
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Error Updating Profile',
+                icon: 'XCircleIcon',
+                text: msg,
+                variant: 'danger',
+              },
             })
-            .catch(error => {
-              this.$refs.registerForm.setErrors(error)
+          })
+          try {
+            if (res === undefined || !('data' in res) || !('insert_user_profile_one' in res.data) || !res.data.insert_user_profile_one) {
+              return
+            }
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Profile Created!',
+                icon: 'CheckIcon',
+                text: 'Let\'s get started.',
+                variant: 'success',
+              },
+            },
+            {
+              timeout: 4000,
             })
+            await this.$store.commit('user/UPDATE_USER_PROFILE', res.data.insert_user_profile_one)
+            this.$router.push('/')
+          } catch (e) {
+            const msg = e.message
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Error Creating Profile',
+                icon: 'XCircleIcon',
+                text: msg,
+                variant: 'danger',
+              },
+            })
+          }
         }
       })
     },

@@ -57,6 +57,15 @@ export default [
     },
   },
   {
+    path: '/register',
+    name: 'auth-register',
+    component: () => import('@/views/pages/authentication/Register.vue'),
+    meta: {
+      layout: 'full',
+      resource: 'Auth',
+    },
+  },
+  {
     path: '/pages/miscellaneous/coming-soon',
     name: 'misc-coming-soon',
     component: () => import('@/views/pages/miscellaneous/ComingSoon.vue'),
@@ -197,7 +206,6 @@ export default [
         },
       ],
     },
-
   },
   {
     path: '/summary/:id',

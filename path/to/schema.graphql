@@ -1178,6 +1178,8 @@ type mutation_root {
     ): user
     "update data of the table: \"user_profile\""
     update_user_profile(
+        "increments the numeric columns with given value of the filtered values"
+        _inc: user_profile_inc_input,
         "sets the columns of the filtered rows to the given values"
         _set: user_profile_set_input,
         "filter the rows which have to be updated"
@@ -1185,6 +1187,8 @@ type mutation_root {
     ): user_profile_mutation_response
     "update single row of the table: \"user_profile\""
     update_user_profile_by_pk(
+        "increments the numeric columns with given value of the filtered values"
+        _inc: user_profile_inc_input,
         "sets the columns of the filtered rows to the given values"
         _set: user_profile_set_input,
         pk_columns: user_profile_pk_columns_input!
@@ -3145,6 +3149,9 @@ type user_mutation_response {
 "columns and relationships of \"user_profile\""
 type user_profile {
     default_city: String
+    lat: float8
+    locName: String
+    lon: float8
     name: String!
     phone_number: String!
     "An object relationship"
@@ -3186,14 +3193,31 @@ type user_profile_aggregate {
 
 "aggregate fields of \"user_profile\""
 type user_profile_aggregate_fields {
+    avg: user_profile_avg_fields
     count(columns: [user_profile_select_column!], distinct: Boolean): Int!
     max: user_profile_max_fields
     min: user_profile_min_fields
+    stddev: user_profile_stddev_fields
+    stddev_pop: user_profile_stddev_pop_fields
+    stddev_samp: user_profile_stddev_samp_fields
+    sum: user_profile_sum_fields
+    var_pop: user_profile_var_pop_fields
+    var_samp: user_profile_var_samp_fields
+    variance: user_profile_variance_fields
+}
+
+"aggregate avg on columns"
+type user_profile_avg_fields {
+    lat: Float
+    lon: Float
 }
 
 "aggregate max on columns"
 type user_profile_max_fields {
     default_city: String
+    lat: float8
+    locName: String
+    lon: float8
     name: String
     phone_number: String
     user_id: String
@@ -3202,6 +3226,9 @@ type user_profile_max_fields {
 "aggregate min on columns"
 type user_profile_min_fields {
     default_city: String
+    lat: float8
+    locName: String
+    lon: float8
     name: String
     phone_number: String
     user_id: String
@@ -3213,6 +3240,48 @@ type user_profile_mutation_response {
     affected_rows: Int!
     "data from the rows affected by the mutation"
     returning: [user_profile!]!
+}
+
+"aggregate stddev on columns"
+type user_profile_stddev_fields {
+    lat: Float
+    lon: Float
+}
+
+"aggregate stddev_pop on columns"
+type user_profile_stddev_pop_fields {
+    lat: Float
+    lon: Float
+}
+
+"aggregate stddev_samp on columns"
+type user_profile_stddev_samp_fields {
+    lat: Float
+    lon: Float
+}
+
+"aggregate sum on columns"
+type user_profile_sum_fields {
+    lat: float8
+    lon: float8
+}
+
+"aggregate var_pop on columns"
+type user_profile_var_pop_fields {
+    lat: Float
+    lon: Float
+}
+
+"aggregate var_samp on columns"
+type user_profile_var_samp_fields {
+    lat: Float
+    lon: Float
+}
+
+"aggregate variance on columns"
+type user_profile_variance_fields {
+    lat: Float
+    lon: Float
 }
 
 "columns and relationships of \"vendor\""
@@ -3941,6 +4010,12 @@ enum user_profile_select_column {
     "column name"
     default_city
     "column name"
+    lat
+    "column name"
+    locName
+    "column name"
+    lon
+    "column name"
     name
     "column name"
     phone_number
@@ -3952,6 +4027,12 @@ enum user_profile_select_column {
 enum user_profile_update_column {
     "column name"
     default_city
+    "column name"
+    lat
+    "column name"
+    locName
+    "column name"
+    lon
     "column name"
     name
     "column name"
@@ -6043,6 +6124,9 @@ input user_profile_bool_exp {
     _not: user_profile_bool_exp
     _or: [user_profile_bool_exp!]
     default_city: String_comparison_exp
+    lat: float8_comparison_exp
+    locName: String_comparison_exp
+    lon: float8_comparison_exp
     name: String_comparison_exp
     phone_number: String_comparison_exp
     user: user_bool_exp
@@ -6050,9 +6134,18 @@ input user_profile_bool_exp {
     wishlists: wishlist_bool_exp
 }
 
+"input type for incrementing numeric columns in table \"user_profile\""
+input user_profile_inc_input {
+    lat: float8
+    lon: float8
+}
+
 "input type for inserting data into table \"user_profile\""
 input user_profile_insert_input {
     default_city: String
+    lat: float8
+    locName: String
+    lon: float8
     name: String
     phone_number: String
     user: user_obj_rel_insert_input
@@ -6077,6 +6170,9 @@ input user_profile_on_conflict {
 "Ordering options when selecting data from \"user_profile\"."
 input user_profile_order_by {
     default_city: order_by
+    lat: order_by
+    locName: order_by
+    lon: order_by
     name: order_by
     phone_number: order_by
     user: user_order_by
@@ -6092,6 +6188,9 @@ input user_profile_pk_columns_input {
 "input type for updating data in table \"user_profile\""
 input user_profile_set_input {
     default_city: String
+    lat: float8
+    locName: String
+    lon: float8
     name: String
     phone_number: String
     user_id: String

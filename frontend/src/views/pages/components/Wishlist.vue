@@ -92,8 +92,8 @@ export default {
     async getTurfs() {
       // console.log('sd')
       const result = await this.$apollo.query({
-        query: gql`query {
-          turf(where: {status: {_neq: false}}) {
+        query: gql`query($ids: [bigint!]) {
+          turf(where: {_and: {status: {_neq: false}, id: {_in: $ids}}}) {
             id
             name
             pincode
@@ -120,6 +120,9 @@ export default {
             }
           }
         }`,
+        variables: {
+          ids: (!this.$store.state.user.userProfile || this.$store.state.user.userProfile.length === 0) ? [] : this.$store.state.user.userProfile[0].wishlists,
+        },
       })
       this.turfs = result.data.turf.map(turf => {
         const t = {
@@ -136,7 +139,7 @@ export default {
             t.sports.push({
               id: facility.sport.id,
               name: facility.sport.name,
-              image: facility.sport.images[0].url,
+              image: facility.sport.images.length > 0 && facility.sport.images[0].url,
             })
           }
         })
