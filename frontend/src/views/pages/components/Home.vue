@@ -272,7 +272,7 @@ export default {
       // eslint-disable-next-line global-require
       downImg: require('@/assets/images/pages/error.svg'),
       settings: {
-        infinite: false,
+        infinite: true,
         speed: 500,
         slidesToShow: 3,
         slidesToScroll: 5,
