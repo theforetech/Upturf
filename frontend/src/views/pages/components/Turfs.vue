@@ -1,6 +1,6 @@
 <!--suppress ALL -->
 <template>
-  <div>
+  <div v-if="!loading">
     <b-row v-if="turfs.length > 0">
       <b-col
         v-for="x in turfs"
@@ -35,12 +35,46 @@
       </b-alert>
     </div>
   </div>
+  <div v-else>
+    <b-row>
+      <b-col
+        cols="12"
+        class="mt-3"
+      >
+        <b-skeleton-img
+          no-aspect
+          height="150px"
+        />
+      </b-col>
+      <b-col
+        cols="12"
+        class="mt-3"
+      >
+        <b-card>
+          <b-skeleton
+            animation="wave"
+            width="85%"
+          />
+          <b-skeleton
+            animation="wave"
+            width="55%"
+          />
+          <b-skeleton
+            animation="wave"
+            width="70%"
+          />
+        </b-card>
+      </b-col>
+    </b-row>
+  </div>
   <!-- / Error page-->
 </template>
 
 <script>
 /* eslint-disable global-require */
-import { BCol, BRow, BAlert } from 'bootstrap-vue'
+import {
+  BCol, BRow, BAlert, BSkeleton, BSkeletonImg, BCard,
+} from 'bootstrap-vue'
 
 import gql from 'graphql-tag'
 import { mapGetters } from 'vuex'
@@ -53,9 +87,13 @@ export default {
     BCol,
     BAlert,
     TurfCard,
+    BCard,
+    BSkeleton,
+    BSkeletonImg,
   },
   data() {
     return {
+      loading: true,
       turfs2: [
         {
           img: ['/images/turfs/turf1.jpeg', '/images/turfs/turf2.jpg',
@@ -89,26 +127,13 @@ export default {
       downImg: require('@/assets/images/pages/error.svg'),
     }
   },
-  watch: {
-    filterSports() {
-      this.getTurfs()
-    },
-    filterAmenities() {
-      this.getTurfs()
-    },
-    filterTimings() {
-      this.getTurfs()
-    },
-    // searchQuery(val) {
-    //   this.updateSearchQuery(val)
-    // },
-  },
   computed: {
     ...mapGetters({
       filterDate: 'filters/date',
       filterLocation: 'filters/location',
       filterSortBy: 'filters/sortBy',
       filterLoading: 'filters/loading',
+      filterSearchQuery: 'filters/searchQuery',
       filterAmenities: 'filters/amenities',
       filterSports: 'filters/sports',
       filterTimings: 'filters/timings',
@@ -123,11 +148,29 @@ export default {
       return this.downImg
     },
   },
+  watch: {
+    filterSports() {
+      this.getTurfs()
+    },
+    filterAmenities() {
+      this.getTurfs()
+    },
+    filterTimings() {
+      this.getTurfs()
+    },
+    filterLocation() {
+      this.getTurfs()
+    },
+    filterSearchQuery() {
+      this.getTurfs()
+    },
+  },
   mounted() {
     this.getTurfs()
   },
   methods: {
     async getTurfs() {
+      this.loading = true
       let filters = '{status: {_neq: false}'
       const variables = {}
       const timings = {
@@ -157,10 +200,13 @@ export default {
         filters += '}'
       }
       filters += '}'
-      if (this.filterLocation) {
+      if (!this.filterSearchQuery && this.filterLocation) {
         variables.lat = this.filterLocation.lat
         variables.lon = this.filterLocation.lon
         variables.bound = 20
+      }
+      if (this.filterSearchQuery) {
+        variables.search = this.filterSearchQuery
       }
       const q1 = gql`query ($sports: [String!], $startTimes: [time!]) {
           turf(where: ${filters}) {
@@ -218,14 +264,44 @@ export default {
             }
           }
         }`
+      const q3 = gql`query ($search: String!, $sports: [String!], $startTimes: [time!]) {
+          search_turfs(args: {search: $search}, where: ${filters}) {
+            id
+            name
+            pincode
+            city
+            address
+            images{
+              url
+            }
+            facilities {
+              sport{
+                id
+                name
+                images{
+                  url
+                }
+              }
+            }
+            ratings_aggregate {
+              aggregate {
+                avg {
+                  ratings
+                }
+              }
+            }
+          }
+        }`
       // console.log(filters)
       const result = await this.$apollo.query({
-        query: !this.filterLocation ? q1 : q2,
+        // eslint-disable-next-line no-nested-ternary
+        query: this.filterSearchQuery === '' ? !this.filterLocation ? q1 : q2 : q3,
         variables,
         fetchPolicy: 'no-cache',
       })
       // console.log(result.data.turf)
-      const res = !this.filterLocation ? result.data.turf : result.data.get_nearby_turfs
+      // eslint-disable-next-line no-nested-ternary
+      const res = this.filterSearchQuery === '' ? !this.filterLocation ? result.data.turf : result.data.get_nearby_turfs : result.data.search_turfs
       this.turfs = res.map(turf => {
         const t = {
           ...turf,
@@ -247,6 +323,7 @@ export default {
         })
         return t
       })
+      this.loading = false
     },
   },
 }

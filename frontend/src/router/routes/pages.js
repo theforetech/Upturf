@@ -200,7 +200,7 @@ export default [
 
   },
   {
-    path: '/summary',
+    path: '/summary/:id',
     name: 'pages-summary',
     component: () => import('@/views/pages/components/user/Summary.vue'),
     meta: {

@@ -47,6 +47,7 @@
                 color:#202023;
 
              "
+              href="tel:+91-9910583584"
             >
               <span class="align-middle">
                 Help
@@ -221,11 +222,9 @@ export default {
           },
         ],
         type: '5 v 5',
-
         orderID: 'UPT00012',
         turf: 'Sirifort Stadium',
       },
-
     }
   },
   computed: {

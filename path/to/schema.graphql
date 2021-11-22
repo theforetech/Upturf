@@ -1662,6 +1662,36 @@ type query_root {
     ): rating_aggregate!
     "fetch data from the table: \"rating\" using primary key columns"
     rating_by_pk(id: bigint!): rating
+    "execute function \"search_turfs\" which returns \"turf\""
+    search_turfs(
+        "input parameters for function \"search_turfs\""
+        args: search_turfs_args!,
+        "distinct select on columns"
+        distinct_on: [turf_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [turf_order_by!],
+        "filter the rows returned"
+        where: turf_bool_exp
+    ): [turf!]!
+    "execute function \"search_turfs\" and query aggregates on result of table type \"turf\""
+    search_turfs_aggregate(
+        "input parameters for function \"search_turfs\""
+        args: search_turfs_args!,
+        "distinct select on columns"
+        distinct_on: [turf_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [turf_order_by!],
+        "filter the rows returned"
+        where: turf_bool_exp
+    ): turf_aggregate!
     "An array relationship"
     slots(
         "distinct select on columns"
@@ -2469,6 +2499,36 @@ type subscription_root {
     ): rating_aggregate!
     "fetch data from the table: \"rating\" using primary key columns"
     rating_by_pk(id: bigint!): rating
+    "execute function \"search_turfs\" which returns \"turf\""
+    search_turfs(
+        "input parameters for function \"search_turfs\""
+        args: search_turfs_args!,
+        "distinct select on columns"
+        distinct_on: [turf_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [turf_order_by!],
+        "filter the rows returned"
+        where: turf_bool_exp
+    ): [turf!]!
+    "execute function \"search_turfs\" and query aggregates on result of table type \"turf\""
+    search_turfs_aggregate(
+        "input parameters for function \"search_turfs\""
+        args: search_turfs_args!,
+        "distinct select on columns"
+        distinct_on: [turf_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [turf_order_by!],
+        "filter the rows returned"
+        where: turf_bool_exp
+    ): turf_aggregate!
     "An array relationship"
     slots(
         "distinct select on columns"
@@ -5374,6 +5434,10 @@ input rating_variance_order_by {
     id: order_by
     ratings: order_by
     turf_id: order_by
+}
+
+input search_turfs_args {
+    search: String
 }
 
 "order by aggregate values of table \"slots\""

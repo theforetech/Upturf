@@ -67,6 +67,7 @@
         variant="flat-secondary"
         class="booking-btn"
         style="color:#202023;"
+        @click="navigateTo"
       >
         View Summary
       </b-button>
@@ -124,6 +125,11 @@ export default {
     Ripple,
   },
   props: {
+    bookingId: {
+      type: [String, Number],
+      required: true,
+      default: '',
+    },
     turf: {
       type: [String, Number],
       required: true,
@@ -233,7 +239,16 @@ export default {
       const formattedDate = moment(this.date).format('Do MMM YYYY')
       return formattedDate
     },
-
+  },
+  methods: {
+    navigateTo() {
+      this.$router.push({
+        name: 'pages-summary',
+        params: {
+          id: this.bookingId,
+        },
+      })
+    },
   },
 }
 </script>

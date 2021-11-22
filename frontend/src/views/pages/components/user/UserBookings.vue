@@ -2,6 +2,7 @@
   <div style="overflow: hidden;">
     <b-card
       no-body
+      style="margin-bottom: 0.6rem"
     >
       <b-card-header>
         <b-button
@@ -31,6 +32,7 @@
     <BookedCard
       v-for="x in bookings"
       :key="x.id"
+      :booking-id="x.id"
       :turf="x.facility.turf.name"
       :slots="x.booked_slots_aggregate.aggregate.count"
       :amount="x.amount"
@@ -39,9 +41,6 @@
       :tag="getTag(x.booking_status, x.payment_status, x.reservation_date, x.booked_slots[0].startTime)"
       :date="x.reservation_date"
     />
-    <b-card>
-      <b-card-body />
-    </b-card>
   </div>
 </template>
 
@@ -50,7 +49,6 @@ import {
   BCard,
   BCardHeader,
   BButton,
-  BCardBody,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import gql from 'graphql-tag'
@@ -62,7 +60,6 @@ export default {
     BCard,
     BButton,
     BCardHeader,
-    BCardBody,
     BookedCard,
   },
   directives: {

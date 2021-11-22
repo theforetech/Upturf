@@ -60,7 +60,7 @@
       v-if="search"
       class="rows"
       align-h="center"
-      style="padding: 0.2rem 0.5rem 0 0.5rem; height: 3.7rem;"
+      style="padding: 0.2rem 0.5rem 0 0.5rem; height: 3.7rem; margin-bottom: 0.8rem;  margin-top: -0.4rem;"
     >
       <b-form-group
         label-for="vi-search-bar"
@@ -88,6 +88,7 @@
             <b-button
               variant="outline-primary"
               class="btn-icon"
+              @click="searchEmit"
             >
               <feather-icon
                 icon="ArrowRightIcon"
@@ -101,7 +102,7 @@
     <b-row
       v-if="search && (filters || calcFilters)"
       class="rows"
-      style="padding-top: 0.2rem; padding-left: 0.5rem; padding-right: 0.5rem;"
+      style="padding-top: 0; padding-left: 0.5rem; padding-right: 0.1rem; margin-top: -0.6rem;"
     >
       <b-col
         cols="10"
@@ -782,9 +783,9 @@ export default {
       this.selectedTimeslots = val
       this.filterbtns[4].len = this.selectedTimeslots.length
     },
-    searchQuery(val) {
-      this.updateSearchQuery(val)
-    },
+    // searchQuery(val) {
+    //   this.updateSearchQuery(val)
+    // },
   },
   mounted() {
     this.filters = 'filters' in this.$route.matched[0].meta && this.$route.matched[0].meta.filters
@@ -809,6 +810,13 @@ export default {
       updateFilterTimings: 'filters/UPDATE_TIMINGS',
       updateFilterFourPlus: 'filters/TOGGLE_FOUR_PLUS',
     }),
+    searchEmit() {
+      this.$emit('searchText', true)
+      this.updateSearchQuery(this.searchQuery)
+      if (this.$route.name !== 'pages-turfs') {
+        this.$router.push({ name: 'pages-turfs' })
+      }
+    },
     geolocate() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(position => {
