@@ -122,11 +122,19 @@
             @click="toggleBottom(x.tag)"
           >
             {{ x.tag==='date'? finalDate: x.name }}
+            <b-badge
+              v-if="!x.toggleable && x.len>0"
+              variant="primary"
+              style="padding: 0.4rem 0.4rem  0.3rem 0.4rem"
+            >
+              {{ x.len }}
+            </b-badge>
             <feather-icon
-              v-if="!x.toggleable"
+              v-if="!x.toggleable && x.len <1"
               icon="ChevronDownIcon"
               class="ml-20"
             />
+
             <feather-icon
               v-if="x.tag==='rating'&& filterFourPlus"
               icon="XIcon"
@@ -486,7 +494,7 @@
 
 <script>
 import {
-  BRow, BButton, BFormGroup, BInputGroup, BFormInput, BInputGroupPrepend, BInputGroupAppend, BCol, BAvatar, BCalendar, BFormCheckbox, BImg, BFormRadioGroup,
+  BRow, BButton, BFormGroup, BInputGroup, BFormInput, BInputGroupPrepend, BInputGroupAppend, BCol, BAvatar, BCalendar, BFormCheckbox, BImg, BFormRadioGroup, BBadge,
 } from 'bootstrap-vue'
 import { mapGetters, mapMutations } from 'vuex'
 import Ripple from 'vue-ripple-directive'
@@ -511,6 +519,7 @@ export default {
     BFormCheckbox,
     BImg,
     BFormRadioGroup,
+    BBadge,
   },
   directives: {
     Ripple,
@@ -601,30 +610,35 @@ export default {
           id: 0,
           name: 'Date',
           tag: 'date',
+          len: 0,
           toggleable: false,
         },
         {
           id: 1,
           name: 'Rating 4+',
           tag: 'rating',
+          len: 0,
           toggleable: true,
         },
         {
           id: 2,
           name: 'Sport',
           tag: 'sport',
+          len: 0,
           toggleable: false,
         },
         {
           id: 3,
           name: 'Amenities',
           tag: 'amenities',
+          len: 0,
           toggleable: false,
         },
         {
           id: 4,
           name: 'Timings',
           tag: 'timings',
+          len: 0,
           toggleable: false,
         },
       ],
@@ -759,12 +773,15 @@ export default {
     },
     filterSports(val) {
       this.selectedSports = val
+      this.filterbtns[2].len = this.selectedSports.length
     },
     filterAmenities(val) {
       this.selectedAmenities = val
+      this.filterbtns[3].len = this.selectedAmenities.length
     },
     filterTimings(val) {
       this.selectedTimeslots = val
+      this.filterbtns[4].len = this.selectedTimeslots.length
     },
     searchQuery(val) {
       this.updateSearchQuery(val)
