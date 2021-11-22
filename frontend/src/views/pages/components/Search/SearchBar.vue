@@ -1,12 +1,12 @@
 <template>
   <div
     class="base header-navbar navbar navbar-shadow"
-    style="width: 100%;overflow: hidden!important; display: block !important;"
+    style="width: 100%;overflow: hidden!important; display: block !important; background: #fff;"
   >
     <b-row
       class="rows"
       align-v="center"
-      style="padding-top: 0.6rem"
+      style="padding-top: 0.4rem; padding-bottom: 0.4rem;"
     >
       <b-col style="padding-right: 0">
         <b-button
@@ -29,13 +29,12 @@
           >
             {{ ('name' in filterLocation) ? filterLocation.name : filterLocation.lat+','+filterLocation.lon }} . .
           </span>
-
         </b-button>
-
       </b-col>
       <b-col
         cols="3"
         align-self="center"
+        style="padding-right: 0;"
       >
         <b-button
           variant="flat-success"
@@ -61,7 +60,7 @@
       v-if="search"
       class="rows"
       align-h="center"
-      style="padding-bottom: 0;height: 3.6rem;"
+      style="padding: 0.2rem 0.5rem 0 0.5rem; height: 3.7rem;"
     >
       <b-form-group
         label-for="vi-search-bar"
@@ -102,7 +101,7 @@
     <b-row
       v-if="search && (filters || calcFilters)"
       class="rows"
-      style="padding-top: 0.2rem"
+      style="padding-top: 0.2rem; padding-left: 0.5rem; padding-right: 0.5rem;"
     >
       <b-col
         cols="10"
