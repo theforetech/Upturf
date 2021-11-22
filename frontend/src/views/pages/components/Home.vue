@@ -176,7 +176,6 @@ export default {
   },
   data() {
     return {
-
       knowledgeBaseSearchQuery: '',
       kb: [],
       sportCategories: [

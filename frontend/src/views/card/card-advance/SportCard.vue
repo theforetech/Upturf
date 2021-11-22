@@ -79,7 +79,7 @@ export default {
     BCard,
   },
   props: {
-    sportTitle: {
+    sportName: {
       type: String,
       default: '',
     },
@@ -91,7 +91,7 @@ export default {
   methods: {
     navigateTo() {
       // TODO remove this
-      this.$store.commit('filters/UPDATE_SPORTS', [this.sportTitle])
+      this.$store.commit('filters/UPDATE_SPORTS', [this.sportName.toLowerCase()])
       this.$router.push({ name: 'pages-turfs' })
       // this.$router.push(`/sport/${this.name}`)
     },
