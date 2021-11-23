@@ -9,7 +9,7 @@
           class="mb-25 font-weight-bolder"
           style="font-size: 1.1rem"
         >
-          {{ timeSlot }}
+          {{ timeFormat }}
         </h2>
         <span style="font-size: 0.9rem">{{ date }}  ₹ {{ cost }}</span>
       </div>
@@ -23,6 +23,7 @@
 
 <script>
 import { BCard, BCardBody, BImg } from 'bootstrap-vue'
+import moment from 'moment'
 
 export default {
   components: {
@@ -37,7 +38,7 @@ export default {
       default: '',
     },
     cost: {
-      type: String,
+      type: [Number, String],
       default: '',
     },
     sport: {
@@ -54,19 +55,19 @@ export default {
     return {
       sportImg: [
         {
-          name: 'Badminton',
+          name: 'badminton',
           img: '/images/sports/Badminton.png',
         },
         {
-          name: 'Football',
+          name: 'football',
           img: '/images/sports/Football.png',
         },
         {
-          name: 'Rugby',
+          name: 'rugby',
           img: '/images/sports/Rugby.png',
         },
         {
-          name: 'Basketball',
+          name: 'basketball',
           img: '/images/sports/Basketball.png',
         },
       ],
@@ -76,6 +77,9 @@ export default {
     sportSelect() {
       const x = this.sportImg.filter(item => item.name === this.sport)
       return x[0].img
+    },
+    timeFormat() {
+      return moment(this.timeSlot, 'HH:mm:ss').format('h:mm A')
     },
   },
   mounted() {

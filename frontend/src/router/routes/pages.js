@@ -208,6 +208,78 @@ export default [
     },
   },
   {
+    path: '/terms',
+    name: 'terms',
+    component: () => import('@/views/pages/components/user/Terms.vue'),
+    meta: {
+      layout: 'full',
+      pageTitle: 'Terms and Conditions',
+      breadcrumb: [
+        {
+          text: 'Pages',
+        },
+        {
+          text: 'Terms and Conditions',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: '/notifications',
+    name: 'notifications',
+    component: () => import('@/views/pages/components/user/Notifications.vue'),
+    meta: {
+      layout: 'full',
+      pageTitle: 'Notifications',
+      breadcrumb: [
+        {
+          text: 'Pages',
+        },
+        {
+          text: 'Notifications',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: '/cancelpolicy',
+    name: 'cancelpolicy',
+    component: () => import('@/views/pages/components/user/CancelPolicy.vue'),
+    meta: {
+      layout: 'full',
+      pageTitle: 'Cancellation & Refund Policy',
+      breadcrumb: [
+        {
+          text: 'Pages',
+        },
+        {
+          text: 'Cancellation & Refund Policy',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: '/fairusage',
+    name: 'fairusage',
+    component: () => import('@/views/pages/components/user/Fair.vue'),
+    meta: {
+      layout: 'full',
+      pageTitle: 'Fair Usage Policy',
+      breadcrumb: [
+        {
+          text: 'Pages',
+        },
+        {
+          text: 'Fair Usage Policy',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
     path: '/summary/:id',
     name: 'pages-summary',
     component: () => import('@/views/pages/components/user/Summary.vue'),
