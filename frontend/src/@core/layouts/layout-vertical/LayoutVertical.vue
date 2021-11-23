@@ -27,20 +27,20 @@
     <!--    </b-navbar>-->
     <!--    &lt;!&ndash;/ Navbar &ndash;&gt;-->
 
-    <!--    &lt;!&ndash; Vertical Nav Menu &ndash;&gt;-->
-    <!--    <vertical-nav-menu-->
-    <!--      v-if="!isNavMenuHidden"-->
-    <!--      :is-vertical-menu-active="isVerticalMenuActive"-->
-    <!--      :toggle-vertical-menu-active="toggleVerticalMenuActive"-->
-    <!--    >-->
-    <!--      <template #header="slotProps">-->
-    <!--        <slot-->
-    <!--          name="vertical-menu-header"-->
-    <!--          v-bind="slotProps"-->
-    <!--        />-->
-    <!--      </template>-->
-    <!--    </vertical-nav-menu>-->
-    <!-- /Vertical Nav Menu -->
+    <!-- Vertical Nav Menu -->
+    <!--        <vertical-nav-menu-->
+    <!--          v-if="!isNavMenuHidden"-->
+    <!--          :is-vertical-menu-active="isVerticalMenuActive"-->
+    <!--          :toggle-vertical-menu-active="toggleVerticalMenuActive"-->
+    <!--        >-->
+    <!--          <template #header="slotProps">-->
+    <!--            <slot-->
+    <!--              name="vertical-menu-header"-->
+    <!--              v-bind="slotProps"-->
+    <!--            />-->
+    <!--          </template>-->
+    <!--        </vertical-nav-menu>-->
+    <!--     /Vertical Nav Menu -->
 
     <!-- Vertical Nav Menu Overlay -->
     <div

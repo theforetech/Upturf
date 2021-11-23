@@ -33,7 +33,6 @@
         <statistic-card-vertical
           icon="EyeIcon"
           statistic="36.9k"
-          statistic-title="Views"
           color="info"
         />
       </b-col>

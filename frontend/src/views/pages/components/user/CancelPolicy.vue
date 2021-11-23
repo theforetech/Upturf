@@ -24,39 +24,11 @@
           <b-col
             cols="6"
             style="padding: 0"
-          >
-            <h2 style="text-align:center;font-size: 1rem;font-weight: 500;color:#000">
-              Booking ID #{{ booking.orderID }}
-            </h2>
-            <h2 style="text-align:center;font-size: 0.8rem;font-weight: 500;color:#000">
-              {{ bookingDetails.facility.turf.name }}
-            </h2>
-          </b-col>
-          <b-col
-            cols="3"
-            style="padding:0;position: absolute;right: 0;"
             align-self="center"
-            align="center"
           >
-            <b-button
-              v-ripple.400="'rgba(52, 52, 55, 0.15)'"
-              variant="flat-secondary"
-              style="
-                padding-left: 0.3rem;
-                padding-right: 0.3rem;
-                color:#202023;
-
-             "
-              href="tel:+91-9910583584"
-            >
-              <span class="align-middle">
-                Help
-              </span>
-              <feather-icon
-                icon="HelpCircleIcon"
-                class="ml-50"
-              />
-            </b-button>
+            <h2 style="text-align:center;font-size: 1.2rem;font-weight: 600;color:#000;white-space: nowrap;">
+              Terms & Conditions
+            </h2>
           </b-col>
         </b-row>
       </b-card-header>
@@ -68,28 +40,28 @@
             Details:
           </div>
           <div class="checkout details">
-            <h2>{{ bookingDetails.facility.type }} - {{ bookingDetails.facility.sport.name }} Turf</h2>
+            <h2> -  Turf</h2>
           </div>
           <div class="checkout details">
             <h2 style="font-size: 1rem!important;">
-              Reservation Date: {{ formattedReservationDate }}
+              Reservation Date:
             </h2>
           </div>
           <div
             class="checkout details"
           >
             <h2 style="font-size: 0.9rem!important;">
-              {{ bookingDetails.facility.turf.name }}
+              cxvvdv
             </h2>
           </div>
           <div class="checkout details">
             <h2 style="font-size: 0.9rem!important;">
-              Slot(s) Reserved: {{ bookingDetails.booked_slots_aggregate.aggregate.count }}
+              Slot(s) Reserved:
             </h2>
           </div>
           <div class="checkout details">
             <h2 style="font-size: 0.9rem!important;">
-              Booking Date: {{ formattedBookingDate }}
+              Booking Date:
             </h2>
           </div>
 
@@ -132,36 +104,6 @@
         <b-card-body style="padding: 0rem;" />
       </b-card>
     </b-card>
-
-    <b-card>
-      <b-card-header style="padding :0px">
-        <div style="margin-bottom: 1rem">
-          Booked Slots ( {{ bookingDetails.booked_slots_aggregate.aggregate.count }} )
-        </div>
-      </b-card-header>
-      <b-card-body style="padding: 0rem;">
-        <summary-card
-          v-for="x in bookingDetails.booked_slots"
-          :key="x.id"
-          :time-slot="x.startTime"
-          :sport="bookingDetails.facility.sport.name"
-          :date="formattedReservationDate"
-          :cost="x.price"
-          class="summaryCard"
-        />
-        <b-button
-          v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-          block
-          variant="dark"
-        >
-          Download Invoice
-          <feather-icon
-            icon="DownloadIcon"
-          />
-        </b-button>
-      </b-card-body>
-    </b-card>
-
   </div>
 </template>
 
@@ -175,8 +117,6 @@ import {
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import moment from 'moment'
-import gql from 'graphql-tag'
-import SummaryCard from './SummaryCard.vue'
 
 export default {
   components: {
@@ -184,7 +124,6 @@ export default {
     BButton,
     BCardHeader,
     BCardBody,
-    SummaryCard,
     BRow,
     BCol,
   },
@@ -239,9 +178,6 @@ export default {
     },
   },
   mounted() {
-    this.bookingID = this.$route.params
-    console.log(this.bookingID)
-    this.getBookingSummary()
   },
   methods: {
     navigateBack() {
@@ -249,46 +185,6 @@ export default {
     },
     moment() {
       return moment
-    },
-    async getBookingSummary() {
-      const result = await this.$apollo.query({
-        query: gql`query ($id: uuid!) {
-         bookings(where: {id: {_eq: $id}}) {
-                amount
-                contact_name
-                contact_phone
-                facility {
-                  id
-                  type
-                  sport {
-                    id
-                    name
-                  }
-                  turf {
-                    id
-                    name
-                  }
-                }
-                booking_status
-                booked_slots_aggregate {
-                  aggregate {
-                    count(columns: slot_id)
-                  }
-                }
-                booked_slots {
-                  startTime
-                  price
-                  date
-                }
-                reservation_date
-              }
-        }`,
-        variables: {
-          id: this.bookingID.id,
-        },
-      })
-      // eslint-disable-next-line prefer-destructuring
-      this.bookingDetails = result.data.bookings[0]
     },
   },
 }
