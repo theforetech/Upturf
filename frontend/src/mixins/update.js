@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 export default {
   data() {
     return {
@@ -26,6 +28,41 @@ export default {
     // We use `updateExists` to control whatever alert, toast, dialog, etc we want to use
     // To alert the user there is an update they need to refresh for
     updateAvailable(event) {
+      const vm = this
+      Vue.swal('Hello Vue world!!!')
+      Vue.swal({
+        title: 'New Update Available!',
+        text: 'Do you want to get it now?',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'Update!',
+        customClass: {
+          confirmButton: 'btn btn-primary',
+          cancelButton: 'btn btn-outline-danger ml-1',
+        },
+        buttonsStyling: false,
+      }).then(result => {
+        if (result.value) {
+          vm.refreshApp()
+          Vue.swal({
+            icon: 'success',
+            title: 'Hurray!',
+            text: 'Upturf will be updated.',
+            customClass: {
+              confirmButton: 'btn btn-success',
+            },
+          })
+        } else if (result.dismiss === 'cancel') {
+          Vue.swal({
+            title: 'Update soon!',
+            text: 'Get the latest features with the update :)',
+            icon: 'error',
+            customClass: {
+              confirmButton: 'btn btn-success',
+            },
+          })
+        }
+      })
       this.registration = event.detail
       this.updateExists = true
     },

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-row>
+    <b-row v-if="turfs.length > 0">
       <b-col
         v-for="x in turfs"
         :key="x.id"
@@ -19,13 +19,26 @@
         />
       </b-col>
     </b-row>
+    <div v-else>
+      <b-alert
+        variant="warning"
+        show
+      >
+        <h4 class="alert-heading">
+          Oops
+        </h4>
+        <div class="alert-body">
+          <span>No turfs found in your favourites.</span>
+        </div>
+      </b-alert>
+    </div>
   </div>
   <!-- / Error page-->
 </template>
 
 <script>
 /* eslint-disable global-require */
-import { BCol, BRow } from 'bootstrap-vue'
+import { BCol, BRow, BAlert } from 'bootstrap-vue'
 
 import gql from 'graphql-tag'
 import store from '@/store/index'
@@ -36,7 +49,7 @@ export default {
     BRow,
     BCol,
     TurfCard,
-
+    BAlert,
   },
 
   data() {

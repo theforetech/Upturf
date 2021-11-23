@@ -10527,6 +10527,11 @@ vue-loader@^15.9.2:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
+vue-navigator-share@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/vue-navigator-share/-/vue-navigator-share-1.0.3.tgz#cdc3982fff5e595d4a37102fa2e3fe83b8a6805e"
+  integrity sha512-7b1bIyNYTlyyt/sigl2yXilnVL7x95NtsckcxVb6z4OJ3OGv3DOdqb1t2eAE6MCOf2TKBR170PUQjoiDI8TT/A==
+
 vue-perfect-scrollbar@0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/vue-perfect-scrollbar/-/vue-perfect-scrollbar-0.2.1.tgz#2fecab975512f7c8c37e1610dee48faf46d649f3"

@@ -29,18 +29,36 @@
     <!--      :tag="x.tag"-->
     <!--      :date="x.date"-->
     <!--    />-->
-    <BookedCard
-      v-for="x in bookings"
-      :key="x.id"
-      :booking-id="x.id"
-      :turf="x.facility.turf.name"
-      :slots="x.booked_slots_aggregate.aggregate.count"
-      :amount="x.amount"
-      :facility="x.facility.type"
-      :sport="x.facility.sport.name"
-      :tag="getTag(x.booking_status, x.payment_status, x.reservation_date, x.booked_slots[0].startTime)"
-      :date="x.reservation_date"
-    />
+    <template
+      v-if="bookings.length > 0"
+    >
+      <BookedCard
+        v-for="x in bookings"
+        :key="x.id"
+        :booking-id="x.id"
+        :turf="x.facility.turf.name"
+        :slots="x.booked_slots_aggregate.aggregate.count"
+        :amount="x.amount"
+        :facility="x.facility.type"
+        :sport="x.facility.sport.name"
+        :tag="getTag(x.booking_status, x.payment_status, x.reservation_date, x.booked_slots[0].startTime)"
+        :date="x.reservation_date"
+      />
+    </template>
+    <div v-else>
+      <b-alert
+        class="m-2"
+        variant="warning"
+        show
+      >
+        <h4 class="alert-heading">
+          Oops
+        </h4>
+        <div class="alert-body">
+          <span>No bookings found. Explore Turfs and create some! :)</span>
+        </div>
+      </b-alert>
+    </div>
   </div>
 </template>
 
@@ -49,6 +67,7 @@ import {
   BCard,
   BCardHeader,
   BButton,
+  BAlert,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import gql from 'graphql-tag'
@@ -57,6 +76,7 @@ import BookedCard from './BookedCard.vue'
 
 export default {
   components: {
+    BAlert,
     BCard,
     BButton,
     BCardHeader,

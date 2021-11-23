@@ -158,10 +158,10 @@ export default [
     component: () => import('@/views/pages/components/Wishlist.vue'),
     meta: {
       header: true,
-      pageTitle: 'Wishlist',
+      pageTitle: 'Favourites',
       breadcrumb: [
         {
-          text: 'Wishlist',
+          text: 'Favourites',
           active: true,
         },
       ],

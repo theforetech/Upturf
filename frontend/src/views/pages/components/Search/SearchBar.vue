@@ -82,10 +82,23 @@
             v-model="searchQuery"
             placeholder="Search for Turfs, Sports, etc . . ."
             class="searchInput field"
+            autocomplete="off"
             @focus.native="onFocus"
           />
           <b-input-group-append v-if="searchQuery !== ''">
             <b-button
+              v-if="filterSearchQuery !== ''"
+              variant="outline-primary"
+              class="btn-icon"
+              @click="resetSearch"
+            >
+              <feather-icon
+                icon="XIcon"
+                class="searchIcon"
+              />
+            </b-button>
+            <b-button
+              v-else
               variant="outline-primary"
               class="btn-icon"
               @click="searchEmit"
@@ -100,9 +113,10 @@
       </b-form-group>
     </b-row>
     <b-row
-      v-if="search && (filters || calcFilters)"
+      v-if="search && (filters || true || calcFilters)"
       class="rows"
       style="padding-top: 0; padding-left: 0.5rem; padding-right: 0.1rem; margin-top: -0.6rem;"
+      @click="gotoTurfsPage"
     >
       <b-col
         cols="10"
@@ -810,6 +824,14 @@ export default {
       updateFilterTimings: 'filters/UPDATE_TIMINGS',
       updateFilterFourPlus: 'filters/TOGGLE_FOUR_PLUS',
     }),
+    resetSearch() {
+      this.searchQuery = ''
+      this.$emit('searchText', true)
+      this.updateSearchQuery(this.searchQuery)
+      if (this.$route.name !== 'pages-turfs') {
+        this.$router.push({ name: 'pages-turfs' })
+      }
+    },
     searchEmit() {
       this.$emit('searchText', true)
       this.updateSearchQuery(this.searchQuery)
@@ -826,7 +848,13 @@ export default {
         })
       }
     },
+    gotoTurfsPage() {
+      if (this.$route.name !== 'pages-turfs') {
+        this.$router.push({ name: 'pages-turfs' })
+      }
+    },
     onFocus() {
+      this.gotoTurfsPage()
       if (!this.filters && !this.calcFilters) {
         this.calcFilters = this.calcFilters ? this.searchQuery !== '' : true
       }

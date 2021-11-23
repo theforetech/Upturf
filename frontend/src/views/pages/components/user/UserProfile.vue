@@ -177,8 +177,10 @@ export default {
   computed: {
     ...mapGetters({
       userInfo: 'user/getActiveUser',
+      userProfile: 'user/getUserProfile',
     }),
     firstName() {
+      if (this.userProfile.length > 0 && this.userProfile[0].name) return this.userProfile[0].name
       return this.userInfo.displayName.split(' ')[0]
     },
   },
