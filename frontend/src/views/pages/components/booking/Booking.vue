@@ -697,10 +697,10 @@ export default {
       this.slotsFetching = true
       this.selectedSlots = []
       const result = await this.$apollo.query({
-        query: gql`query ($date: date, $id: Int!) {
+        query: gql`query ($date: date, $id: Int!, $time: time) {
           facilities_by_pk(id: $id) {
             id
-            slots {
+            slots(where: {start_time: {_gt: $time}}) {
               disabled
               end_time
               id
@@ -716,6 +716,7 @@ export default {
         variables: {
           id: this.facilityID,
           date: moment(this.checkoutDate).format('YYYY-MM-DD'),
+          time: moment().format('HH:mm:ss'),
         },
         fetchPolicy: 'no-cache',
       })
@@ -857,7 +858,12 @@ export default {
           })
           vm.showSummary = 4
           setTimeout(() => {
-            vm.$router.push({ name: 'user-bookings' })
+            vm.$router.push({
+              name: 'user-bookings',
+              params: {
+                refresh: true,
+              },
+            })
           }, 3000)
         },
         modal: {

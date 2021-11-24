@@ -202,6 +202,7 @@ export default {
             }
           }
         }`,
+        fetchPolicy: 'no-cache',
       })
       this.bookings = result.data.bookings
     },
