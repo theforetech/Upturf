@@ -67,15 +67,9 @@ export const useAuth0 = ({
         this.isAuthenticated = await this.auth0Client.isAuthenticated()
         this.user = await this.auth0Client.getUser()
         if (this.user) {
-          this.ability = new Ability([{
-            action: 'manage',
-            subject: 'all',
-          }])
+          this.ability = new Ability(this.user['https://upturf.in/rules'])
           await store.commit('user/UPDATE_USER_INFO', {
-            ability: [{
-              action: 'manage',
-              subject: 'all',
-            }],
+            ability: this.user['https://upturf.in/rules'],
             displayName: this.user.name,
             email: this.user.email,
             emailVerified: this.user.email_verified,
@@ -110,7 +104,10 @@ export const useAuth0 = ({
     },
     methods: {
       canNavigate(to) {
-        return to.matched.some(route => this.ability.can(route.meta.action || 'read', route.meta.resource))
+        return to.matched.some(route => {
+          if (!('meta' in route) || !('resource' in route.meta)) return true
+          return this.ability.can(route.meta.action || 'read', route.meta.resource)
+        })
       },
       // eslint-disable-next-line no-shadow
       async loginWithPopup(options, config) {
@@ -142,15 +139,9 @@ export const useAuth0 = ({
           this.isAuthenticated = await this.auth0Client.isAuthenticated()
           this.user = await this.auth0Client.getUser()
           if (this.user) {
-            this.ability = new Ability([{
-              action: 'manage',
-              subject: 'all',
-            }])
+            this.ability = new Ability(this.user['https://upturf.in/rules'])
             await store.commit('user/UPDATE_USER_INFO', {
-              ability: [{
-                action: 'manage',
-                subject: 'all',
-              }],
+              ability: this.user['https://upturf.in/rules'],
               displayName: this.user.name,
               email: this.user.email,
               emailVerified: this.user.email_verified,

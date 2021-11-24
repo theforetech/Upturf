@@ -1,10 +1,7 @@
 <template>
   <div class="misc-wrapper">
     <b-link class="brand-logo">
-      <vuexy-logo />
-      <h2 class="brand-text text-primary ml-1">
-        Surf A Turf
-      </h2>
+      <Vuexy-logo />
     </b-link>
 
     <div class="misc-inner p-2 p-sm-3">
@@ -22,10 +19,12 @@
 
 <script>
 import VuexyLogo from '@core/layouts/components/Logo.vue'
-import { getHomeRouteForLoggedInUser } from '@/auth/utils'
+// eslint-disable-next-line no-unused-vars
 import {
   BLink,
 } from 'bootstrap-vue'
+import { getHomeRouteForLoggedInUser } from '@/auth/utils'
+
 // eslint-disable-next-line no-unused-vars
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
@@ -37,26 +36,12 @@ export default {
     VuexyLogo,
   },
   async created() {
-    await this.$auth.handleAuthentication()
-    // await sleep(3000)
-    // if (await this.$auth.isAuthenticated()) await this.$router.push('/').then(() => { window.location.reload() })
-  },
-  methods: {
-    async handleLoginEvent(data) {
-      this.$ability.update(data.ability)
-      if (data.state && data.state !== 'no-redirect') {
-        this.$store.commit('app/UPDATE_REDIRECT', data.state)
-        if (this.$auth.isAuthenticated()) {
-          this.$router.push(data.state || getHomeRouteForLoggedInUser(data.role)).then(() => {
-            window.location.reload()
-          })
-        }
-      } else if (this.$auth.isAuthenticated()) {
-        this.$router.push(getHomeRouteForLoggedInUser(data.role)).then(() => {
-          window.location.reload()
-        })
-      }
-    },
+    // await this.$auth.handleAuthentication()
+    // await sleep(500)
+    if (await this.$auth.isAuthenticated) {
+      await this.$router.push(getHomeRouteForLoggedInUser(this.$auth.user.role))
+        .then(() => { window.location.reload() })
+    }
   },
 }
 </script>

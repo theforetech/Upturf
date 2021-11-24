@@ -121,7 +121,7 @@
 import {
   BNavItemDropdown, BDropdownItem, BDropdownDivider, BAvatar,
 } from 'bootstrap-vue'
-import { initialAbility } from '@/libs/acl/config'
+import { mapGetters } from 'vuex'
 import { avatarText } from '@core/utils/filter'
 
 export default {
@@ -133,15 +133,20 @@ export default {
   },
   data() {
     return {
-      userInfo: JSON.parse(localStorage.getItem('userInfo')),
+      // userInfo: JSON.parse(localStorage.getItem('userInfo')),
       avatarText,
     }
+  },
+  computed: {
+    ...mapGetters({
+      userInfo: 'user/getActiveUser',
+    }),
   },
   methods: {
     logout() {
       // Reset ability
-      this.$ability.update(initialAbility)
-      this.$auth.logOut()
+      // this.$ability.update(initialAbility)
+      this.$auth.logout()
       // // Remove userInfo from localStorage
       // // ? You just removed token from localStorage. If you like, you can also make API call to backend to blacklist used token
       // localStorage.removeItem(useJwt.jwtConfig.storageTokenKeyName)

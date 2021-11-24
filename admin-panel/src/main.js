@@ -28,11 +28,31 @@ import '@/firebase/firebaseConfig'
 
 // Auth0 Plugin
 import { Auth0Plugin } from './auth/auth0-service'
-import { audience, clientId, domain } from "../../frontend/src/auth/auth0.json";
+import { audience, clientId, domain } from './auth/auth0.json'
+import './registerServiceWorker'
 
 // const { apolloClient } = require('./apollo')
 
 Vue.use(VueApollo)
+// const ls = new SecureLS({ encodingType: 'aes' })
+// const secureLocalCache = {
+//   get(key) {
+//     return JSON.parse(ls.get(key))
+//   },
+//
+//   set(key, value) {
+//     ls.set(key, JSON.stringify(value))
+//   },
+//
+//   remove(key) {
+//     ls.remove(key)
+//   },
+//
+//   // Optional
+//   allKeys() {
+//     return ls.getAllKeys()
+//   },
+// }
 
 Vue.use(Auth0Plugin, {
   domain,
@@ -45,6 +65,9 @@ Vue.use(Auth0Plugin, {
         : window.location.pathname,
     ).then(() => { window.location.reload() })
   },
+  useRefreshTokens: true,
+  cacheLocation: 'localstorage',
+  // cache: secureLocalCache,
 })
 
 Vue.use(VueGoogleMaps, {
@@ -82,7 +105,9 @@ Vue.config.productionTip = false
 const { backend } = require('./global-vars')
 
 Vue.prototype.$backend = backend
+Vue.prototype.$delay = ms => new Promise(res => setTimeout(res, ms))
 
+// eslint-disable-next-line no-unused-vars
 const app = new Vue({
   router,
   store,
@@ -94,4 +119,4 @@ const app = new Vue({
   },
   render: h => h(App),
 }).$mount('#app')
-app.use(apolloProvider)
+// app.use(apolloProvider)

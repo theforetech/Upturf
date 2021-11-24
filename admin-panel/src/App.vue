@@ -24,6 +24,7 @@ import useAppConfig from '@core/app-config/useAppConfig'
 import { useWindowSize, useCssVar } from '@vueuse/core'
 
 import store from '@/store'
+import update from './mixins/update'
 // import gql from 'graphql-tag'
 
 const LayoutVertical = () => import('@/layouts/vertical/LayoutVertical.vue')
@@ -40,8 +41,7 @@ export default {
 
     ScrollToTop,
   },
-  // ! We can move this computed: layout & contentLayoutType once we get to use Vue 3
-  // Currently, router.currentRoute is not reactive and doesn't trigger any change
+  mixins: [update],
   computed: {
     layout() {
       if (this.$route.meta.layout === 'full') return 'layout-full'

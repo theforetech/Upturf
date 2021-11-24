@@ -67,15 +67,9 @@ export const useAuth0 = ({
         this.isAuthenticated = await this.auth0Client.isAuthenticated()
         this.user = await this.auth0Client.getUser()
         if (this.user) {
-          this.ability = new Ability([{
-            action: 'manage',
-            subject: 'all',
-          }])
+          this.ability = new Ability(this.user['https://upturf.in/rules'])
           await store.commit('user/UPDATE_USER_INFO', {
-            ability: [{
-              action: 'manage',
-              subject: 'all',
-            }],
+            ability: this.user['https://upturf.in/rules'],
             displayName: this.user.name,
             email: this.user.email,
             emailVerified: this.user.email_verified,
@@ -142,15 +136,9 @@ export const useAuth0 = ({
           this.isAuthenticated = await this.auth0Client.isAuthenticated()
           this.user = await this.auth0Client.getUser()
           if (this.user) {
-            this.ability = new Ability([{
-              action: 'manage',
-              subject: 'all',
-            }])
+            this.ability = new Ability(this.user['https://upturf.in/rules'])
             await store.commit('user/UPDATE_USER_INFO', {
-              ability: [{
-                action: 'manage',
-                subject: 'all',
-              }],
+              ability: this.user['https://upturf.in/rules'],
               displayName: this.user.name,
               email: this.user.email,
               emailVerified: this.user.email_verified,

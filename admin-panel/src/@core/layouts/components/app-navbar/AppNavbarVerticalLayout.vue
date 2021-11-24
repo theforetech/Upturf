@@ -36,7 +36,7 @@
 
 <script>
 import {
-  BNavbarNav,
+  BNavbarNav, BLink,
 } from 'bootstrap-vue'
 import SearchBar from './components/SearchBar.vue'
 import DarkToggler from './components/DarkToggler.vue'
@@ -47,6 +47,7 @@ export default {
   components: {
 
     // Navbar Components
+    BLink,
     BNavbarNav,
     SearchBar,
     DarkToggler,

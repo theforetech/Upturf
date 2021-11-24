@@ -359,7 +359,7 @@ export default {
       }
     },
     logOut() {
-      this.$auth.logOut()
+      this.$auth.logout()
     },
     resetForm() {
       this.formData = {
