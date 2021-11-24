@@ -27,7 +27,7 @@
             align-self="center"
           >
             <h2 style="text-align:center;font-size: 1.2rem;font-weight: 600;color:#000;white-space: nowrap;">
-              Terms & Conditions
+              Fair Usage Policy
             </h2>
           </b-col>
         </b-row>

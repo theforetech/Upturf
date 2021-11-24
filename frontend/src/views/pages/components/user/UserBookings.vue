@@ -150,7 +150,7 @@ export default {
     async getBookings() {
       const result = await this.$apollo.query({
         query: gql`query {
-          bookings {
+          bookings(order_by: {reservation_date: desc}) {
             id
             amount
             payment_status

@@ -5,36 +5,47 @@
   >
     <b-card-body style="padding: 1rem 0rem;">
       <div>
-        <b-avatar
-          :variant="`light-${color}`"
-          size="35"
-        >
-          <feather-icon
-            size="18"
-            :icon="icon"
-          />
-        </b-avatar>
-        <span style="margin-left: 1rem;font-weight: 600">
-          {{ statistic }}
-        </span>
+        <b-row>
+          <b-col
+            style="padding: 0 0.5rem 0 0.3rem"
+            cols="2"
+          >
+            <b-avatar
+              :variant="`light-${color}`"
+              size="45"
+              src=""
+              class="upturf"
+            />
+          </b-col>
+          <b-col style="padding: 0">
+            <span style="font-weight: 500;">
+              {{ statistic }}
+            </span>
+          </b-col>
+        </b-row>
+        <hr>
       </div>
     </b-card-body>
   </b-card>
 </template>
 
 <script>
-import { BCard, BCardBody, BAvatar } from 'bootstrap-vue'
+import {
+  BCard, BCardBody, BAvatar, BRow, BCol,
+} from 'bootstrap-vue'
 
 export default {
   components: {
     BCard,
     BCardBody,
     BAvatar,
+    BRow,
+    BCol,
   },
   props: {
     icon: {
       type: String,
-      required: true,
+      required: false,
     },
     statistic: {
       type: [Number, String],
@@ -52,3 +63,9 @@ export default {
   },
 }
 </script>
+<style scoped>
+.upturf{
+  height: 100%;
+}
+
+</style>
