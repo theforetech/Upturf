@@ -98,19 +98,35 @@
             v-if="!slotsFetching"
             style="padding: 0rem;"
           >
-            <slot-select-card
-              v-for="x in slots"
-              :key="'slots_' + x.id"
-              :disabled="x.disabled"
-              :icon="getIcon(isRowSelected(x))"
-              :statistic="x.start_time"
-              :statistic-title="x.price"
-              :date="checkoutDate"
-              :color="getSlotColor(isRowSelected(x))"
-              :border-color="getBorderColor(isRowSelected(x))"
-              class="slotCard"
-              @clicked="toggleRow(x)"
-            />
+            <template v-if="slots.length > 0">
+              <slot-select-card
+                v-for="x in slots"
+                :key="'slots_' + x.id"
+                :disabled="x.disabled"
+                :icon="getIcon(isRowSelected(x))"
+                :statistic="x.start_time"
+                :statistic-title="x.price"
+                :date="checkoutDate"
+                :color="getSlotColor(isRowSelected(x))"
+                :border-color="getBorderColor(isRowSelected(x))"
+                class="slotCard"
+                @clicked="toggleRow(x)"
+              />
+            </template>
+            <div v-else>
+              <b-alert
+                class="m-2"
+                variant="warning"
+                show
+              >
+                <h4 class="alert-heading">
+                  Oops
+                </h4>
+                <div class="alert-body">
+                  <span>No slots available!</span>
+                </div>
+              </b-alert>
+            </div>
           </b-card-body>
           <b-card-body v-else>
             <b-skeleton-table
@@ -227,14 +243,21 @@
                     <validation-provider
                       #default="{ errors }"
                       name="Phone Number"
-                      :rules="{ required, regex:/^[6-9]\d{9}$/ }"
+                      :rules="{ required }"
                     >
-                      <b-form-input
-                        v-model="contactPhone"
-                        :state="errors.length > 0 ? false:null"
-                        type="phone"
-                        placeholder="Phone Number"
-                      />
+                      <b-input-group>
+                        <b-input-group-prepend is-text>
+                          IN (+91)
+                        </b-input-group-prepend>
+                        <cleave
+                          id="phone"
+                          v-model="contactPhone"
+                          class="form-control"
+                          :raw="false"
+                          :options="phoneOptions"
+                          placeholder="77991 44423"
+                        />
+                      </b-input-group>
                       <small class="text-danger">{{ errors[0] }}</small>
                     </validation-provider>
                   </b-form-group>
@@ -359,10 +382,13 @@
 
 <script>
 import {
-  BCardHeader, BCardBody, BCard, BButton, BImg, BRow, BCol, BDropdown, BDropdownItem, BSkeletonTable, BFormInput, BFormGroup, BForm,
+  BCardHeader, BCardBody, BCard, BButton, BImg, BRow, BCol, BDropdown, BDropdownItem, BInputGroup, BInputGroupPrepend, BSkeletonTable, BFormInput, BFormGroup, BForm, BAlert,
 } from 'bootstrap-vue'
 
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import Cleave from 'vue-cleave-component'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'cleave.js/dist/addons/cleave-phone.in'
 import { required } from '@validations'
 import VueSlickCarousel from 'vue-slick-carousel'
 // import { Carousel3d, Slide } from 'vue-carousel-3d'
@@ -379,6 +405,10 @@ import SlotSelectCard from './SlotSelectCard.vue'
 
 export default {
   components: {
+    Cleave,
+    BInputGroup,
+    BInputGroupPrepend,
+    BAlert,
     ValidationProvider,
     ValidationObserver,
     BFormInput,
@@ -404,6 +434,7 @@ export default {
   data() {
     return {
       required,
+      phoneOptions: { phone: true, phoneRegionCode: 'IN' },
       retries: 0,
       contactName: this.$store.state.user.AppActiveUser.displayName,
       contactPhone: '',
@@ -696,8 +727,10 @@ export default {
     async getSlots() {
       this.slotsFetching = true
       this.selectedSlots = []
-      const result = await this.$apollo.query({
-        query: gql`query ($date: date, $id: Int!, $time: time) {
+      let result = null
+      if (moment(moment().format('YYYY-MM-DD'), 'YYYY-MM-DD').isSame(moment(moment(this.checkoutDate).format('YYYY-MM-DD'), 'YYYY-MM-DD'))) {
+        result = await this.$apollo.query({
+          query: gql`query ($date: date, $id: Int!, $time: time) {
           facilities_by_pk(id: $id) {
             id
             slots(where: {start_time: {_gt: $time}}) {
@@ -713,13 +746,38 @@ export default {
             }
           }
         }`,
-        variables: {
-          id: this.facilityID,
-          date: moment(this.checkoutDate).format('YYYY-MM-DD'),
-          time: moment().format('HH:mm:ss'),
-        },
-        fetchPolicy: 'no-cache',
-      })
+          variables: {
+            id: this.facilityID,
+            date: moment(this.checkoutDate).format('YYYY-MM-DD'),
+            time: moment().format('HH:mm:ss'),
+          },
+          fetchPolicy: 'no-cache',
+        })
+      } else {
+        result = await this.$apollo.query({
+          query: gql`query ($date: date, $id: Int!) {
+          facilities_by_pk(id: $id) {
+            id
+            slots {
+              disabled
+              end_time
+              id
+              start_time
+              booked_slots_aggregate(where: {_and: {date: {_eq: $date}, booking: {_and: {booking_status: {_in: [0, 1]}, payment_status: {_in: [processing, success]}}}}}) {
+                aggregate {
+                  count
+                }
+              }
+            }
+          }
+        }`,
+          variables: {
+            id: this.facilityID,
+            date: moment(this.checkoutDate).format('YYYY-MM-DD'),
+          },
+          fetchPolicy: 'no-cache',
+        })
+      }
       let { price } = this.facilityData
       if (moment(this.checkoutDate).day() === 0 || moment(this.checkoutDate).day() === 6) {
         price = this.facilityData.weekendPrice
@@ -836,9 +894,9 @@ export default {
         order_id: this.currentBooking.razorpay,
         name: 'Booking Payment',
         prefill: {
-          name: 'Test',
-          email: 'a@upturf.in',
-          contact: '+919999999999',
+          name: this.$store.state.user.userProfile[0].name,
+          email: this.$store.state.user.AppActiveUser.email,
+          contact: this.$store.state.user.userProfile[0].phone_number,
         },
         retry: {
           enabled: true,

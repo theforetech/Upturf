@@ -51,11 +51,11 @@ export default {
   },
   props: {
     facilityID: {
-      type: Number,
+      type: [Number, String],
       default: null,
     },
     turfID: {
-      type: String,
+      type: [Number, String],
       default: null,
     },
     facilityName: {

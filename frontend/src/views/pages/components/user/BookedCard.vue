@@ -2,6 +2,7 @@
   <b-card
     class="user-booking"
   >
+    <div id="razorpay" />
     <b-container style="padding: 0">
       <b-row
         style="padding-bottom: 1.5rem"
@@ -77,6 +78,7 @@
         variant="flat-danger"
         class="booking-btn"
         :class="{display:buttonUpdate}"
+        @click="cancelBooking"
       >
         Cancel Booking
       </b-button>
@@ -92,12 +94,11 @@
         v-ripple.400="'rgba(255, 255, 255, 0.15)'"
         variant="flat-success"
         class="booking-btn"
+        @click="displayRazorpay"
       >
         Complete Payment
       </b-button>
-
     </b-row>
-
   </b-card>
 </template>
 
@@ -108,6 +109,8 @@ import {
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import moment from 'moment'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import gql from 'graphql-tag'
 
 export default {
   components: {
@@ -164,6 +167,11 @@ export default {
       type: [String, Number],
       required: true,
       default: '',
+    },
+    payments: {
+      type: Array,
+      // eslint-disable-next-line vue/require-valid-default-prop
+      default: [],
     },
   },
   data() {
@@ -241,6 +249,128 @@ export default {
     },
   },
   methods: {
+    async cancelBooking() {
+      const vm = this
+      const res = await this.$apollo.mutate({
+        mutation: gql`mutation ($id: uuid!) {
+          cancel(bookingID: $id) {
+            id
+            refund
+            status
+          }
+        }`,
+        variables: {
+          id: this.bookingId,
+        },
+      }).catch(e => {
+        let msg = e.message
+        if (e.message.includes('Uniqueness violation') || e.message.includes('Slot')) {
+          msg = 'Slot unavailable'
+        }
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Error Cancelling',
+            icon: 'XCircleIcon',
+            text: msg,
+            variant: 'danger',
+          },
+        })
+      })
+      try {
+        if (res === undefined || !('data' in res) || !('cancel' in res.data) || !res.data.cancel) {
+          return
+        }
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Booking Cancelled!',
+            icon: 'CheckIcon',
+            text: 'We hope to serve you again.',
+            variant: 'success',
+          },
+        },
+        {
+          timeout: 4000,
+        })
+        vm.$emit('refreshBookings', true)
+      } catch (e) {
+        const msg = e.message
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Error Cancelling',
+            icon: 'XCircleIcon',
+            text: msg,
+            variant: 'danger',
+          },
+        })
+      }
+    },
+    loadScript(src) {
+      return new Promise(resolve => {
+        if (document.getElementById('razorpay').childElementCount !== 1) {
+          const script = document.createElement('script')
+          script.src = src
+          script.onload = () => {
+            resolve(true)
+          }
+          script.onerror = () => {
+            resolve(false)
+          }
+          document.getElementById('razorpay').appendChild(script)
+        } else {
+          resolve(true)
+        }
+      })
+    },
+    async displayRazorpay() {
+      const vm = this
+      const res = await this.loadScript('https://checkout.razorpay.com/v1/checkout.js')
+      if (!res) {
+        // eslint-disable-next-line no-alert
+        alert('Razorpay SDK failed to load. Are you online?')
+        return
+      }
+      const options = {
+        key: 'rzp_test_abiH700LsWApe9',
+        currency: 'INR',
+        amount: (this.amount * 100).toString(),
+        order_id: this.payments[0].id,
+        name: 'Booking Payment',
+        prefill: {
+          name: this.$store.state.user.userProfile[0].name,
+          email: this.$store.state.user.AppActiveUser.email,
+          contact: this.$store.state.user.userProfile[0].phone_number,
+        },
+        retry: {
+          enabled: true,
+          max_count: 5,
+        },
+        description: `Booking ID: ${this.payments[0].id}`,
+        image: 'https://upturf.in/logo.png',
+        handler() {
+          vm.$toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Success!',
+              icon: 'CheckIcon',
+              text: 'Payment Confirmed.',
+              variant: 'success',
+            },
+          })
+          vm.$emit('refreshBookings', true)
+        },
+      }
+      const paymentObject = new window.Razorpay(options)
+      paymentObject.on('payment.failed', () => {
+        vm.retries += 1
+        if (vm.retries > 4) {
+          paymentObject.close()
+        }
+      })
+      paymentObject.open()
+    },
     navigateTo() {
       this.$router.push({
         name: 'pages-summary',

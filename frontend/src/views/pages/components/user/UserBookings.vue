@@ -43,6 +43,8 @@
         :sport="x.facility.sport.name"
         :tag="getTag(x.booking_status, x.payment_status, x.reservation_date, x.booked_slots[0].startTime)"
         :date="x.reservation_date"
+        :payments="x.payments"
+        @refreshBookings="getBookings"
       />
     </template>
     <div v-else>
@@ -199,6 +201,11 @@ export default {
             }
             booked_slots(order_by: {startTime: asc}, limit: 1) {
               startTime
+            }
+            payments {
+              id
+              payment_status
+              payment_captured
             }
           }
         }`,
