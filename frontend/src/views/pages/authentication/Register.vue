@@ -140,6 +140,7 @@
                     id="vi-location"
                     v-model="vm.searchPlace"
                     v-gmaps-searchbox:location.name.geometry.address_components="vm"
+                    autocomplete="off"
                     placeholder="Search your location..."
                     class="searchInput field"
                     name="name"

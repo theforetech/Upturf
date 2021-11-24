@@ -13,7 +13,7 @@
             <b-avatar
               :variant="`light-${color}`"
               size="45"
-              src=""
+              src="/logo.png"
               class="upturf"
             />
           </b-col>
@@ -43,10 +43,6 @@ export default {
     BCol,
   },
   props: {
-    icon: {
-      type: String,
-      required: false,
-    },
     statistic: {
       type: [Number, String],
       required: true,
