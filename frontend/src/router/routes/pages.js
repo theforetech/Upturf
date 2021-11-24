@@ -226,6 +226,24 @@ export default [
     },
   },
   {
+    path: '/update-profile',
+    name: 'update-profile',
+    component: () => import('@/views/pages/components/user/UpdateProfile.vue'),
+    meta: {
+      layout: 'full',
+      pageTitle: 'Update Profile',
+      breadcrumb: [
+        {
+          text: 'Pages',
+        },
+        {
+          text: 'Update Profile',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
     path: '/notifications',
     name: 'notifications',
     component: () => import('@/views/pages/components/user/Notifications.vue'),

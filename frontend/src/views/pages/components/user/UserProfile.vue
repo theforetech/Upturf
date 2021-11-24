@@ -87,9 +87,10 @@
         </b-col>
         <b-col style="padding: 0rem 2rem 0rem 1rem;">
           <profile-card
-            icon="SettingsIcon"
-            statistic="Settings"
+            icon="Edit2Icon"
+            statistic="Update Profile"
             color="dark"
+            @clicked="navigateTo('update-profile')"
           />
         </b-col>
       </b-row>

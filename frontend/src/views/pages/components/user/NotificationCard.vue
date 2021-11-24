@@ -43,10 +43,6 @@ export default {
     BCol,
   },
   props: {
-    icon: {
-      type: String,
-      required: false,
-    },
     statistic: {
       type: [Number, String],
       required: true,
