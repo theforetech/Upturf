@@ -35,11 +35,12 @@
     </b-card>
     <b-card class="summary">
       <b-card class="internal">
-        <b-card-header style="padding :0px">
-          Hello
-        </b-card-header>
-        <b-card-body style="padding: 0rem;" />
-      </b-card>
+        <!--        <b-card-header style="padding :0px" />-->
+        <b-card-body style="padding: 0rem 1rem 0rem 1rem;">
+          <notification-card
+            statistic="Hello, welcome to Upturf, the more you play, the more you smile."
+          />
+        </b-card-body></b-card>
     </b-card>
   </div>
 </template>
@@ -54,6 +55,7 @@ import {
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import moment from 'moment'
+import NotificationCard from './NotificationCard.vue'
 
 export default {
   components: {
@@ -63,6 +65,7 @@ export default {
     BCardBody,
     BRow,
     BCol,
+    NotificationCard,
   },
   directives: {
     Ripple,
@@ -175,7 +178,9 @@ h2{
 .summaryCard{
   margin-bottom: 1rem;
 }
-
+ [dir] .summary .card-body[data-v-2f3ae0e8] {
+   padding: 0;
+ }
 </style>
 <style lang="scss" >
 @import '@core/scss/vue/pages/page-profile.scss';
