@@ -13,7 +13,7 @@
             <b-avatar
               :variant="`light-${color}`"
               size="45"
-              src=""
+              src="/logo.png"
               class="upturf"
             />
           </b-col>
