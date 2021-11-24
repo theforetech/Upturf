@@ -99,7 +99,6 @@
 <script>
 import { BRow, BCol } from 'bootstrap-vue'
 
-import { getUserData } from '@/auth/utils'
 import EcommerceMedal from './EcommerceMedal.vue'
 import EcommerceStatistics from './EcommerceStatistics.vue'
 import EcommerceRevenueReport from './EcommerceRevenueReport.vue'
@@ -142,7 +141,7 @@ export default {
 
         // ? Your API will return name of logged in user or you might just directly get name of logged in user
         // ? This is just for demo purpose
-        const userInfo = getUserData()
+        const userInfo = this.$store.state.user.AppActiveUser
         this.data.congratulations.name = userInfo.displayName.split(' ')[0] || userInfo.username
       })
   },

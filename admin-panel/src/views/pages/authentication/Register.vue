@@ -213,7 +213,6 @@ import {
 import { required, email } from '@validations'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import store from '@/store/index'
-import useJwt from '@/auth/jwt/useJwt'
 
 export default {
   components: {
@@ -265,22 +264,7 @@ export default {
     register() {
       this.$refs.registerForm.validate().then(success => {
         if (success) {
-          useJwt.register({
-            name: this.name,
-            email: this.userEmail,
-            password: this.password,
-            role: 'admin',
-          })
-            .then(response => {
-              useJwt.setToken(response.data.accessToken)
-              useJwt.setRefreshToken(response.data.refreshToken)
-              localStorage.setItem('userInfo', JSON.stringify(response.data.userInfo))
-              this.$ability.update(response.data.userInfo.ability)
-              this.$router.push('/')
-            })
-            .catch(error => {
-              this.$refs.registerForm.setErrors(error)
-            })
+          // success
         }
       })
     },

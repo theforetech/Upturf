@@ -371,6 +371,7 @@ import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 import moment from 'moment'
 import gql from 'graphql-tag'
 import Ripple from 'vue-ripple-directive'
+import { mapGetters } from 'vuex'
 import ToastificationContent
   from '../../../../@core/components/toastification/ToastificationContent.vue'
 import SlotCard from './SlotCard.vue'
@@ -542,6 +543,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      userProfile: 'user/getUserProfile',
+    }),
     getTotal() {
       if (this.selectedSlots.length < 0) {
         return 0
@@ -566,6 +570,10 @@ export default {
   },
   async mounted() {
     // console.log(this.turfID, this.facilityID)
+    if (this.userProfile.length > 0 && this.userProfile[0].name) {
+      this.contactName = this.userProfile[0].name
+      this.contactPhone = this.userProfile[0].phone_number
+    }
     await this.getTurfData()
     await this.getFacilityData()
     this.checkoutDate = moment().toISOString()

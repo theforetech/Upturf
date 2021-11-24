@@ -1,20 +1,19 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
 // Routes
-import { canNavigate } from '@/libs/acl/routeProtection'
-import { getHomeRouteForLoggedInUser } from '@/auth/utils'
-import AuthService from '@/auth'
-import { doesProfileExist } from './userProfileCheck'
-import admin from './routes/admin'
-import vendor from './routes/vendor'
-import apps from './routes/apps'
-import dashboard from './routes/dashboard'
-import uiElements from './routes/ui-elements/index'
+/* eslint-disable */
+// import AuthService from '@/auth'
 import pages from './routes/pages'
-import chartsMaps from './routes/charts-maps'
-import formsTable from './routes/forms-tables'
-import others from './routes/others'
+import { apolloClient, waitUntilAuth } from "@/apollo"
+import { getInstance } from '@/auth/auth0-service/authWrapper'
+import { getHomeRouteForLoggedInUser } from '@/auth/utils'
+import store from '@/store'
+import admin from "@/router/routes/admin";
+import vendor from "@/router/routes/vendor";
+import apps from "@/router/routes/apps";
+import dashboard from "@/router/routes/dashboard";
+import { doesProfileExist } from "@/router/userProfileCheck";
+/* eslint-enable */
 
 Vue.use(VueRouter)
 
@@ -31,10 +30,10 @@ const router = new VueRouter({
     ...apps,
     ...dashboard,
     ...pages,
-    ...chartsMaps,
-    ...formsTable,
-    ...uiElements,
-    ...others,
+    // ...chartsMaps,
+    // ...formsTable,
+    // ...uiElements,
+    // ...others,
     {
       path: '*',
       redirect: 'error-404',
@@ -42,37 +41,50 @@ const router = new VueRouter({
   ],
 })
 
-router.beforeEach(async (to, _, next) => {
-  const isLoggedIn = AuthService.isAuthenticated()
-  // eslint-disable-next-line no-constant-condition
-  if (to.name !== 'auth-login' && AuthService.isExpired()) {
-    // eslint-disable-next-line no-unused-vars,consistent-return
-    await AuthService.renewTokens().catch(async () => {
-      await AuthService.logOut()
-    })
-  }
-  if (!canNavigate(to)) {
-    // Redirect to login if not logged in
-    if (!isLoggedIn) return next({ name: 'auth-login', query: { redirect: to.path } })
+// eslint-disable-next-line consistent-return,import/prefer-default-export
+router.beforeEach(async (to, from, next) => {
+  const authService = getInstance()
+  // eslint-disable-next-line no-empty
+  await waitUntilAuth(authService)
+  const fn2 = async () => {
+    const isLoggedIn = authService.isAuthenticated
+    if (isLoggedIn && store.state.user.userProfile === null) {
+      await store.dispatch('user/updateUserProfile', apolloClient)
+      if (store.state.user.userProfile.length === 0) {
+        return next({ name: 'auth-register' })
+        // return next({ name: 'auth-register', query: { redirect: to.path } })
+      }
+    }
+    if (!authService.canNavigate(to)) {
+      // Redirect to login if not logged in
+      if (!isLoggedIn) return next({ name: 'auth-login', query: { redirect: to.path } })
 
-    // If logged in => not authorized
-    return next({ name: 'redirect-to-dashboard' })
+      // If logged in => not authorized
+      return next({ name: 'redirect-to-dashboard' })
+    }
+    if (isLoggedIn && to.name !== 'vendor-create-profile' && !await doesProfileExist()) {
+      return next({ name: 'vendor-create-profile' })
+    }
+    // Redirect if logged in
+    if (to.query.redirect && isLoggedIn) {
+      return next(to.query.redirect)
+    }
+    if (to.meta.redirectIfLoggedIn && isLoggedIn) {
+      return next(getHomeRouteForLoggedInUser(authService.user.role))
+    }
+    return next()
   }
-  // Check if profile is fetched after login
-  // const profile = await doesProfileExist()
-  if (isLoggedIn && to.name !== 'vendor-create-profile' && !await doesProfileExist()) {
-    return next({ name: 'vendor-create-profile' })
+  const fn = () => {
+    if (authService.isAuthenticated) {
+      return fn2()
+    }
+    return next({ name: 'auth-login', query: { redirect: to.path } })
   }
 
-  // Redirect if logged in
-  if (to.query.redirect && isLoggedIn) {
-    return next(to.query.redirect)
+  if (!authService.loading && to.name !== 'auth-login') {
+    return fn()
   }
-  if (to.meta.redirectIfLoggedIn && isLoggedIn) {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-    return next(getHomeRouteForLoggedInUser(userInfo ? userInfo.userRole : null))
-  }
-  return next()
+  return fn2()
 })
 
 // ? For splash screen

@@ -3,15 +3,16 @@ import { apolloClient } from '@/apollo'
 import gql from 'graphql-tag'
 // eslint-disable-next-line import/prefer-default-export,consistent-return
 export const doesProfileExist = async () => {
-  if (store.state.user.AppActiveUser.userProfile !== null) {
+  if (store.state.user.AppActiveUser.userRole === 'admin' || store.state.user.AppActiveUser.userProfile !== null) {
     return true
   }
-  const userProfile = JSON.parse(localStorage.getItem('userProfile'))
-  if (userProfile !== null) {
-    await store.commit('user/UPDATE_USER_PROFILE', userProfile)
-  } else {
-    const result = await apolloClient.query({
-      query: gql`query {
+  // const userProfile = JSON.parse(localStorage.getItem('userProfile'))
+  // const userProfile = null
+  // if (userProfile !== null) {
+  //   await store.commit('user/UPDATE_USER_PROFILE', userProfile)
+  // } else {
+  const result = await apolloClient.query({
+    query: gql`query {
           vendor {
               about
               address
@@ -25,14 +26,14 @@ export const doesProfileExist = async () => {
               website
           }
       }`,
-    })
-    if (result.data !== undefined && result.data.vendor !== undefined && result.data.vendor !== null) {
-      if (result.data.vendor.length === 0) {
-        return false
-      }
-      await store.commit('user/UPDATE_USER_PROFILE', result.data.vendor[0])
+  })
+  if (result.data !== undefined && result.data.vendor !== undefined && result.data.vendor !== null) {
+    if (result.data.vendor.length === 0) {
+      return false
     }
-    // await store.commit('user/UPDATE_USER_PROFILE', userProfile)
+    await store.commit('user/UPDATE_USER_PROFILE', result.data.vendor[0])
   }
+  // await store.commit('user/UPDATE_USER_PROFILE', userProfile)
+  // }
   return true
 }

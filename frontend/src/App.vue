@@ -47,84 +47,6 @@ export default {
     ScrollToTop,
   },
   mixins: [update],
-  watch: {
-    updateExists(oldVal, newVal) {
-      if (!oldVal && newVal) {
-        this.$swal({
-          title: 'New Update Available!',
-          text: 'Do you want to get it now?',
-          icon: 'info',
-          showCancelButton: true,
-          confirmButtonText: 'Update!',
-          customClass: {
-            confirmButton: 'btn btn-primary',
-            cancelButton: 'btn btn-outline-danger ml-1',
-          },
-          buttonsStyling: false,
-        }).then(result => {
-          if (result.value) {
-            this.refreshApp()
-            this.$swal({
-              icon: 'success',
-              title: 'Hurray!',
-              text: 'Upturf will be updated.',
-              customClass: {
-                confirmButton: 'btn btn-success',
-              },
-            })
-          } else if (result.dismiss === 'cancel') {
-            this.$swal({
-              title: 'Update soon!',
-              text: 'Get the latest features with the update :)',
-              icon: 'error',
-              customClass: {
-                confirmButton: 'btn btn-success',
-              },
-            })
-          }
-        })
-      }
-    },
-  },
-  mounted() {
-    if (this.updateExists) {
-      this.$swal({
-        title: 'New Update Available!',
-        text: 'Do you want to get it now?',
-        icon: 'info',
-        showCancelButton: true,
-        confirmButtonText: 'Update!',
-        customClass: {
-          confirmButton: 'btn btn-primary',
-          cancelButton: 'btn btn-outline-danger ml-1',
-        },
-        buttonsStyling: false,
-      }).then(result => {
-        if (result.value) {
-          this.refreshApp()
-          this.$swal({
-            icon: 'success',
-            title: 'Hurray!',
-            text: 'Upturf will be updated.',
-            customClass: {
-              confirmButton: 'btn btn-success',
-            },
-          })
-        } else if (result.dismiss === 'cancel') {
-          this.$swal({
-            title: 'Update soon!',
-            text: 'Get the latest features with the update :)',
-            icon: 'error',
-            customClass: {
-              confirmButton: 'btn btn-success',
-            },
-          })
-        }
-      })
-    }
-  },
-  // ! We can move this computed: layout & contentLayoutType once we get to use Vue 3
-  // Currently, router.currentRoute is not reactive and doesn't trigger any change
   computed: {
     layout() {
       if (this.$route.meta.layout === 'full') return 'layout-full'
@@ -155,6 +77,8 @@ export default {
     // Set RTL
     const { isRTL } = $themeConfig.layout
     document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr')
+  },
+  methods: {
   },
   setup() {
     const { skin, skinClasses } = useAppConfig()

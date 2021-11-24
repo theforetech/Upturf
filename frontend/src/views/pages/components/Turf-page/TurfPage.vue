@@ -49,31 +49,44 @@
           >
             <feather-icon
               icon="ArrowLeftIcon"
-              size="25"
+              size="20"
             />
           </b-button>
           <b-button
-            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-            variant="gradient-danger"
+            v-ripple.400="'rgba(0, 0, 0, 0.15)'"
+            variant="gradient-secondary"
             class="btn-wishlist"
-            style="float: right;aspect-ratio:1/1;border-radius:50%;padding:0.5rem;margin-right:1rem;"
+            :style="{ backgroundImage: isInWishlist ? 'linear-gradient(47deg, red, orangered)!important' : 'linear-gradient(47deg, #fff, #f8f8f8)!important' }"
+            style="float: right;aspect-ratio:1/1;border-radius:50%;padding:0.5rem;margin-right:1rem;box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );"
+            @click="toggleWishlist"
           >
             <feather-icon
               icon="HeartIcon"
-              size="25"
+              size="20"
+              :style="{ stroke: isInWishlist ? 'white' : 'red', fill: isInWishlist ? 'white' : 'white' }"
+              style="stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"
+              class="text-danger"
             />
           </b-button>
-          <b-button
-            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-            variant="gradient-secondary"
-            class="btn-wishlist"
-            style="float: right;aspect-ratio:1/1;border-radius:50%;padding:0.5rem;margin-right:1rem;"
+          <navigator-share
+            :url="url"
+            :title="title"
+            text="Checkout this turf on Upturf!"
           >
-            <feather-icon
-              icon="ShareIcon"
-              size="25"
-            />
-          </b-button>
+            <template v-slot:clickable>
+              <b-button
+                v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                variant="gradient-secondary"
+                class="btn-wishlist"
+                style="float: right;aspect-ratio:1/1;border-radius:50%;padding:0.5rem;margin-right:1rem;"
+              >
+                <feather-icon
+                  icon="ShareIcon"
+                  size="20"
+                />
+              </b-button>
+            </template>
+          </navigator-share>
         </div>
         <b-carousel-slide
           v-for="y in turfData.images"
@@ -352,14 +365,17 @@ import {
   BButton,
 } from 'bootstrap-vue'
 import gql from 'graphql-tag'
+import { mapGetters } from 'vuex'
 import Ripple from 'vue-ripple-directive'
 import VueSlickCarousel from 'vue-slick-carousel'
+import NavigatorShare from 'vue-navigator-share'
 import BuyCard from './BuyCard.vue'
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 /* eslint-disable global-require */
 export default {
   components: {
+    NavigatorShare,
     BRow,
     BCol,
     BCard,
@@ -386,6 +402,7 @@ export default {
   data() {
     return {
       turfID: null,
+      profile: null,
       loading: true,
       facilities: [
         {
@@ -496,15 +513,33 @@ export default {
       ],
     }
   },
+  computed: {
+    ...mapGetters({ userProfile: 'user/getUserProfile' }),
+    url() {
+      return window.location.href
+    },
+    title() {
+      return this.turfData.name
+    },
+    isInWishlist() {
+      return this.$store.state.user.userProfile[0].wishlists.includes(this.turfID)
+    },
+  },
   created() {
     this.$http.get('/profile/data').then(res => { this.profileData = res.data })
   },
   mounted() {
+    this.profile = this.$store.state.user.userProfile
     this.turfID = this.$route.params.id
     // console.log(this.turfID)
     this.getTurfData()
   },
   methods: {
+    toggleWishlist() {
+      this.$store.dispatch('user/updateWishlist', {
+        apollo: this.$apollo, userId: this.$store.state.user.AppActiveUser.uid, turfId: this.turfID, type: this.isInWishlist ? 'remove' : 'insert',
+      })
+    },
     async getTurfData() {
       // console.log('sd')
       const result = await this.$apollo.query({

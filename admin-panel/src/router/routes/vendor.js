@@ -21,7 +21,7 @@ export default [
     component: () => import('@/views/pages/vendor/account-setting/AccountSetting'),
     meta: {
       layout: 'full',
-      resource: 'Auth',
+      resource: 'Vendor',
       action: 'read',
       pageTitle: 'Create Profile',
       breadcrumb: [
@@ -40,7 +40,7 @@ export default [
     name: 'vendor-turfs',
     component: () => import('@/views/pages/vendor/turfs/UsersList.vue'),
     meta: {
-      resource: 'Auth',
+      resource: 'Vendor',
       action: 'read',
       pageTitle: 'Turfs',
       breadcrumb: [
@@ -59,7 +59,7 @@ export default [
     name: 'vendor-bookings',
     component: () => import('@/views/pages/vendor/bookings/Calendar'),
     meta: {
-      resource: 'Auth',
+      resource: 'Vendor',
       action: 'read',
       pageTitle: 'Bookings',
       breadcrumb: [
@@ -79,7 +79,7 @@ export default [
     component: () => import('@/views/pages/vendor/turfs/UsersView.vue'),
     props: ({ params }) => ({ id: Number.parseInt(params.id, 10) || 0 }),
     meta: {
-      resource: 'Auth',
+      resource: 'Vendor',
       action: 'read',
       pageTitle: 'Turfs',
       breadcrumb: [
@@ -102,6 +102,8 @@ export default [
     component: () => import('@/views/pages/vendor/turfs/account-setting/AccountSetting.vue'),
     props: ({ params }) => ({ id: Number.parseInt(params.id, 10) || 0 }),
     meta: {
+      resource: 'Vendor',
+      action: 'read',
       pageTitle: 'Turfs',
       breadcrumb: [
         {

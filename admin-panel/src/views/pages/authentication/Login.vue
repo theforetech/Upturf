@@ -4,10 +4,10 @@
 
       <!-- Brand logo-->
       <b-link class="brand-logo">
-        <vuexy-logo />
-        <h2 class="brand-text text-primary ml-1">
-          Vuexy
-        </h2>
+        <Vuexy-logo />
+        <!--        <h2 class="brand-text text-primary ml-1">-->
+        <!--          Upturf-->
+        <!--        </h2>-->
       </b-link>
       <!-- /Brand logo-->
 
@@ -41,7 +41,7 @@
             class="mb-1 font-weight-bold"
             title-tag="h2"
           >
-            Welcome to Surf A Turf! 👋
+            Welcome to Upturf! 👋
           </b-card-title>
           <b-card-text class="mb-2">
             Please sign-in to your account and start the adventure
@@ -122,7 +122,7 @@
           <!--          </div>-->
         </b-col>
       </b-col>
-    <!-- /Login-->
+      <!-- /Login-->
     </b-row>
   </div>
 </template>
@@ -133,8 +133,9 @@ import VuexyLogo from '@core/layouts/components/Logo.vue'
 import {
   BRow, BCol, BLink, BCardText, BCardTitle, BImg, BButton, BAlert, VBTooltip,
 } from 'bootstrap-vue'
-import store from '@/store/index'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import store from '@/store/index'
+// eslint-disable-next-line no-unused-vars
 import { getHomeRouteForLoggedInUser } from '@/auth/utils'
 
 export default {
@@ -170,7 +171,7 @@ export default {
   methods: {
     checkLogin() {
       // If user is already logged in notify
-      if (this.$auth.isAuthenticated()) {
+      if (this.$auth.isAuthenticated) {
         this.$toast({
           component: ToastificationContent,
           props: {
@@ -179,7 +180,7 @@ export default {
             variant: 'warning',
           },
         })
-        this.$router.push(this.$route.query.redirect || getHomeRouteForLoggedInUser(this.$store.state.user.AppActiveUser.userRole))
+        this.$router.push(this.$route.query.redirect || getHomeRouteForLoggedInUser(this.$auth.user.role))
         return false
       }
       return true
@@ -187,10 +188,10 @@ export default {
     loginAuth0() {
       if (!this.checkLogin()) return
       if (this.$route.query.redirect) {
-        this.$auth.login(this.$route.query.redirect)
+        this.$auth.loginWithRedirect({ appState: { targetUrl: this.$route.query.redirect } })
         return
       }
-      this.$auth.login('no-redirect')
+      this.$auth.loginWithRedirect()
     },
   },
 }

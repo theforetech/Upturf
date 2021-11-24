@@ -11,16 +11,14 @@ const httpLink = createHttpLink({
   uri: 'https://backend.upturf.in/v1/graphql',
 })
 
-async function waitUntilAuth(authService) {
-  return new Promise(resolve => {
-    const interval = setInterval(() => {
-      if (authService && authService.auth0Client !== null) {
-        resolve(true)
-        clearInterval(interval)
-      }
-    }, 50)
-  })
-}
+export const waitUntilAuth = async authService => new Promise(resolve => {
+  const interval = setInterval(() => {
+    if (authService && authService.auth0Client !== null) {
+      resolve(true)
+      clearInterval(interval)
+    }
+  }, 50)
+})
 
 // eslint-disable-next-line no-async-promise-executor
 const getHeaders = async () => new Promise(async (resolve, reject) => {

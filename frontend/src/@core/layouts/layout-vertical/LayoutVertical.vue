@@ -265,7 +265,7 @@ export default {
           route: 'user-bookings',
         },
         {
-          name: 'Wishlist',
+          name: 'Favourites',
           icon: 'HeartIcon',
           route: 'wishlist',
         },

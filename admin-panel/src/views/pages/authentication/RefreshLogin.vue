@@ -1,10 +1,10 @@
 <template>
   <div class="misc-wrapper">
     <b-link class="brand-logo">
-      <vuexy-logo />
-      <h2 class="brand-text text-primary ml-1">
-        Surf A Turf
-      </h2>
+      <Vuexy-logo />
+      <!--      <h2 class="brand-text text-primary ml-1">-->
+      <!--        Upturf-->
+      <!--      </h2>-->
     </b-link>
 
     <div class="misc-inner p-2 p-sm-3">
@@ -21,7 +21,11 @@
 </template>
 
 <script>
+import {
+  BLink,
+} from 'bootstrap-vue'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
+import { getHomeRouteForLoggedInUser } from '@/auth/utils'
 // import { getHomeRouteForLoggedInUser } from '@/auth/utils'
 
 // eslint-disable-next-line no-unused-vars
@@ -32,16 +36,11 @@ export default {
   name: 'RefreshLogin',
   components: {
     VuexyLogo,
+    BLink,
   },
   created() {
-    if (this.$auth.isAuthenticated()) {
-      if (this.$store.state.app.redirectAfterLogin) {
-        const url = this.$store.state.app.redirectAfterLogin
-        this.$store.commit('app/UPDATE_REDIRECT', null)
-        this.$router.push(url)
-        return
-      }
-      this.$router.push('/')
+    if (this.$auth.isAuthenticated) {
+      this.$router.push(getHomeRouteForLoggedInUser(this.$auth.user.role))
     } else {
       this.$router.push({ name: 'auth-control' })
     }

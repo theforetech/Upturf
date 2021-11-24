@@ -1,5 +1,4 @@
 <template>
-
   <b-card
     style="padding: 0"
     class="turf-card pointerCursor"
@@ -204,6 +203,7 @@ export default {
   data() {
     return {
       loading: false,
+      profile: null,
     }
   },
   computed: {

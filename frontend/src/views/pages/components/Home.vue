@@ -68,7 +68,6 @@
           no-body
           class="nearby"
         >
-
           <b-media-aside class="mr-2">
             <b-link :href="x.link">
               <b-img
@@ -274,16 +273,16 @@ export default {
         infinite: true,
         speed: 500,
         slidesToShow: 3,
-        slidesToScroll: 5,
+        slidesToScroll: 2,
         arrows: false,
         touchThreshold: 5,
       },
       settingsNearby: {
         rows: 2,
         slidesPerRow: 1,
-        infinite: false,
+        infinite: true,
         speed: 500,
-        slidesToShow: 1,
+        slidesToShow: 1.04,
         arrows: false,
       },
     }

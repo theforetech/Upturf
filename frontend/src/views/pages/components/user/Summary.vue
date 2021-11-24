@@ -240,7 +240,7 @@ export default {
   },
   mounted() {
     this.bookingID = this.$route.params
-    console.log(this.bookingID)
+    // console.log(this.bookingID)
     this.getBookingSummary()
   },
   methods: {

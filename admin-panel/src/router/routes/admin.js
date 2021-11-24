@@ -20,7 +20,7 @@ export default [
     name: 'sports',
     component: () => import('@/views/pages/admin/sports/SportList.vue'),
     meta: {
-      resource: 'Auth',
+      resource: 'Admin',
       action: 'read',
       pageTitle: 'Sports',
       breadcrumb: [
@@ -39,7 +39,7 @@ export default [
     name: 'turfs',
     component: () => import('@/views/pages/admin/turfs/UsersList.vue'),
     meta: {
-      resource: 'Auth',
+      resource: 'Admin',
       action: 'read',
       pageTitle: 'Turfs',
       breadcrumb: [
@@ -59,7 +59,7 @@ export default [
     component: () => import('@/views/pages/admin/turfs/UsersView.vue'),
     meta: {
 
-      resource: 'Auth',
+      resource: 'Admin',
       action: 'read',
       pageTitle: 'Turfs',
       breadcrumb: [
@@ -81,7 +81,7 @@ export default [
     name: 'vendors',
     component: () => import('@/views/pages/admin/vendors/UsersList.vue'),
     meta: {
-      resource: 'Auth',
+      resource: 'Admin',
       action: 'read',
       pageTitle: 'Vendors',
       breadcrumb: [
@@ -100,7 +100,7 @@ export default [
     name: 'vendor',
     component: () => import('@/views/pages/admin/vendors/UsersView.vue'),
     meta: {
-      resource: 'Auth',
+      resource: 'Admin',
       action: 'read',
       pageTitle: 'Vendors',
       breadcrumb: [
@@ -122,7 +122,7 @@ export default [
     name: 'users',
     component: () => import('@/views/pages/admin/users/UsersView.vue'),
     meta: {
-      resource: 'Auth',
+      resource: 'Admin',
       action: 'read',
       pageTitle: 'Users',
       breadcrumb: [
@@ -141,7 +141,7 @@ export default [
     name: 'user',
     component: () => import('@/views/pages/admin/users/UsersView.vue'),
     meta: {
-      resource: 'Auth',
+      resource: 'Admin',
       action: 'read',
       pageTitle: 'Turfs',
       breadcrumb: [
