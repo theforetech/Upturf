@@ -137,7 +137,7 @@ router.afterEach(to => {
   // Remove initial loading
   const appLoading = document.getElementById('loading-bg')
   if (appLoading && to.path !== '/callback') {
-    appLoading.style.display = 'none'
+    // appLoading.style.display = 'none'
   }
 })
 

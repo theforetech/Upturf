@@ -4,7 +4,7 @@ export default [
     icon: 'HomeIcon',
     role: 'vendor',
     tagVariant: 'light-warning',
-    route: 'dashboard-analytics',
+    route: 'dashboard-vendor',
   },
   {
     title: 'Bookings',
@@ -19,16 +19,10 @@ export default [
     route: 'vendor-turfs',
   },
   {
-    title: 'Facilities',
-    icon: 'MapIcon',
-    role: 'vendor',
-    route: 'apps-e-commerce-shop',
-  },
-  {
     title: 'Payments',
     icon: 'DollarSignIcon',
     role: 'vendor',
-    route: 'apps-e-commerce-shop',
+    route: 'misc-coming-soon',
   },
   {
     title: 'Profile',

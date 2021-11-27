@@ -4,10 +4,9 @@ export default [
     name: 'dashboard-admin',
     component: () => import('@/views/dashboard/analytics/Analytics.vue'),
     meta: {
-      layout: 'full',
       resource: 'Admin',
       action: 'read',
-      pageTitle: 'Create Profile',
+      pageTitle: 'Admin Dashboard',
       breadcrumb: [
         {
           text: 'Admin Panel',
@@ -35,6 +34,90 @@ export default [
     },
   },
   {
+    path: '/amenities',
+    name: 'amenities',
+    component: () => import('@/views/pages/admin/amenities/SportList.vue'),
+    meta: {
+      resource: 'Admin',
+      action: 'read',
+      pageTitle: 'Amenities',
+      breadcrumb: [
+        {
+          text: 'Admin Panel',
+        },
+        {
+          text: 'Amenities',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: '/turfs/:id',
+    name: 'admin-turf',
+    component: () => import('@/views/pages/admin/turfs/TurfPage'),
+    props: ({ params }) => ({ id: Number.parseInt(params.id, 10) || 0 }),
+    meta: {
+      resource: 'Admin',
+      action: 'read',
+      pageTitle: 'Turfs',
+      breadcrumb: [
+        {
+          text: 'Admin Panel',
+        },
+        {
+          text: 'Turfs',
+        },
+        {
+          text: 'Turf',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: '/turfs/edit/:id',
+    name: 'admin-turf-edit',
+    component: () => import('@/views/pages/admin/turfs/account-setting/AccountSetting.vue'),
+    props: ({ params }) => ({ id: Number.parseInt(params.id, 10) || 0 }),
+    meta: {
+      resource: 'Admin',
+      action: 'read',
+      pageTitle: 'Turfs',
+      breadcrumb: [
+        {
+          text: 'Admin Panel',
+        },
+        {
+          text: 'Turfs',
+        },
+        {
+          text: 'Edit Turf',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: '/turfs-approval',
+    name: 'turfs-approval',
+    component: () => import('@/views/pages/admin/turfs/Approval.vue'),
+    meta: {
+      resource: 'Admin',
+      action: 'read',
+      pageTitle: 'Turfs',
+      breadcrumb: [
+        {
+          text: 'Admin Panel',
+        },
+        {
+          text: 'Turfs Approval',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
     path: '/turfs',
     name: 'turfs',
     component: () => import('@/views/pages/admin/turfs/UsersList.vue'),
@@ -48,29 +131,6 @@ export default [
         },
         {
           text: 'Turfs',
-          active: true,
-        },
-      ],
-    },
-  },
-  {
-    path: '/turfs/:id',
-    name: 'turf',
-    component: () => import('@/views/pages/admin/turfs/UsersView.vue'),
-    meta: {
-
-      resource: 'Admin',
-      action: 'read',
-      pageTitle: 'Turfs',
-      breadcrumb: [
-        {
-          text: 'Admin Panel',
-        },
-        {
-          text: 'Turfs',
-        },
-        {
-          text: 'Turf',
           active: true,
         },
       ],

@@ -1,6 +1,6 @@
 <template>
   <b-sidebar
-    id="add-new-user-sidebar"
+    id="add-new-turf-sidebar"
     :visible="isAddNewUserSidebarActive"
     bg-variant="white"
     sidebar-class="sidebar-lg"
@@ -9,13 +9,13 @@
     no-header
     right
     @hidden="resetForm"
-    @change="(val) => $emit('update:is-add-new-user-sidebar-active', val)"
+    @change="(val) => $emit('update:is-add-new-turf-sidebar-active', val)"
   >
     <template #default="{ hide }">
       <!-- Header -->
       <div class="d-flex justify-content-between align-items-center content-sidebar-header px-2 py-1">
         <h5 class="mb-0">
-          Add New User
+          Add New Turf
         </h5>
 
         <feather-icon
@@ -35,27 +35,27 @@
         <!-- Form -->
         <b-form
           class="p-2"
-          @submit.prevent="handleSubmit(onSubmit)"
+          @submit.prevent="handleSubmit(submit)"
           @reset.prevent="resetForm"
         >
 
-          <!-- Full Name -->
+          <!-- Name -->
           <validation-provider
             #default="validationContext"
-            name="Full Name"
+            name="Name"
             rules="required"
           >
             <b-form-group
-              label="Full Name"
-              label-for="full-name"
+              label="Name"
+              label-for="name"
             >
               <b-form-input
-                id="full-name"
-                v-model="userInfo.displayName"
+                id="name"
+                v-model="name"
                 autofocus
                 :state="getValidationState(validationContext)"
                 trim
-                placeholder="John Doe"
+                placeholder="Turf Name"
               />
 
               <b-form-invalid-feedback>
@@ -64,171 +64,69 @@
             </b-form-group>
           </validation-provider>
 
-          <!-- Username -->
+          <!-- City -->
           <validation-provider
             #default="validationContext"
-            name="Username"
-            rules="required|alpha-num"
+            name="Location"
+            rules="required"
           >
             <b-form-group
-              label="Username"
-              label-for="username"
+              label="Location"
+              label-for="location"
             >
-              <b-form-input
-                id="username"
-                v-model="userInfo.username"
-                :state="getValidationState(validationContext)"
-                trim
-              />
+              <!--              <b-form-input-->
+              <!--                v-model="vm.searchPlace"-->
+              <!--                v-gmaps-searchbox="vm"-->
+              <!--                placeholder="Search For Business"-->
+              <!--                name="name"-->
+              <!--                autocomplete="off"-->
+              <!--              />-->
+              <!--              <b-form-input-->
+              <!--                id="location"-->
+              <!--                v-model="vm.location.name"-->
+              <!--                autofocus-->
+              <!--                :state="getValidationState(validationContext)"-->
+              <!--                trim-->
+              <!--                placeholder="Your location will display here on selection"-->
+              <!--                class="searchInput field"-->
+              <!--                name="name"-->
+              <!--                :disabled="true"-->
+              <!--              />-->
 
               <b-form-invalid-feedback>
                 {{ validationContext.errors[0] }}
               </b-form-invalid-feedback>
             </b-form-group>
           </validation-provider>
+          <b-form-group
+            label="Search Location"
+            label-for="search-location"
+          />
 
-          <!-- Email -->
-          <validation-provider
-            #default="validationContext"
-            name="Email"
-            rules="required|email"
-          >
-            <b-form-group
-              label="Email"
-              label-for="email"
-            >
-              <b-form-input
-                id="email"
-                v-model="userInfo.email"
-                :state="getValidationState(validationContext)"
-                trim
-              />
+          <!--          &lt;!&ndash; Pincode &ndash;&gt;-->
+          <!--          <validation-provider-->
+          <!--            #default="validationContext"-->
+          <!--            name="Pincode"-->
+          <!--            rules="required"-->
+          <!--          >-->
+          <!--            <b-form-group-->
+          <!--              label="Pincode"-->
+          <!--              label-for="pincode"-->
+          <!--            >-->
+          <!--              <b-form-input-->
+          <!--                id="pincode"-->
+          <!--                v-model="pincode"-->
+          <!--                autofocus-->
+          <!--                :state="getValidationState(validationContext)"-->
+          <!--                trim-->
+          <!--                placeholder="560001"-->
+          <!--              />-->
 
-              <b-form-invalid-feedback>
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- Company -->
-          <validation-provider
-            #default="validationContext"
-            name="Contact"
-            rules="required"
-          >
-            <b-form-group
-              label="Contact"
-              label-for="contact"
-            >
-              <b-form-input
-                id="contact"
-                v-model="userInfo.contact"
-                :state="getValidationState(validationContext)"
-                trim
-              />
-
-              <b-form-invalid-feedback>
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- Company -->
-          <validation-provider
-            #default="validationContext"
-            name="Company"
-            rules="required"
-          >
-            <b-form-group
-              label="Company"
-              label-for="company"
-            >
-              <b-form-input
-                id="company"
-                v-model="userInfo.company"
-                :state="getValidationState(validationContext)"
-                trim
-              />
-
-              <b-form-invalid-feedback>
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- Country -->
-          <validation-provider
-            #default="validationContext"
-            name="Country"
-            rules="required"
-          >
-            <b-form-group
-              label="Country"
-              label-for="country"
-              :state="getValidationState(validationContext)"
-            >
-              <v-select
-                v-model="userInfo.country"
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="countries"
-                :clearable="false"
-                input-id="country"
-              />
-              <b-form-invalid-feedback :state="getValidationState(validationContext)">
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- User Role -->
-          <validation-provider
-            #default="validationContext"
-            name="User Role"
-            rules="required"
-          >
-            <b-form-group
-              label="User Role"
-              label-for="user-role"
-              :state="getValidationState(validationContext)"
-            >
-              <v-select
-                v-model="userInfo.role"
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="roleOptions"
-                :reduce="val => val.value"
-                :clearable="false"
-                input-id="user-role"
-              />
-              <b-form-invalid-feedback :state="getValidationState(validationContext)">
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- Plan -->
-          <validation-provider
-            #default="validationContext"
-            name="Plan"
-            rules="required"
-          >
-            <b-form-group
-              label="Plan"
-              label-for="plan"
-              :state="getValidationState(validationContext)"
-            >
-              <v-select
-                v-model="userInfo.currentPlan"
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="planOptions"
-                :reduce="val => val.value"
-                :clearable="false"
-                input-id="plan"
-              />
-              <b-form-invalid-feedback :state="getValidationState(validationContext)">
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
+          <!--              <b-form-invalid-feedback>-->
+          <!--                {{ validationContext.errors[0] }}-->
+          <!--              </b-form-invalid-feedback>-->
+          <!--            </b-form-group>-->
+          <!--          </validation-provider>-->
 
           <!-- Form Actions -->
           <div class="d-flex mt-2">
@@ -265,9 +163,9 @@ import { ref } from '@vue/composition-api'
 import { required, alphaNum, email } from '@validations'
 import formValidation from '@core/comp-functions/forms/form-validation'
 import Ripple from 'vue-ripple-directive'
-import vSelect from 'vue-select'
 import countries from '@/@fake-db/data/other/countries'
-import store from '@/store'
+import gql from 'graphql-tag'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default {
   components: {
@@ -277,7 +175,6 @@ export default {
     BFormInput,
     BFormInvalidFeedback,
     BButton,
-    vSelect,
 
     // Form Validation
     ValidationProvider,
@@ -288,7 +185,7 @@ export default {
   },
   model: {
     prop: 'isAddNewUserSidebarActive',
-    event: 'update:is-add-new-user-sidebar-active',
+    event: 'update:is-add-new-turf-sidebar-active',
   },
   props: {
     isAddNewUserSidebarActive: {
@@ -306,13 +203,147 @@ export default {
   },
   data() {
     return {
+      currentPlace: null,
+      locationSelected: false,
+      vm: {
+        searchPlace: '',
+        location: {},
+      },
       required,
       alphaNum,
       email,
       countries,
+      name: '',
+      pincode: '',
+      city: '',
     }
   },
-  setup(props, { emit }) {
+  beforeDestroy() {
+    this.$emit('destroy-done')
+  },
+  methods: {
+    reset() {
+      this.name = ''
+      this.pincode = ''
+      this.city = ''
+    },
+    async submit() {
+      await this.$apollo.mutate({
+        mutation: gql`mutation test($name: String!, $pincode: Int!, $city: String!) {
+          insert_turf_one(object: { name: $name, pincode: $pincode, city: $city }) {
+            id
+            name
+            pincode
+            city
+            ratings_aggregate {
+              aggregate {
+                avg {
+                  ratings
+                }
+              }
+            }
+            facilities_aggregate {
+              aggregate {
+                count
+              }
+            }
+            status
+          }
+        }`,
+        variables: {
+          name: this.name,
+          pincode: this.pincode,
+          city: this.city,
+        },
+        update: async (cache, { data: { insert_turf_one } }) => {
+          // Read the data from our cache for this query.
+          try {
+            const data = await cache.readQuery({
+              query: gql`query {
+                      turf {
+                        id
+                        name
+                        pincode
+                        city
+                        ratings_aggregate {
+                          aggregate {
+                            avg {
+                              ratings
+                            }
+                          }
+                        }
+                        facilities_aggregate {
+                          aggregate {
+                            count
+                          }
+                        }
+                        status
+                      }
+                    }`,
+            })
+            data.turf.splice(0, 0, insert_turf_one)
+            await cache.writeQuery({
+              query: gql`query {
+                      turf {
+                        id
+                        name
+                        pincode
+                        city
+                        ratings_aggregate {
+                          aggregate {
+                            avg {
+                              ratings
+                            }
+                          }
+                        }
+                        facilities_aggregate {
+                          aggregate {
+                            count
+                          }
+                        }
+                        status
+                      }
+                    }`,
+              data,
+            })
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Success',
+                icon: 'CheckIcon',
+                text: 'Added turf successfully!',
+                variant: 'success',
+              },
+            })
+            this.$emit('refetch-data', true)
+          } catch (e) {
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Error adding turf',
+                icon: 'XCircleIcon',
+                text: e.message,
+                variant: 'danger',
+              },
+            })
+          }
+        },
+      }).catch(e => {
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Error adding turf',
+            icon: 'XCircleIcon',
+            text: e,
+            variant: 'danger',
+          },
+        })
+      })
+      this.reset()
+      this.isAddNewUserSidebarActive = false
+    },
+  },
+  setup() {
     const blankUserData = {
       fullName: '',
       username: '',
@@ -329,13 +360,13 @@ export default {
       userInfo.value = JSON.parse(JSON.stringify(blankUserData))
     }
 
-    const onSubmit = () => {
-      store.dispatch('app-user/addUser', userInfo.value)
-        .then(() => {
-          emit('refetch-data')
-          emit('update:is-add-new-user-sidebar-active', false)
-        })
-    }
+    // const onSubmit = () => {
+    //   store.dispatch('app-turf/addUser', userInfo.value)
+    //     .then(() => {
+    //       emit('refetch-data')
+    //       emit('update:is-add-new-turf-sidebar-active', false)
+    //     })
+    // }
 
     const {
       refFormObserver,
@@ -345,7 +376,7 @@ export default {
 
     return {
       userInfo,
-      onSubmit,
+      // onSubmit,
 
       refFormObserver,
       getValidationState,
@@ -358,7 +389,7 @@ export default {
 <style lang="scss">
 @import '@core/scss/vue/libs/vue-select.scss';
 
-#add-new-user-sidebar {
+#add-new-turf-sidebar {
   .vs__dropdown-menu {
     max-height: 200px !important;
   }

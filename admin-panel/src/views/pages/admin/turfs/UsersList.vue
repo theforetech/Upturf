@@ -7,17 +7,18 @@
       :role-options="roleOptions"
       :plan-options="planOptions"
       @refetch-data="refetchData"
+      @destroy-done="updateFn"
     />
 
-    <!-- Filters -->
-    <users-list-filters
-      :role-filter.sync="roleFilter"
-      :plan-filter.sync="planFilter"
-      :status-filter.sync="statusFilter"
-      :role-options="roleOptions"
-      :plan-options="planOptions"
-      :status-options="statusOptions"
-    />
+    <!--    &lt;!&ndash; Filters &ndash;&gt;-->
+    <!--    <users-list-filters-->
+    <!--      :role-filter.sync="roleFilter"-->
+    <!--      :plan-filter.sync="planFilter"-->
+    <!--      :status-filter.sync="statusFilter"-->
+    <!--      :role-options="roleOptions"-->
+    <!--      :plan-options="planOptions"-->
+    <!--      :status-options="statusOptions"-->
+    <!--    />-->
 
     <!-- Table Container Card -->
     <b-card
@@ -35,17 +36,7 @@
             cols="12"
             md="6"
             class="d-flex align-items-center justify-content-start mb-1 mb-md-0"
-          >
-            <label>Show</label>
-            <v-select
-              v-model="perPage"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="perPageOptions"
-              :clearable="false"
-              class="per-page-selector d-inline-block mx-50"
-            />
-            <label>entries</label>
-          </b-col>
+          />
 
           <!-- Search -->
           <b-col
@@ -62,7 +53,7 @@
                 variant="primary"
                 @click="isAddNewUserSidebarActive = true"
               >
-                <span class="text-nowrap">Add User</span>
+                <span class="text-nowrap">Add Turf</span>
               </b-button>
             </div>
           </b-col>
@@ -73,7 +64,9 @@
       <b-table
         ref="refUserListTable"
         class="position-relative"
-        :items="fetchUsers"
+        style="min-height: 200px!important;"
+        :items="turfs"
+        striped
         responsive
         :fields="tableColumns"
         primary-key="id"
@@ -82,39 +75,50 @@
         empty-text="No matching records found"
         :sort-desc.sync="isSortDirDesc"
       >
-
-        <!-- Column: User -->
-        <template #cell(user)="data">
-          <b-media vertical-align="center">
-            <template #aside>
-              <b-avatar
-                size="32"
-                :src="data.item.avatar"
-                :text="avatarText(data.item.fullName)"
-                :variant="`light-${resolveUserRoleVariant(data.item.role)}`"
-                :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
-              />
-            </template>
-            <b-link
-              :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
-              class="font-weight-bold d-block text-nowrap"
-            >
-              {{ data.item.fullName }}
-            </b-link>
-            <small class="text-muted">@{{ data.item.username }}</small>
-          </b-media>
-        </template>
-
-        <!-- Column: Role -->
-        <template #cell(role)="data">
+        <!-- Column: ID -->
+        <template #cell(id)="data">
           <div class="text-nowrap">
-            <feather-icon
-              :icon="resolveUserRoleIcon(data.item.role)"
-              size="18"
-              class="mr-50"
-              :class="`text-${resolveUserRoleVariant(data.item.role)}`"
-            />
-            <span class="align-text-top text-capitalize">{{ data.item.role }}</span>
+            <span class="align-text-top text-capitalize">{{ data.item.id }}</span>
+          </div>
+        </template>
+        <!-- Column: Name -->
+        <template #cell(name)="data">
+          <div class="text-nowrap">
+            <span class="align-text-top text-capitalize">{{ data.item.name }}</span>
+          </div>
+        </template>
+        <!-- Column: Pincode -->
+        <template #cell(pincode)="data">
+          <div class="text-nowrap">
+            <span class="align-text-top text-capitalize">{{ data.item.pincode }}</span>
+          </div>
+        </template>
+        <!-- Column: City -->
+        <template #cell(city)="data">
+          <div class="text-nowrap">
+            <span class="align-text-top text-capitalize">{{ data.item.city }}</span>
+          </div>
+        </template>
+        <!-- Column: numFacilities -->
+        <template #cell(numFacilities)="data">
+          <div class="text-nowrap">
+            <span class="align-text-top text-capitalize">{{ data.item.numFacilities }}</span>
+          </div>
+        </template>
+        <!-- Column: rating -->
+        <template #cell(rating)="data">
+          <div class="text-nowrap">
+            <b-badge
+              v-if="data.item.rating !== null"
+              variant="success"
+              class="badge"
+            >
+              <span>{{ data.item.rating }}</span>
+              <feather-icon
+                icon="StarIcon"
+                class="star-icon"
+              />
+            </b-badge>
           </div>
         </template>
 
@@ -125,7 +129,7 @@
             :variant="`light-${resolveUserStatusVariant(data.item.status)}`"
             class="text-capitalize"
           >
-            {{ data.item.status }}
+            {{ data.item.status ? 'Enabled' : 'Disabled' }}
           </b-badge>
         </template>
 
@@ -144,107 +148,185 @@
                 class="align-middle text-body"
               />
             </template>
-            <b-dropdown-item :to="{ name: 'apps-users-view', params: { id: data.item.id } }">
+            <b-dropdown-item :to="{ name: 'admin-turf', params: { id: data.item.id } }">
               <feather-icon icon="FileTextIcon" />
               <span class="align-middle ml-50">Details</span>
             </b-dropdown-item>
 
-            <b-dropdown-item :to="{ name: 'apps-users-edit', params: { id: data.item.id } }">
+            <b-dropdown-item :to="{ name: 'admin-turf-edit', params: { id: data.item.id } }">
               <feather-icon icon="EditIcon" />
               <span class="align-middle ml-50">Edit</span>
             </b-dropdown-item>
 
-            <b-dropdown-item>
+            <b-dropdown-item @click="statusTurf(data.item)">
               <feather-icon icon="TrashIcon" />
-              <span class="align-middle ml-50">Delete</span>
+              <span class="align-middle ml-50">{{ data.item.status ? 'Disable' : 'Enable' }}</span>
             </b-dropdown-item>
           </b-dropdown>
         </template>
 
       </b-table>
-      <div class="mx-2 mb-2">
-        <b-row>
-
-          <b-col
-            cols="12"
-            sm="6"
-            class="d-flex align-items-center justify-content-center justify-content-sm-start"
-          >
-            <span class="text-muted">Showing {{ dataMeta.from }} to {{ dataMeta.to }} of {{ dataMeta.of }} entries</span>
-          </b-col>
-          <!-- Pagination -->
-          <b-col
-            cols="12"
-            sm="6"
-            class="d-flex align-items-center justify-content-center justify-content-sm-end"
-          >
-
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="totalUsers"
-              :per-page="perPage"
-              first-number
-              last-number
-              class="mb-0 mt-1 mt-sm-0"
-              prev-class="prev-item"
-              next-class="next-item"
-            >
-              <template #prev-text>
-                <feather-icon
-                  icon="ChevronLeftIcon"
-                  size="18"
-                />
-              </template>
-              <template #next-text>
-                <feather-icon
-                  icon="ChevronRightIcon"
-                  size="18"
-                />
-              </template>
-            </b-pagination>
-
-          </b-col>
-
-        </b-row>
-      </div>
     </b-card>
   </div>
 </template>
 
 <script>
 import {
-  BCard, BRow, BCol, BFormInput, BButton, BTable, BMedia, BAvatar, BLink,
-  BBadge, BDropdown, BDropdownItem, BPagination,
+  BCard, BRow, BCol, BFormInput, BButton, BTable,
+  BBadge, BDropdown, BDropdownItem,
 } from 'bootstrap-vue'
-import vSelect from 'vue-select'
 import store from '@/store'
 import { ref, onUnmounted } from '@vue/composition-api'
 import { avatarText } from '@core/utils/filter'
-import UsersListFilters from './UsersListFilters.vue'
+// import UsersListFilters from './UsersListFilters.vue'
+import gql from 'graphql-tag'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import useUsersList from './useUsersList'
 import userStoreModule from '../userStoreModule'
 import UserListAddNew from './UserListAddNew.vue'
 
 export default {
   components: {
-    UsersListFilters,
     UserListAddNew,
-
     BCard,
     BRow,
     BCol,
     BFormInput,
     BButton,
     BTable,
-    BMedia,
-    BAvatar,
-    BLink,
     BBadge,
     BDropdown,
     BDropdownItem,
-    BPagination,
-
-    vSelect,
+  },
+  data() {
+    return {
+      isAddNewUserSidebarActive: false,
+      tableColumns: [
+        { key: 'ID', sortable: true },
+        { key: 'name', sortable: true },
+        { key: 'pincode', sortable: true },
+        { key: 'city', sortable: true },
+        { key: 'numFacilities', sortable: true },
+        { key: 'rating', sortable: true },
+        { key: 'status', sortable: true },
+        { key: 'actions' },
+      ],
+      sortBy: 'id',
+      isSortDirDesc: false,
+      turfs: [],
+    }
+  },
+  mounted() {
+    this.getTurfs()
+  },
+  methods: {
+    async statusTurf(turf) {
+      const vm = this
+      const query = gql`mutation test($id: bigint!, $status: Boolean) {
+          update_turf_by_pk(pk_columns: {id: $id}, _set: {status: $status, toApprove: 0}) {
+            id
+          }
+        }`
+      const vars = {
+        id: turf.id,
+        status: !turf.status,
+      }
+      await this.$swal({
+        title: 'Are you sure?',
+        text: 'You can revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: `Yes, ${turf.status ? 'Disable' : 'Enable'} it!'`,
+        customClass: {
+          confirmButton: 'btn btn-primary',
+          cancelButton: 'btn btn-outline-danger ml-1',
+        },
+        buttonsStyling: false,
+      }).then(async result => {
+        if (result.value) {
+          await vm.$apollo.mutate({
+            mutation: query,
+            variables: vars,
+            update: async () => {
+              // Read the data from our cache for this query.
+              try {
+                await vm.getTurfs()
+              } catch (e) {
+                vm.$toast({
+                  component: ToastificationContent,
+                  props: {
+                    title: 'Error updating turf',
+                    icon: 'XCircleIcon',
+                    text: e,
+                    variant: 'danger',
+                  },
+                })
+              }
+            },
+          })
+          vm.$toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Success',
+              icon: 'CheckIcon',
+              text: 'Updated turf successfully!',
+              variant: 'success',
+            },
+          })
+        }
+      })
+    },
+    updateFn() {
+      this.isAddNewUserSidebarActive = false
+    },
+    resolveUserStatusVariant(status) {
+      if (status === false) return 'warning'
+      if (status === true) return 'success'
+      return 'primary'
+    },
+    refetchData() {
+      const vm = this
+      setTimeout(() => {
+        vm.getTurfs().then(() => {
+          vm.updateFn()
+        })
+      }, 1500)
+    },
+    async getTurfs() {
+      const result = await this.$apollo.query({
+        query: gql`query {
+          turf {
+            id
+            name
+            pincode
+            city
+            ratings_aggregate {
+              aggregate {
+                avg {
+                  ratings
+                }
+              }
+            }
+            facilities_aggregate {
+              aggregate {
+                count
+              }
+            }
+            status
+          }
+        }`,
+        fetchPolicy: 'no-cache',
+      })
+      this.turfs = result.data.turf.map(turf => ({
+        id: turf.id,
+        name: turf.name,
+        pincode: turf.pincode,
+        city: turf.city,
+        status: turf.status,
+        rating: turf.ratings_aggregate.aggregate.avg.ratings,
+        numFacilities: turf.facilities_aggregate.aggregate.count || 0,
+      }))
+    },
   },
   setup() {
     const USER_APP_STORE_MODULE_NAME = 'app-user'
@@ -282,22 +364,17 @@ export default {
 
     const {
       fetchUsers,
-      tableColumns,
       perPage,
       currentPage,
       totalUsers,
       dataMeta,
       perPageOptions,
       searchQuery,
-      sortBy,
-      isSortDirDesc,
       refUserListTable,
-      refetchData,
 
       // UI
       resolveUserRoleVariant,
       resolveUserRoleIcon,
-      resolveUserStatusVariant,
 
       // Extra Filters
       roleFilter,
@@ -311,17 +388,13 @@ export default {
       isAddNewUserSidebarActive,
 
       fetchUsers,
-      tableColumns,
       perPage,
       currentPage,
       totalUsers,
       dataMeta,
       perPageOptions,
       searchQuery,
-      sortBy,
-      isSortDirDesc,
       refUserListTable,
-      refetchData,
 
       // Filter
       avatarText,
@@ -329,7 +402,6 @@ export default {
       // UI
       resolveUserRoleVariant,
       resolveUserRoleIcon,
-      resolveUserStatusVariant,
 
       roleOptions,
       planOptions,

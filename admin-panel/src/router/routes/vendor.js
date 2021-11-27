@@ -4,10 +4,9 @@ export default [
     name: 'dashboard-vendor',
     component: () => import('@/views/dashboard/ecommerce/Ecommerce.vue'),
     meta: {
-      layout: 'full',
       resource: 'Vendor',
       action: 'read',
-      pageTitle: 'Create Profile',
+      pageTitle: 'Your Dashboard',
       breadcrumb: [
         {
           text: 'Vendor Panel',
@@ -76,7 +75,7 @@ export default [
   {
     path: '/vendor/turfs/:id',
     name: 'vendor-turf',
-    component: () => import('@/views/pages/vendor/turfs/UsersView.vue'),
+    component: () => import('@/views/pages/vendor/turfs/TurfPage'),
     props: ({ params }) => ({ id: Number.parseInt(params.id, 10) || 0 }),
     meta: {
       resource: 'Vendor',

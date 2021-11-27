@@ -66,6 +66,10 @@ export const useAuth0 = ({
       } finally {
         this.isAuthenticated = await this.auth0Client.isAuthenticated()
         this.user = await this.auth0Client.getUser()
+        this.user = {
+          ...this.user,
+          role: this.user['https://hasura.io/jwt/claims']['x-hasura-default-role'],
+        }
         if (this.user) {
           this.ability = new Ability(this.user['https://upturf.in/rules'])
           await store.commit('user/UPDATE_USER_INFO', {
@@ -116,6 +120,10 @@ export const useAuth0 = ({
         try {
           await this.auth0Client.loginWithPopup(options, config)
           this.user = await this.auth0Client.getUser()
+          this.user = {
+            ...this.user,
+            role: this.user['https://hasura.io/jwt/claims']['x-hasura-default-role'],
+          }
           this.isAuthenticated = await this.auth0Client.isAuthenticated()
           this.error = null
         } catch (e) {
@@ -131,6 +139,10 @@ export const useAuth0 = ({
         try {
           await this.auth0Client.handleRedirectCallback()
           this.user = await this.auth0Client.getUser()
+          this.user = {
+            ...this.user,
+            role: this.user['https://hasura.io/jwt/claims']['x-hasura-default-role'],
+          }
           this.isAuthenticated = true
           this.error = null
         } catch (e) {
@@ -138,6 +150,10 @@ export const useAuth0 = ({
         } finally {
           this.isAuthenticated = await this.auth0Client.isAuthenticated()
           this.user = await this.auth0Client.getUser()
+          this.user = {
+            ...this.user,
+            role: this.user['https://hasura.io/jwt/claims']['x-hasura-default-role'],
+          }
           if (this.user) {
             this.ability = new Ability(this.user['https://upturf.in/rules'])
             await store.commit('user/UPDATE_USER_INFO', {

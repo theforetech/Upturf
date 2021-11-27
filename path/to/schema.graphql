@@ -7,11 +7,126 @@ schema {
 }
 
 type FileOutput {
+    amenity_id: Int
     id: Int
     sport_id: Int
     turf_id: bigint
     url: String!
     user_id: String
+}
+
+"columns and relationships of \"amenities\""
+type amenities {
+    disabled: Boolean!
+    id: Int!
+    "An array relationship"
+    images(
+        "distinct select on columns"
+        distinct_on: [images_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [images_order_by!],
+        "filter the rows returned"
+        where: images_bool_exp
+    ): [images!]!
+    "An aggregate relationship"
+    images_aggregate(
+        "distinct select on columns"
+        distinct_on: [images_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [images_order_by!],
+        "filter the rows returned"
+        where: images_bool_exp
+    ): images_aggregate!
+    name: String!
+}
+
+"aggregated selection of \"amenities\""
+type amenities_aggregate {
+    aggregate: amenities_aggregate_fields
+    nodes: [amenities!]!
+}
+
+"aggregate fields of \"amenities\""
+type amenities_aggregate_fields {
+    avg: amenities_avg_fields
+    count(columns: [amenities_select_column!], distinct: Boolean): Int!
+    max: amenities_max_fields
+    min: amenities_min_fields
+    stddev: amenities_stddev_fields
+    stddev_pop: amenities_stddev_pop_fields
+    stddev_samp: amenities_stddev_samp_fields
+    sum: amenities_sum_fields
+    var_pop: amenities_var_pop_fields
+    var_samp: amenities_var_samp_fields
+    variance: amenities_variance_fields
+}
+
+"aggregate avg on columns"
+type amenities_avg_fields {
+    id: Float
+}
+
+"aggregate max on columns"
+type amenities_max_fields {
+    id: Int
+    name: String
+}
+
+"aggregate min on columns"
+type amenities_min_fields {
+    id: Int
+    name: String
+}
+
+"response of any mutation on the table \"amenities\""
+type amenities_mutation_response {
+    "number of rows affected by the mutation"
+    affected_rows: Int!
+    "data from the rows affected by the mutation"
+    returning: [amenities!]!
+}
+
+"aggregate stddev on columns"
+type amenities_stddev_fields {
+    id: Float
+}
+
+"aggregate stddev_pop on columns"
+type amenities_stddev_pop_fields {
+    id: Float
+}
+
+"aggregate stddev_samp on columns"
+type amenities_stddev_samp_fields {
+    id: Float
+}
+
+"aggregate sum on columns"
+type amenities_sum_fields {
+    id: Int
+}
+
+"aggregate var_pop on columns"
+type amenities_var_pop_fields {
+    id: Float
+}
+
+"aggregate var_samp on columns"
+type amenities_var_samp_fields {
+    id: Float
+}
+
+"aggregate variance on columns"
+type amenities_variance_fields {
+    id: Float
 }
 
 type bookOutput {
@@ -583,6 +698,9 @@ type facilities_variance_fields {
 
 "columns and relationships of \"images\""
 type images {
+    "An object relationship"
+    amenity: amenities
+    amenity_id: Int
     id: bigint!
     "An object relationship"
     sport: sport
@@ -619,6 +737,7 @@ type images_aggregate_fields {
 
 "aggregate avg on columns"
 type images_avg_fields {
+    amenity_id: Float
     id: Float
     sport_id: Float
     turf_id: Float
@@ -626,6 +745,7 @@ type images_avg_fields {
 
 "aggregate max on columns"
 type images_max_fields {
+    amenity_id: Int
     id: bigint
     sport_id: Int
     turf_id: bigint
@@ -635,6 +755,7 @@ type images_max_fields {
 
 "aggregate min on columns"
 type images_min_fields {
+    amenity_id: Int
     id: bigint
     sport_id: Int
     turf_id: bigint
@@ -652,6 +773,7 @@ type images_mutation_response {
 
 "aggregate stddev on columns"
 type images_stddev_fields {
+    amenity_id: Float
     id: Float
     sport_id: Float
     turf_id: Float
@@ -659,6 +781,7 @@ type images_stddev_fields {
 
 "aggregate stddev_pop on columns"
 type images_stddev_pop_fields {
+    amenity_id: Float
     id: Float
     sport_id: Float
     turf_id: Float
@@ -666,6 +789,7 @@ type images_stddev_pop_fields {
 
 "aggregate stddev_samp on columns"
 type images_stddev_samp_fields {
+    amenity_id: Float
     id: Float
     sport_id: Float
     turf_id: Float
@@ -673,6 +797,7 @@ type images_stddev_samp_fields {
 
 "aggregate sum on columns"
 type images_sum_fields {
+    amenity_id: Int
     id: bigint
     sport_id: Int
     turf_id: bigint
@@ -680,6 +805,7 @@ type images_sum_fields {
 
 "aggregate var_pop on columns"
 type images_var_pop_fields {
+    amenity_id: Float
     id: Float
     sport_id: Float
     turf_id: Float
@@ -687,6 +813,7 @@ type images_var_pop_fields {
 
 "aggregate var_samp on columns"
 type images_var_samp_fields {
+    amenity_id: Float
     id: Float
     sport_id: Float
     turf_id: Float
@@ -694,6 +821,7 @@ type images_var_samp_fields {
 
 "aggregate variance on columns"
 type images_variance_fields {
+    amenity_id: Float
     id: Float
     sport_id: Float
     turf_id: Float
@@ -703,6 +831,13 @@ type images_variance_fields {
 type mutation_root {
     book(contactName: String, contactPhone: String, date: date, facility: Int, slots: [bigint]): bookOutput
     cancel(bookingID: uuid!): cancelOutput
+    "delete data from the table: \"amenities\""
+    delete_amenities(
+        "filter the rows which have to be deleted"
+        where: amenities_bool_exp!
+    ): amenities_mutation_response
+    "delete single row from the table: \"amenities\""
+    delete_amenities_by_pk(id: Int!): amenities
     "delete data from the table: \"booked_slots\""
     delete_booked_slots(
         "filter the rows which have to be deleted"
@@ -801,6 +936,20 @@ type mutation_root {
     ): wishlist_mutation_response
     "delete single row from the table: \"wishlist\""
     delete_wishlist_by_pk(turf_id: bigint!, user_id: String!): wishlist
+    "insert data into the table: \"amenities\""
+    insert_amenities(
+        "the rows to be inserted"
+        objects: [amenities_insert_input!]!,
+        "on conflict condition"
+        on_conflict: amenities_on_conflict
+    ): amenities_mutation_response
+    "insert a single row into the table: \"amenities\""
+    insert_amenities_one(
+        "the row to be inserted"
+        object: amenities_insert_input!,
+        "on conflict condition"
+        on_conflict: amenities_on_conflict
+    ): amenities
     "insert data into the table: \"booked_slots\""
     insert_booked_slots(
         "the rows to be inserted"
@@ -997,6 +1146,23 @@ type mutation_root {
         "on conflict condition"
         on_conflict: wishlist_on_conflict
     ): wishlist
+    "update data of the table: \"amenities\""
+    update_amenities(
+        "increments the numeric columns with given value of the filtered values"
+        _inc: amenities_inc_input,
+        "sets the columns of the filtered rows to the given values"
+        _set: amenities_set_input,
+        "filter the rows which have to be updated"
+        where: amenities_bool_exp!
+    ): amenities_mutation_response
+    "update single row of the table: \"amenities\""
+    update_amenities_by_pk(
+        "increments the numeric columns with given value of the filtered values"
+        _inc: amenities_inc_input,
+        "sets the columns of the filtered rows to the given values"
+        _set: amenities_set_input,
+        pk_columns: amenities_pk_columns_input!
+    ): amenities
     "update data of the table: \"booked_slots\""
     update_booked_slots(
         "increments the numeric columns with given value of the filtered values"
@@ -1223,7 +1389,7 @@ type mutation_root {
         _set: wishlist_set_input,
         pk_columns: wishlist_pk_columns_input!
     ): wishlist
-    uploadFile(base64str: String!, name: String!, sportID: Int, turfID: bigint, type: String!, userID: String): FileOutput
+    uploadFile(amenityID: Int, base64str: String!, name: String!, sportID: Int, turfID: bigint, type: String!, userID: String): FileOutput
 }
 
 "columns and relationships of \"payment_status_enum\""
@@ -1440,6 +1606,34 @@ type payments_variance_fields {
 }
 
 type query_root {
+    "fetch data from the table: \"amenities\""
+    amenities(
+        "distinct select on columns"
+        distinct_on: [amenities_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [amenities_order_by!],
+        "filter the rows returned"
+        where: amenities_bool_exp
+    ): [amenities!]!
+    "fetch aggregated fields from the table: \"amenities\""
+    amenities_aggregate(
+        "distinct select on columns"
+        distinct_on: [amenities_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [amenities_order_by!],
+        "filter the rows returned"
+        where: amenities_bool_exp
+    ): amenities_aggregate!
+    "fetch data from the table: \"amenities\" using primary key columns"
+    amenities_by_pk(id: Int!): amenities
     "An array relationship"
     booked_slots(
         "distinct select on columns"
@@ -2277,6 +2471,34 @@ type sport_variance_fields {
 }
 
 type subscription_root {
+    "fetch data from the table: \"amenities\""
+    amenities(
+        "distinct select on columns"
+        distinct_on: [amenities_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [amenities_order_by!],
+        "filter the rows returned"
+        where: amenities_bool_exp
+    ): [amenities!]!
+    "fetch aggregated fields from the table: \"amenities\""
+    amenities_aggregate(
+        "distinct select on columns"
+        distinct_on: [amenities_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [amenities_order_by!],
+        "filter the rows returned"
+        where: amenities_bool_exp
+    ): amenities_aggregate!
+    "fetch data from the table: \"amenities\" using primary key columns"
+    amenities_by_pk(id: Int!): amenities
     "An array relationship"
     booked_slots(
         "distinct select on columns"
@@ -2736,6 +2958,7 @@ type turf {
     about: String
     address: String
     city: String!
+    comments: String
     contactEmail: String
     contactName: String
     contactPhone: bigint
@@ -2832,6 +3055,7 @@ type turf {
     ): rating_aggregate!
     state: String
     status: Boolean!
+    toApprove: Int!
     twitter: String
     updated_at: timestamptz
     vendor_id: String!
@@ -2893,6 +3117,7 @@ type turf_avg_fields {
     lat: Float
     lon: Float
     pincode: Float
+    toApprove: Float
 }
 
 "aggregate max on columns"
@@ -2900,6 +3125,7 @@ type turf_max_fields {
     about: String
     address: String
     city: String
+    comments: String
     contactEmail: String
     contactName: String
     contactPhone: bigint
@@ -2915,6 +3141,7 @@ type turf_max_fields {
     name: String
     pincode: Int
     state: String
+    toApprove: Int
     twitter: String
     updated_at: timestamptz
     vendor_id: String
@@ -2925,6 +3152,7 @@ type turf_min_fields {
     about: String
     address: String
     city: String
+    comments: String
     contactEmail: String
     contactName: String
     contactPhone: bigint
@@ -2940,6 +3168,7 @@ type turf_min_fields {
     name: String
     pincode: Int
     state: String
+    toApprove: Int
     twitter: String
     updated_at: timestamptz
     vendor_id: String
@@ -2960,6 +3189,7 @@ type turf_stddev_fields {
     lat: Float
     lon: Float
     pincode: Float
+    toApprove: Float
 }
 
 "aggregate stddev_pop on columns"
@@ -2969,6 +3199,7 @@ type turf_stddev_pop_fields {
     lat: Float
     lon: Float
     pincode: Float
+    toApprove: Float
 }
 
 "aggregate stddev_samp on columns"
@@ -2978,6 +3209,7 @@ type turf_stddev_samp_fields {
     lat: Float
     lon: Float
     pincode: Float
+    toApprove: Float
 }
 
 "aggregate sum on columns"
@@ -2987,6 +3219,7 @@ type turf_sum_fields {
     lat: float8
     lon: float8
     pincode: Int
+    toApprove: Int
 }
 
 "aggregate var_pop on columns"
@@ -2996,6 +3229,7 @@ type turf_var_pop_fields {
     lat: Float
     lon: Float
     pincode: Float
+    toApprove: Float
 }
 
 "aggregate var_samp on columns"
@@ -3005,6 +3239,7 @@ type turf_var_samp_fields {
     lat: Float
     lon: Float
     pincode: Float
+    toApprove: Float
 }
 
 "aggregate variance on columns"
@@ -3014,6 +3249,7 @@ type turf_variance_fields {
     lat: Float
     lon: Float
     pincode: Float
+    toApprove: Float
 }
 
 "columns and relationships of \"user\""
@@ -3472,6 +3708,32 @@ type wishlist_variance_fields {
     turf_id: Float
 }
 
+"unique or primary key constraints on table \"amenities\""
+enum amenities_constraint {
+    "unique or primary key constraint"
+    amenities_pkey
+}
+
+"select columns of table \"amenities\""
+enum amenities_select_column {
+    "column name"
+    disabled
+    "column name"
+    id
+    "column name"
+    name
+}
+
+"update columns of table \"amenities\""
+enum amenities_update_column {
+    "column name"
+    disabled
+    "column name"
+    id
+    "column name"
+    name
+}
+
 "unique or primary key constraints on table \"booked_slots\""
 enum booked_slots_constraint {
     "unique or primary key constraint"
@@ -3659,6 +3921,8 @@ enum images_constraint {
 "select columns of table \"images\""
 enum images_select_column {
     "column name"
+    amenity_id
+    "column name"
     id
     "column name"
     sport_id
@@ -3672,6 +3936,8 @@ enum images_select_column {
 
 "update columns of table \"images\""
 enum images_update_column {
+    "column name"
+    amenity_id
     "column name"
     id
     "column name"
@@ -3904,6 +4170,8 @@ enum turf_select_column {
     "column name"
     city
     "column name"
+    comments
+    "column name"
     contactEmail
     "column name"
     contactName
@@ -3935,6 +4203,8 @@ enum turf_select_column {
     state
     "column name"
     status
+    "column name"
+    toApprove
     "column name"
     twitter
     "column name"
@@ -3952,6 +4222,8 @@ enum turf_update_column {
     "column name"
     city
     "column name"
+    comments
+    "column name"
     contactEmail
     "column name"
     contactName
@@ -3983,6 +4255,8 @@ enum turf_update_column {
     state
     "column name"
     status
+    "column name"
+    toApprove
     "column name"
     twitter
     "column name"
@@ -4216,6 +4490,64 @@ input String_comparison_exp {
     _regex: String
     "does the column match the given SQL regular expression"
     _similar: String
+}
+
+"Boolean expression to filter rows from the table \"amenities\". All fields are combined with a logical 'AND'."
+input amenities_bool_exp {
+    _and: [amenities_bool_exp!]
+    _not: amenities_bool_exp
+    _or: [amenities_bool_exp!]
+    disabled: Boolean_comparison_exp
+    id: Int_comparison_exp
+    images: images_bool_exp
+    name: String_comparison_exp
+}
+
+"input type for incrementing numeric columns in table \"amenities\""
+input amenities_inc_input {
+    id: Int
+}
+
+"input type for inserting data into table \"amenities\""
+input amenities_insert_input {
+    disabled: Boolean
+    id: Int
+    images: images_arr_rel_insert_input
+    name: String
+}
+
+"input type for inserting object relation for remote table \"amenities\""
+input amenities_obj_rel_insert_input {
+    data: amenities_insert_input!
+    "on conflict condition"
+    on_conflict: amenities_on_conflict
+}
+
+"on conflict condition type for table \"amenities\""
+input amenities_on_conflict {
+    constraint: amenities_constraint!
+    update_columns: [amenities_update_column!]! = []
+    where: amenities_bool_exp
+}
+
+"Ordering options when selecting data from \"amenities\"."
+input amenities_order_by {
+    disabled: order_by
+    id: order_by
+    images_aggregate: images_aggregate_order_by
+    name: order_by
+}
+
+"primary key columns input for table: amenities"
+input amenities_pk_columns_input {
+    id: Int!
+}
+
+"input type for updating data in table \"amenities\""
+input amenities_set_input {
+    disabled: Boolean
+    id: Int
+    name: String
 }
 
 "Boolean expression to compare columns of type \"bigint\". All fields are combined with logical 'AND'."
@@ -4961,6 +5293,7 @@ input images_arr_rel_insert_input {
 
 "order by avg() on columns of table \"images\""
 input images_avg_order_by {
+    amenity_id: order_by
     id: order_by
     sport_id: order_by
     turf_id: order_by
@@ -4971,6 +5304,8 @@ input images_bool_exp {
     _and: [images_bool_exp!]
     _not: images_bool_exp
     _or: [images_bool_exp!]
+    amenity: amenities_bool_exp
+    amenity_id: Int_comparison_exp
     id: bigint_comparison_exp
     sport: sport_bool_exp
     sport_id: Int_comparison_exp
@@ -4983,6 +5318,7 @@ input images_bool_exp {
 
 "input type for incrementing numeric columns in table \"images\""
 input images_inc_input {
+    amenity_id: Int
     id: bigint
     sport_id: Int
     turf_id: bigint
@@ -4990,6 +5326,8 @@ input images_inc_input {
 
 "input type for inserting data into table \"images\""
 input images_insert_input {
+    amenity: amenities_obj_rel_insert_input
+    amenity_id: Int
     id: bigint
     sport: sport_obj_rel_insert_input
     sport_id: Int
@@ -5002,6 +5340,7 @@ input images_insert_input {
 
 "order by max() on columns of table \"images\""
 input images_max_order_by {
+    amenity_id: order_by
     id: order_by
     sport_id: order_by
     turf_id: order_by
@@ -5011,6 +5350,7 @@ input images_max_order_by {
 
 "order by min() on columns of table \"images\""
 input images_min_order_by {
+    amenity_id: order_by
     id: order_by
     sport_id: order_by
     turf_id: order_by
@@ -5027,6 +5367,8 @@ input images_on_conflict {
 
 "Ordering options when selecting data from \"images\"."
 input images_order_by {
+    amenity: amenities_order_by
+    amenity_id: order_by
     id: order_by
     sport: sport_order_by
     sport_id: order_by
@@ -5044,6 +5386,7 @@ input images_pk_columns_input {
 
 "input type for updating data in table \"images\""
 input images_set_input {
+    amenity_id: Int
     id: bigint
     sport_id: Int
     turf_id: bigint
@@ -5053,6 +5396,7 @@ input images_set_input {
 
 "order by stddev() on columns of table \"images\""
 input images_stddev_order_by {
+    amenity_id: order_by
     id: order_by
     sport_id: order_by
     turf_id: order_by
@@ -5060,6 +5404,7 @@ input images_stddev_order_by {
 
 "order by stddev_pop() on columns of table \"images\""
 input images_stddev_pop_order_by {
+    amenity_id: order_by
     id: order_by
     sport_id: order_by
     turf_id: order_by
@@ -5067,6 +5412,7 @@ input images_stddev_pop_order_by {
 
 "order by stddev_samp() on columns of table \"images\""
 input images_stddev_samp_order_by {
+    amenity_id: order_by
     id: order_by
     sport_id: order_by
     turf_id: order_by
@@ -5074,6 +5420,7 @@ input images_stddev_samp_order_by {
 
 "order by sum() on columns of table \"images\""
 input images_sum_order_by {
+    amenity_id: order_by
     id: order_by
     sport_id: order_by
     turf_id: order_by
@@ -5081,6 +5428,7 @@ input images_sum_order_by {
 
 "order by var_pop() on columns of table \"images\""
 input images_var_pop_order_by {
+    amenity_id: order_by
     id: order_by
     sport_id: order_by
     turf_id: order_by
@@ -5088,6 +5436,7 @@ input images_var_pop_order_by {
 
 "order by var_samp() on columns of table \"images\""
 input images_var_samp_order_by {
+    amenity_id: order_by
     id: order_by
     sport_id: order_by
     turf_id: order_by
@@ -5095,6 +5444,7 @@ input images_var_samp_order_by {
 
 "order by variance() on columns of table \"images\""
 input images_variance_order_by {
+    amenity_id: order_by
     id: order_by
     sport_id: order_by
     turf_id: order_by
@@ -5789,6 +6139,7 @@ input turf_avg_order_by {
     lat: order_by
     lon: order_by
     pincode: order_by
+    toApprove: order_by
 }
 
 "Boolean expression to filter rows from the table \"turf\". All fields are combined with a logical 'AND'."
@@ -5799,6 +6150,7 @@ input turf_bool_exp {
     about: String_comparison_exp
     address: String_comparison_exp
     city: String_comparison_exp
+    comments: String_comparison_exp
     contactEmail: String_comparison_exp
     contactName: String_comparison_exp
     contactPhone: bigint_comparison_exp
@@ -5818,6 +6170,7 @@ input turf_bool_exp {
     ratings: rating_bool_exp
     state: String_comparison_exp
     status: Boolean_comparison_exp
+    toApprove: Int_comparison_exp
     twitter: String_comparison_exp
     updated_at: timestamptz_comparison_exp
     vendor_id: String_comparison_exp
@@ -5832,6 +6185,7 @@ input turf_inc_input {
     lat: float8
     lon: float8
     pincode: Int
+    toApprove: Int
 }
 
 "input type for inserting data into table \"turf\""
@@ -5839,6 +6193,7 @@ input turf_insert_input {
     about: String
     address: String
     city: String
+    comments: String
     contactEmail: String
     contactName: String
     contactPhone: bigint
@@ -5858,6 +6213,7 @@ input turf_insert_input {
     ratings: rating_arr_rel_insert_input
     state: String
     status: Boolean
+    toApprove: Int
     twitter: String
     updated_at: timestamptz
     vendor_id: String
@@ -5870,6 +6226,7 @@ input turf_max_order_by {
     about: order_by
     address: order_by
     city: order_by
+    comments: order_by
     contactEmail: order_by
     contactName: order_by
     contactPhone: order_by
@@ -5885,6 +6242,7 @@ input turf_max_order_by {
     name: order_by
     pincode: order_by
     state: order_by
+    toApprove: order_by
     twitter: order_by
     updated_at: order_by
     vendor_id: order_by
@@ -5895,6 +6253,7 @@ input turf_min_order_by {
     about: order_by
     address: order_by
     city: order_by
+    comments: order_by
     contactEmail: order_by
     contactName: order_by
     contactPhone: order_by
@@ -5910,6 +6269,7 @@ input turf_min_order_by {
     name: order_by
     pincode: order_by
     state: order_by
+    toApprove: order_by
     twitter: order_by
     updated_at: order_by
     vendor_id: order_by
@@ -5934,6 +6294,7 @@ input turf_order_by {
     about: order_by
     address: order_by
     city: order_by
+    comments: order_by
     contactEmail: order_by
     contactName: order_by
     contactPhone: order_by
@@ -5953,6 +6314,7 @@ input turf_order_by {
     ratings_aggregate: rating_aggregate_order_by
     state: order_by
     status: order_by
+    toApprove: order_by
     twitter: order_by
     updated_at: order_by
     vendor_id: order_by
@@ -5970,6 +6332,7 @@ input turf_set_input {
     about: String
     address: String
     city: String
+    comments: String
     contactEmail: String
     contactName: String
     contactPhone: bigint
@@ -5986,6 +6349,7 @@ input turf_set_input {
     pincode: Int
     state: String
     status: Boolean
+    toApprove: Int
     twitter: String
     updated_at: timestamptz
     vendor_id: String
@@ -5998,6 +6362,7 @@ input turf_stddev_order_by {
     lat: order_by
     lon: order_by
     pincode: order_by
+    toApprove: order_by
 }
 
 "order by stddev_pop() on columns of table \"turf\""
@@ -6007,6 +6372,7 @@ input turf_stddev_pop_order_by {
     lat: order_by
     lon: order_by
     pincode: order_by
+    toApprove: order_by
 }
 
 "order by stddev_samp() on columns of table \"turf\""
@@ -6016,6 +6382,7 @@ input turf_stddev_samp_order_by {
     lat: order_by
     lon: order_by
     pincode: order_by
+    toApprove: order_by
 }
 
 "order by sum() on columns of table \"turf\""
@@ -6025,6 +6392,7 @@ input turf_sum_order_by {
     lat: order_by
     lon: order_by
     pincode: order_by
+    toApprove: order_by
 }
 
 "order by var_pop() on columns of table \"turf\""
@@ -6034,6 +6402,7 @@ input turf_var_pop_order_by {
     lat: order_by
     lon: order_by
     pincode: order_by
+    toApprove: order_by
 }
 
 "order by var_samp() on columns of table \"turf\""
@@ -6043,6 +6412,7 @@ input turf_var_samp_order_by {
     lat: order_by
     lon: order_by
     pincode: order_by
+    toApprove: order_by
 }
 
 "order by variance() on columns of table \"turf\""
@@ -6052,6 +6422,7 @@ input turf_variance_order_by {
     lat: order_by
     lon: order_by
     pincode: order_by
+    toApprove: order_by
 }
 
 "Boolean expression to filter rows from the table \"user\". All fields are combined with a logical 'AND'."

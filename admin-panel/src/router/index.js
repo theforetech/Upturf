@@ -24,11 +24,11 @@ const router = new VueRouter({
     return { x: 0, y: 0 }
   },
   routes: [
-    { path: '/', redirect: { name: 'dashboard-ecommerce' } },
+    { path: '/', redirect: { name: 'redirect-to-dashboard' } },
     ...admin,
     ...vendor,
     ...apps,
-    ...dashboard,
+    // ...dashboard,
     ...pages,
     // ...chartsMaps,
     // ...formsTable,
@@ -48,13 +48,13 @@ router.beforeEach(async (to, from, next) => {
   await waitUntilAuth(authService)
   const fn2 = async () => {
     const isLoggedIn = authService.isAuthenticated
-    if (isLoggedIn && store.state.user.userProfile === null) {
-      await store.dispatch('user/updateUserProfile', apolloClient)
-      if (store.state.user.userProfile.length === 0) {
-        return next({ name: 'auth-register' })
-        // return next({ name: 'auth-register', query: { redirect: to.path } })
-      }
-    }
+    // if (isLoggedIn && store.state.user.userProfile === null) {
+    //   await store.dispatch('user/updateUserProfile', apolloClient)
+    //   if (store.state.user.userProfile.length === 0) {
+    //     return next({ name: 'auth-register' })
+    //     // return next({ name: 'auth-register', query: { redirect: to.path } })
+    //   }
+    // }
     if (!authService.canNavigate(to)) {
       // Redirect to login if not logged in
       if (!isLoggedIn) return next({ name: 'auth-login', query: { redirect: to.path } })
@@ -64,6 +64,8 @@ router.beforeEach(async (to, from, next) => {
     }
     if (isLoggedIn && to.name !== 'vendor-create-profile' && !await doesProfileExist()) {
       return next({ name: 'vendor-create-profile' })
+    } if (isLoggedIn && to.name === 'vendor-create-profile' && await doesProfileExist()) {
+      return next(getHomeRouteForLoggedInUser(authService.user.role))
     }
     // Redirect if logged in
     if (to.query.redirect && isLoggedIn) {

@@ -45,13 +45,13 @@ const uploadToCloud = async (filePath, name) => {
 
 const fileUpload = async (req, res, next) => {
   try {
-    let { name, type, base64str, sportID, turfID, userID } = req.body.input;
+    let { name, type, base64str, sportID, turfID, userID, amenityID } = req.body.input;
     if (base64str === undefined || base64str === null) {
       return res.status(400).json({
         message: 'No file provided'
       })
     }
-    if (sportID === undefined && turfID === undefined && userID === undefined) {
+    if (sportID === undefined && turfID === undefined && userID === undefined && amenityID === undefined) {
       return res.status(400).json({
         message: 'Please add an entity to assign the image to'
       })
@@ -60,6 +60,7 @@ const fileUpload = async (req, res, next) => {
     sportID = sportID === undefined ? null : sportID
     turfID = turfID === undefined ? null : turfID
     userID = userID === undefined ? null : userID
+    amenityID = amenityID === undefined ? null : amenityID
     name = name === undefined ? null : name.split('.')[0].split(' ').join('') + '-' + moment().format('DDMMYYYYhhmmss') + path.extname(name)
     let fileBuffer = Buffer.from(base64str, 'base64');
     await fs.writeFileSync("./resources/uploads/" + name, fileBuffer, 'base64');
@@ -74,17 +75,18 @@ const fileUpload = async (req, res, next) => {
 
     // insert into db
     const HASURA_MUTATION = `
-      mutation ($url: String!, $sportID: Int, $turfID: bigint, $userID: String) {
-        insert_images_one(object: {sport_id: $sportID, url: $url, user_id: $userID, turf_id: $turfID}) {
+      mutation ($url: String!, $sportID: Int, $amenityID: Int, $turfID: bigint, $userID: String) {
+        insert_images_one(object: {sport_id: $sportID, amenity_id: $amenityID, url: $url, user_id: $userID, turf_id: $turfID}) {
           id
           sport_id
+          amenity_id
           turf_id
           url
           user_id
         }
       }
     `;
-    const variables = { url: resp.secure_url, sportID: sportID, turfID: turfID, userID: userID };
+    const variables = { url: resp.secure_url, sportID: sportID, amenityID: amenityID, turfID: turfID, userID: userID };
 
     // execute the parent mutation in Hasura
     require('axios')({

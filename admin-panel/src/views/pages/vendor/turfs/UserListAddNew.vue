@@ -65,6 +65,45 @@
           </validation-provider>
 
           <!-- City -->
+          <!--          <validation-provider-->
+          <!--            #default="validationContext"-->
+          <!--            name="Location"-->
+          <!--            rules="required"-->
+          <!--          >-->
+          <!--            <b-form-group-->
+          <!--              label="Location"-->
+          <!--              label-for="location"-->
+          <!--            >-->
+          <!--              &lt;!&ndash;              <b-form-input&ndash;&gt;-->
+          <!--              &lt;!&ndash;                v-model="vm.searchPlace"&ndash;&gt;-->
+          <!--              &lt;!&ndash;                v-gmaps-searchbox="vm"&ndash;&gt;-->
+          <!--              &lt;!&ndash;                placeholder="Search For Business"&ndash;&gt;-->
+          <!--              &lt;!&ndash;                name="name"&ndash;&gt;-->
+          <!--              &lt;!&ndash;                autocomplete="off"&ndash;&gt;-->
+          <!--              &lt;!&ndash;              />&ndash;&gt;-->
+          <!--              &lt;!&ndash;              <b-form-input&ndash;&gt;-->
+          <!--              &lt;!&ndash;                id="location"&ndash;&gt;-->
+          <!--              &lt;!&ndash;                v-model="vm.location.name"&ndash;&gt;-->
+          <!--              &lt;!&ndash;                autofocus&ndash;&gt;-->
+          <!--              &lt;!&ndash;                :state="getValidationState(validationContext)"&ndash;&gt;-->
+          <!--              &lt;!&ndash;                trim&ndash;&gt;-->
+          <!--              &lt;!&ndash;                placeholder="Your location will display here on selection"&ndash;&gt;-->
+          <!--              &lt;!&ndash;                class="searchInput field"&ndash;&gt;-->
+          <!--              &lt;!&ndash;                name="name"&ndash;&gt;-->
+          <!--              &lt;!&ndash;                :disabled="true"&ndash;&gt;-->
+          <!--              &lt;!&ndash;              />&ndash;&gt;-->
+
+          <!--              <b-form-invalid-feedback>-->
+          <!--                {{ validationContext.errors[0] }}-->
+          <!--              </b-form-invalid-feedback>-->
+          <!--            </b-form-group>-->
+          <!--          </validation-provider>-->
+          <!--          <b-form-group-->
+          <!--            label="Search Location"-->
+          <!--            label-for="search-location"-->
+          <!--          />-->
+
+          <!-- Pincode -->
           <validation-provider
             #default="validationContext"
             name="City"
@@ -80,7 +119,7 @@
                 autofocus
                 :state="getValidationState(validationContext)"
                 trim
-                placeholder="City Name"
+                placeholder="New Delhi"
               />
 
               <b-form-invalid-feedback>
@@ -189,6 +228,12 @@ export default {
   },
   data() {
     return {
+      currentPlace: null,
+      locationSelected: false,
+      vm: {
+        searchPlace: '',
+        location: {},
+      },
       required,
       alphaNum,
       email,

@@ -165,6 +165,46 @@ app.post('/callback', async (req, res) => {
           message: err.message
         }
       });
+  } else if (updateObj.payment_status === 'refund_initiated' || updateObj.payment_status === 'refunded') {
+    const bookingID = req.body.payload.payment.entity.description.split(': ')[1]
+    let MUTATION = `
+      mutation ($id: uuid!, $status: payment_status_enum_enum, $bookingStatus: Int) {
+        update_bookings_by_pk(pk_columns: {id: $id}, _set: {booking_status: $bookingStatus, payment_status: $status}) {
+          id
+        }
+      }`;
+    let vars = {
+      id: bookingID,
+      status: updateObj.payment_status,
+      bookingStatus: 2
+    };
+    // execute the parent mutation in Hasura
+    await require('axios')({
+      url: 'http://graphql-engine:8080/v1/graphql',
+      // url: 'https://backend.upturf.in/v1/graphql',
+      method: 'post',
+      data: {
+        query: MUTATION,
+        variables: vars
+      },
+      headers: {
+        "x-hasura-admin-secret": "SurfATurf"
+      }
+    })
+      .then(resp => {
+        if ('errors' in resp.data) {
+          console.log(resp.data.errors[0])
+          return {
+            message: resp.data.errors[0].message
+          }
+        }
+        return resp.data.data.update_bookings_by_pk;
+      })
+      .catch(err => {
+        return {
+          message: err.message
+        }
+      });
   }
   return res.json({ status: 'ok' })
 });

@@ -5,7 +5,7 @@ export default [
     // tag: '2',
     role: 'admin',
     tagVariant: 'light-warning',
-    route: 'dashboard-ecommerce',
+    route: 'dashboard-admin',
   },
   {
     title: 'Bookings',
@@ -50,6 +50,12 @@ export default [
     route: 'sports',
   },
   {
+    title: 'Amenities',
+    icon: 'PackageIcon',
+    role: 'admin',
+    route: 'amenities',
+  },
+  {
     title: 'Turfs',
     icon: 'MapIcon',
     role: 'admin',
@@ -59,8 +65,8 @@ export default [
         route: 'turfs',
       },
       {
-        title: 'View',
-        route: { name: 'turf', params: { id: 21 } },
+        title: 'Approval',
+        route: 'turfs-approval',
       },
     ],
   },

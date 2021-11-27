@@ -148,19 +148,19 @@
                 class="align-middle text-body"
               />
             </template>
-            <b-dropdown-item :to="{ name: 'vendor-turf', params: { id: data.item.id } }">
+            <b-dropdown-item :to="{ name: 'admin-turf', params: { id: data.item.id } }">
               <feather-icon icon="FileTextIcon" />
               <span class="align-middle ml-50">Details</span>
             </b-dropdown-item>
 
-            <b-dropdown-item :to="{ name: 'vendor-turf-edit', params: { id: data.item.id } }">
+            <b-dropdown-item @click="updateTurf(data.item.id, true)">
               <feather-icon icon="EditIcon" />
-              <span class="align-middle ml-50">Edit</span>
+              <span class="align-middle ml-50">Approve</span>
             </b-dropdown-item>
 
-            <b-dropdown-item>
+            <b-dropdown-item @click="updateTurf(data.item.id, false)">
               <feather-icon icon="TrashIcon" />
-              <span class="align-middle ml-50">Delete</span>
+              <span class="align-middle ml-50">Reject</span>
             </b-dropdown-item>
           </b-dropdown>
         </template>
@@ -180,6 +180,8 @@ import { ref, onUnmounted } from '@vue/composition-api'
 import { avatarText } from '@core/utils/filter'
 // import UsersListFilters from './UsersListFilters.vue'
 import gql from 'graphql-tag'
+// eslint-disable-next-line no-unused-vars
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import useUsersList from './useUsersList'
 import userStoreModule from '../userStoreModule'
 import UserListAddNew from './UserListAddNew.vue'
@@ -219,6 +221,68 @@ export default {
     this.getTurfs()
   },
   methods: {
+    async updateTurf(turfID, status) {
+      // eslint-disable-next-line no-unused-vars
+      let query = gql`mutation test($id: bigint!) {
+          update_turf_by_pk(pk_columns: {id: $id}, _set: {status: true, toApprove: 0}) {
+            id
+          }
+        }`
+      const vars = {
+        id: turfID,
+      }
+      if (!status) {
+        const { value: text } = await this.$swal.fire({
+          input: 'textarea',
+          inputLabel: 'Message',
+          inputPlaceholder: 'Type your message here...',
+          inputAttributes: {
+            'aria-label': 'Type your message here',
+          },
+          showCancelButton: true,
+        })
+
+        if (!text) {
+          return
+        }
+        // show popup with comments and then make req
+        query = gql`mutation test($id: bigint!, $comments: String) {
+          update_turf_by_pk(pk_columns: {id: $id}, _set: {toApprove: 2, comments: $comments}) {
+            id
+          }
+        }`
+        vars.comments = text
+      }
+      await this.$apollo.mutate({
+        mutation: query,
+        variables: vars,
+        update: async () => {
+          // Read the data from our cache for this query.
+          try {
+            await this.getTurfs()
+          } catch (e) {
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Error updating turf',
+                icon: 'XCircleIcon',
+                text: e,
+                variant: 'danger',
+              },
+            })
+          }
+        },
+      })
+      this.$toast({
+        component: ToastificationContent,
+        props: {
+          title: 'Success',
+          icon: 'CheckIcon',
+          text: 'Updated turf successfully!',
+          variant: 'success',
+        },
+      })
+    },
     updateFn() {
       this.isAddNewUserSidebarActive = false
     },
@@ -238,7 +302,7 @@ export default {
     async getTurfs() {
       const result = await this.$apollo.query({
         query: gql`query {
-          turf {
+          turf (where: {_and: [{toApprove: {_eq: 1}}, {status: {_eq: false}}]}) {
             id
             name
             pincode
