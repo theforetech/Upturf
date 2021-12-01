@@ -1,4 +1,6 @@
 import axios from '@axios'
+import { apolloClient } from '@/apollo'
+import gql from 'graphql-tag'
 
 export default {
   namespaced: true,
@@ -35,38 +37,43 @@ export default {
   },
   actions: {
     fetchEvents(ctx, { calendars }) {
-      // apolloClient.query({
-      //   query: gql`query($startDate: date, $endDate:date) {
-      //       bookings(where: {_and: {payment_status: {_eq: success}, booking_status: {_eq: 1}, reservation_date: {_gte: $startDate, _lte: $endDate}}}) {
-      //           contact_name
-      //           contact_phone
-      //           booking_status
-      //           amount
-      //           facility {
-      //               id
-      //               type
-      //               sport {
-      //                   name
-      //                   images {
-      //                       url
-      //                   }
-      //               }
-      //           }
-      //           id
-      //           payment_status
-      //           reservation_date
-      //           split_payment
-      //           split_members
-      //           split_amount
-      //       }
-      //   }`,
-      //   variables: {
-      //     startDate: '2021-11-01',
-      //     endDate: '2021-11-04',
-      //   },
-      // }).then(res => {
-      //   // console.log(res)
-      // })
+      apolloClient.query({
+        query: gql`query($startDate: date, $endDate:date) {
+            bookings(where: {_and: {payment_status: {_eq: success}, booking_status: {_eq: 1}, reservation_date: {_gte: $startDate, _lte: $endDate}}}) {
+                contact_name
+                contact_phone
+                booking_status
+                amount
+                facility {
+                    id
+                    type
+                    sport {
+                        name
+                        images {
+                            url
+                        }
+                    }
+                }
+                id
+                payment_status
+                reservation_date
+                split_payment
+                split_members
+                split_amount
+                booked_slots {
+                    id
+                    startTime
+                    endTime
+                }
+            }
+        }`,
+        variables: {
+          startDate: '2021-11-01',
+          endDate: '2022-11-04',
+        },
+      }).then(res => {
+        console.log(calendars, res)
+      })
       return new Promise((resolve, reject) => {
         axios
           .get('/apps/calendar/events', {

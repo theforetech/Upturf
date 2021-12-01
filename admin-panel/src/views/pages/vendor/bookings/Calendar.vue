@@ -74,15 +74,15 @@ export default {
       addEvent,
       updateEvent,
       removeEvent,
-      fetchEvents,
       refetchEvents,
       calendarOptions,
+      datesChanged,
 
       // ----- UI ----- //
       isEventHandlerSidebarActive,
     } = useCalendar()
 
-    fetchEvents()
+    // fetchEvents()
 
     return {
       refCalendar,
@@ -94,6 +94,7 @@ export default {
       removeEvent,
       refetchEvents,
       calendarOptions,
+      datesChanged,
 
       // ----- UI ----- //
       isEventHandlerSidebarActive,

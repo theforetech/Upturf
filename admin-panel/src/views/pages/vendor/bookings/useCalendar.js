@@ -55,7 +55,24 @@ export default function userCalendar() {
       description: '',
     },
   }
+  let dateInit = false
+  const currDate = new Date(); const y = currDate.getFullYear(); const
+    m = currDate.getMonth()
+  const dateObj = {
+    startDate: new Date(y, m, 1, 0, 0, 0),
+    endDate: new Date(y, m + 1, 0, 23, 59, 59),
+  }
   const event = ref(JSON.parse(JSON.stringify(blankEvent)))
+  const datesChanged = x => {
+    dateInit = true
+    // eslint-disable-next-line no-use-before-define
+    fetchEvents()
+    // eslint-disable-next-line no-use-before-define
+    // refetchEvents()
+    console.log(dateObj, x)
+    dateObj.startDate = x.startStr
+    dateObj.endDate = x.endStr
+  }
   const clearEventData = () => {
     event.value = JSON.parse(JSON.stringify(blankEvent))
   }
@@ -222,7 +239,9 @@ export default function userCalendar() {
   // --------------------------------------------------------------------------------------------------
   const fetchEvents = (info, successCallback) => {
     // If there's no info => Don't make useless API call
-    if (!info) return
+    console.log(info, !dateInit)
+    // if (!info || !dateInit) return
+    if (!dateInit) return
 
     // Fetch Events from API endpoint
     store
@@ -256,24 +275,25 @@ export default function userCalendar() {
       end: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth',
     },
     events: fetchEvents,
-
+    datesSet: datesChanged,
     /*
       Enable dragging and resizing event
       ? Docs: https://fullcalendar.io/docs/editable
     */
-    editable: true,
+    editable: false,
 
     /*
       Enable resizing event from start
       ? Docs: https://fullcalendar.io/docs/eventResizableFromStart
     */
-    eventResizableFromStart: true,
+    eventResizableFromStart: false,
 
     /*
       Automatically scroll the scroll-containers during event drag-and-drop and date selecting
       ? Docs: https://fullcalendar.io/docs/dragScroll
     */
-    dragScroll: true,
+    dragScroll: false,
+    droppable: false,
 
     /*
       Max number of events within a given day
@@ -368,6 +388,7 @@ export default function userCalendar() {
     calendarOptions,
     event,
     clearEventData,
+    datesChanged,
     addEvent,
     updateEvent,
     removeEvent,
