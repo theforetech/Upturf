@@ -1,5 +1,5 @@
 <template>
-  <b-card-code title="Column Search Table">
+  <b-card-code :title="bookings">
 
     <!-- input search -->
     <div class="custom-search d-flex justify-content-end">
@@ -153,8 +153,10 @@ import {
   BAvatar, BBadge, BPagination, BFormGroup, BFormInput, BFormSelect, BDropdown, BDropdownItem,
 } from 'bootstrap-vue'
 import { VueGoodTable } from 'vue-good-table'
-import store from '@/store/index'
-import { codeColumnSearch } from './code'
+import store from '@/store'
+import moment from 'moment'
+import gql from 'graphql-tag'
+import { codeColumnSearch } from '../../../table/vue-good-table/code'
 
 export default {
   components: {
@@ -171,6 +173,7 @@ export default {
   },
   data() {
     return {
+      bookings: [],
       pageLength: 3,
       dir: false,
       codeColumnSearch,
@@ -249,9 +252,52 @@ export default {
       return this.dir
     },
   },
+  mounted() {
+    this.getBookings()
+  },
   created() {
     this.$http.get('/good-table/basic')
       .then(res => { this.rows = res.data })
+  },
+  methods: {
+    async getBookings() {
+      const result = await this.$apollo.query({
+        query: gql`query ($startDate: date!,$endDate:date!) {
+         bookings(where: {payment_status: {_in: [success, refunded]},booking_status: {_in: [1,2]}, reservation_date: {_gte: $startDate, _lte: $endDate}}) {
+                amount
+                booking_status
+                contact_name
+                contact_phone
+                payment_status
+                reservation_date
+                facility {
+                  id
+                  type
+                  sport {
+                    name
+                    images {
+                      url
+                    }
+                  }
+                }
+                booked_slots {
+                  date
+                  startTime
+                  endTime
+                }
+              }
+            }`,
+        variables: {
+          // startDate: moment().format('YYYY-MM-DD'),
+          // endDate: moment().add(10, 'd').format('YYYY-MM-DD'),
+          startDate: '2000-11-01',
+          endDate: '2022-11-04',
+        },
+      })
+      // console.log('hello')
+      this.bookings = result.data.bookings
+      console.log(this.bookings)
+    },
   },
 }
 </script>

@@ -15,7 +15,7 @@
 import { BRow, BCol } from 'bootstrap-vue'
 import GoodTableBasic from './GoodTableBasic.vue'
 import GoodTableRowGroup from './GoodTableRowGroup.vue'
-import GoodTableColumnSearch from './GoodTableColumnSearch.vue'
+import GoodTableColumnSearch from '../../pages/vendor/bookings/GoodTableColumnSearch.vue'
 import GoodTableAdvanceSearch from './GoodTableAdvanceSearch.vue'
 import GoodTableI18n from './GoodTableI18n.vue'
 import GoodTableSsr from './GoodTableSsr.vue'

@@ -4274,8 +4274,6 @@ enum user_constraint {
 "unique or primary key constraints on table \"user_profile\""
 enum user_profile_constraint {
     "unique or primary key constraint"
-    user_profile_phone_number_key
-    "unique or primary key constraint"
     user_profile_pkey
 }
 

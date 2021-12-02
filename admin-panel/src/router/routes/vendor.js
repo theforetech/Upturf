@@ -56,7 +56,7 @@ export default [
   {
     path: '/vendor/bookings',
     name: 'vendor-bookings',
-    component: () => import('@/views/pages/vendor/bookings/Calendar'),
+    component: () => import('@/views/pages/vendor/bookings/BookingTable'),
     meta: {
       resource: 'Vendor',
       action: 'read',
