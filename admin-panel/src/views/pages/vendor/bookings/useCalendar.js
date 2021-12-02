@@ -69,7 +69,7 @@ export default function userCalendar() {
     fetchEvents()
     // eslint-disable-next-line no-use-before-define
     // refetchEvents()
-    console.log(dateObj, x)
+    // console.log(dateObj, x)
     dateObj.startDate = x.startStr
     dateObj.endDate = x.endStr
   }
@@ -239,7 +239,7 @@ export default function userCalendar() {
   // --------------------------------------------------------------------------------------------------
   const fetchEvents = (info, successCallback) => {
     // If there's no info => Don't make useless API call
-    console.log(info, !dateInit)
+    // console.log(info, !dateInit)
     // if (!info || !dateInit) return
     if (!dateInit) return
 

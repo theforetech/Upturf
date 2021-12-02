@@ -71,8 +71,6 @@ export default {
           startDate: '2021-11-01',
           endDate: '2022-11-04',
         },
-      }).then(res => {
-        console.log(calendars, res)
       })
       return new Promise((resolve, reject) => {
         axios
