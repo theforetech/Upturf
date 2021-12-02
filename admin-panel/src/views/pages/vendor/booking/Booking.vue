@@ -394,6 +394,7 @@ import VueSlickCarousel from 'vue-slick-carousel'
 // import { Carousel3d, Slide } from 'vue-carousel-3d'
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 // import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
+// eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment'
 import gql from 'graphql-tag'
 import Ripple from 'vue-ripple-directive'
@@ -436,7 +437,7 @@ export default {
       required,
       phoneOptions: { phone: true, phoneRegionCode: 'IN' },
       retries: 0,
-      contactName: this.$store.state.user.AppActiveUser.displayName,
+      contactName: '',
       contactPhone: '',
       currentBooking: null,
       slotsFetching: true,
@@ -601,10 +602,6 @@ export default {
   },
   async mounted() {
     // console.log(this.turfID, this.facilityID)
-    if (this.userProfile.length > 0 && this.userProfile[0].name) {
-      this.contactName = this.userProfile[0].name
-      this.contactPhone = this.userProfile[0].phone_number
-    }
     await this.getTurfData()
     await this.getFacilityData()
     this.checkoutDate = moment().toISOString()
@@ -893,11 +890,6 @@ export default {
         amount: (this.currentBooking.amount * 100).toString(),
         order_id: this.currentBooking.razorpay,
         name: 'Booking Payment',
-        prefill: {
-          name: this.$store.state.user.userProfile[0].name,
-          email: this.$store.state.user.AppActiveUser.email,
-          contact: this.$store.state.user.userProfile[0].phone_number,
-        },
         retry: {
           enabled: true,
           max_count: 5,
@@ -917,7 +909,7 @@ export default {
           vm.showSummary = 4
           setTimeout(() => {
             vm.$router.push({
-              name: 'user-bookings',
+              name: 'vendor-bookings',
               params: {
                 refresh: true,
               },
@@ -1138,23 +1130,20 @@ export default {
   background-color: #f4731c;
 }
 .booking-bar{
+  padding: 1rem;
   color:#fff;
-  height: 4rem;
   width: 100%;
+  height: 4rem;
   background-color: #2BB053;
-  position: fixed;
-  bottom: 0rem;
 }
 .booking-bar span{
-  position:absolute;
-  top:30%;
-  left:3%;
+  padding: 1rem;
   font-size:0.9rem;
   font-weight: 500;
 }
 .booking-bar button{
   float:right;
-  margin-top: 0.7rem;
+  margin-top: -0.4rem;
   font-size: 0.9rem;
   background-color: transparent!important;
   border: none;
