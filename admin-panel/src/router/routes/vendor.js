@@ -115,6 +115,28 @@ export default [
     },
   },
   {
+    path: '/vendor/booking-form',
+    name: 'vendor-new-booking-form',
+    component: () => import('@/views/pages/vendor/booking/form/AccountSetting'),
+    meta: {
+      resource: 'Vendor',
+      action: 'read',
+      pageTitle: 'New Booking',
+      breadcrumb: [
+        {
+          text: 'Vendor Panel',
+        },
+        {
+          text: 'Bookings',
+        },
+        {
+          text: 'New',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
     path: '/vendor/turfs/:id',
     name: 'vendor-turf',
     component: () => import('@/views/pages/vendor/turfs/TurfPage'),

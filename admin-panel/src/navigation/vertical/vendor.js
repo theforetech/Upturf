@@ -13,6 +13,12 @@ export default [
     icon: 'CalendarIcon',
   },
   {
+    title: 'New Booking',
+    route: 'vendor-new-booking-form',
+    role: 'vendor',
+    icon: 'PlusIcon',
+  },
+  {
     title: 'Turfs',
     icon: 'MapIcon',
     role: 'vendor',
