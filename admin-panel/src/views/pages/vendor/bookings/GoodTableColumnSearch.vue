@@ -1,5 +1,5 @@
 <template>
-  <b-card-code :title="bookings">
+  <b-card-code>
 
     <!-- input search -->
     <div class="custom-search d-flex justify-content-end">
@@ -18,8 +18,9 @@
 
     <!-- table -->
     <vue-good-table
+      v-if="!loading"
       :columns="columns"
-      :rows="rows"
+      :rows="bookings"
       :rtl="direction"
       :search-options="{
         enabled: true,
@@ -35,22 +36,39 @@
       >
 
         <!-- Column: Name -->
-        <div
-          v-if="props.column.field === 'fullName'"
+        <span
+          v-if="props.column.field === 'facility.sport.name'"
           class="text-nowrap"
         >
           <b-avatar
-            :src="props.row.avatar"
+            :src="props.row.facility.sport.images[0].url"
             class="mx-1"
           />
-          <span class="text-nowrap">{{ props.row.fullName }}</span>
+        </span>
+        <div
+          v-else-if="props.column.field === 'contact_name'"
+          class="text-nowrap"
+        >
+          <span class="text-nowrap">{{ props.row.contact_name }}</span>
         </div>
 
         <!-- Column: Status -->
-        <span v-else-if="props.column.field === 'status'">
-          <b-badge :variant="statusVariant(props.row.status)">
-            {{ props.row.status }}
+
+        <span v-else-if="props.column.field === 'payment_status'">
+          <b-badge :variant="statusVariant(props.row.payment_status)">
+            {{ props.row.payment_status }}
           </b-badge>
+        </span>
+
+        <span v-else-if="props.column.field === 'reservation_date'">
+          {{ moment(props.row.reservation_date).format('Do MMM YYYY') }}
+        </span>
+        <span v-else-if="props.column.field === 'created_at'">
+          {{ moment(props.row.created_at).format('Do MMM YYYY') }}
+        </span>
+
+        <span v-else-if="props.column.field === 'amount'">
+          ₹ {{ props.row.amount }}
         </span>
 
         <!-- Column: Action -->
@@ -68,19 +86,23 @@
                   class="text-body align-middle mr-25"
                 />
               </template>
-              <b-dropdown-item>
+              <b-dropdown-item
+                @click="navigateTo(props.row.id)"
+              >
                 <feather-icon
                   icon="Edit2Icon"
                   class="mr-50"
                 />
-                <span>Edit</span>
+                <span>View</span>
               </b-dropdown-item>
-              <b-dropdown-item>
+              <b-dropdown-item
+                @click="cancelBooking(props.row.id)"
+              >
                 <feather-icon
                   icon="TrashIcon"
                   class="mr-50"
                 />
-                <span>Delete</span>
+                <span>Cancel</span>
               </b-dropdown-item>
             </b-dropdown>
           </span>
@@ -156,6 +178,7 @@ import { VueGoodTable } from 'vue-good-table'
 import store from '@/store'
 import moment from 'moment'
 import gql from 'graphql-tag'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import { codeColumnSearch } from '../../../table/vue-good-table/code'
 
 export default {
@@ -173,38 +196,56 @@ export default {
   },
   data() {
     return {
+      loading: false,
+      moment,
       bookings: [],
       pageLength: 3,
       dir: false,
       codeColumnSearch,
       columns: [
         {
+          label: 'Sport',
+          field: 'facility.sport.name',
+          filterOptions: {
+            enabled: true,
+            placeholder: 'Search Sport',
+          },
+        },
+        {
           label: 'Name',
-          field: 'fullName',
+          field: 'contact_name',
           filterOptions: {
             enabled: true,
             placeholder: 'Search Name',
           },
         },
         {
-          label: 'Email',
-          field: 'email',
+          label: 'Phone Number',
+          field: 'contact_phone',
           filterOptions: {
             enabled: true,
             placeholder: 'Search Email',
           },
         },
         {
-          label: 'Date',
-          field: 'startDate',
+          label: 'Booking Created On',
+          field: 'created_at',
           filterOptions: {
             enabled: true,
             placeholder: 'Search Date',
           },
         },
         {
-          label: 'Salary',
-          field: 'salary',
+          label: 'Reservation Date',
+          field: 'reservation_date',
+          filterOptions: {
+            enabled: true,
+            placeholder: 'Search Date',
+          },
+        },
+        {
+          label: 'Amount',
+          field: 'amount',
           filterOptions: {
             enabled: true,
             placeholder: 'Search Salary',
@@ -212,7 +253,7 @@ export default {
         },
         {
           label: 'Status',
-          field: 'status',
+          field: 'payment_status',
           filterOptions: {
             enabled: true,
             placeholder: 'Search Status',
@@ -232,7 +273,7 @@ export default {
       const statusColor = {
         /* eslint-disable key-spacing */
         Current      : 'light-primary',
-        Professional : 'light-success',
+        success : 'light-success',
         Rejected     : 'light-danger',
         Resigned     : 'light-warning',
         Applied      : 'light-info',
@@ -260,7 +301,62 @@ export default {
       .then(res => { this.rows = res.data })
   },
   methods: {
+    async cancelBooking(id) {
+      const res = await this.$apollo.mutate({
+        mutation: gql`mutation ($id: uuid!) {
+          cancel(bookingID: $id) {
+            id
+            refund
+            status
+          }
+        }`,
+        variables: {
+          id,
+        },
+      }).catch(e => {
+        const msg = e.message
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Error Cancelling',
+            icon: 'XCircleIcon',
+            text: msg,
+            variant: 'danger',
+          },
+        })
+      })
+      try {
+        if (res === undefined || !('data' in res) || !('cancel' in res.data) || !res.data.cancel) {
+          return
+        }
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Booking Cancelled!',
+            icon: 'CheckIcon',
+            text: 'We hope to serve you again.',
+            variant: 'success',
+          },
+        },
+        {
+          timeout: 4000,
+        })
+        this.getBookings()
+      } catch (e) {
+        const msg = e.message
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Error Cancelling',
+            icon: 'XCircleIcon',
+            text: msg,
+            variant: 'danger',
+          },
+        })
+      }
+    },
     async getBookings() {
+      this.loading = true
       const result = await this.$apollo.query({
         query: gql`query ($startDate: date!,$endDate:date!) {
          bookings(where: {payment_status: {_in: [success, refunded]},booking_status: {_in: [1,2]}, reservation_date: {_gte: $startDate, _lte: $endDate}}) {
@@ -285,18 +381,34 @@ export default {
                   startTime
                   endTime
                 }
+                booked_slots_aggregate{
+                  aggregate{
+                    count
+                  }
+                }
+                created_at
+                id
               }
             }`,
+        fetchPolicy: 'no-cache',
         variables: {
-          // startDate: moment().format('YYYY-MM-DD'),
-          // endDate: moment().add(10, 'd').format('YYYY-MM-DD'),
-          startDate: '2000-11-01',
-          endDate: '2022-11-04',
+          startDate: moment().format('YYYY-MM-DD'),
+          endDate: moment().add(10, 'd').format('YYYY-MM-DD'),
         },
       })
-      // console.log('hello')
-      this.bookings = result.data.bookings
-      console.log(this.bookings)
+      this.bookings = result.data.bookings.map(booking => ({
+        ...booking,
+        created_at: moment(booking.created_at).format('YYYY-MM-DD'),
+      }))
+      setTimeout(() => { this.loading = false }, 500)
+    },
+    navigateTo(bookingId) {
+      this.$router.push({
+        name: 'vendor-summary',
+        params: {
+          id: bookingId,
+        },
+      })
     },
   },
 }

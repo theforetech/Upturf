@@ -74,13 +74,12 @@ export default [
   },
   {
     path: '/vendor/bookings/:id',
-    name: 'vendor-booking',
-    component: () => import('@/views/pages/vendor/turfs/TurfPage'),
-    props: ({ params }) => ({ id: Number.parseInt(params.id, 10) || 0 }),
+    name: 'vendor-summary',
+    component: () => import('@/views/pages/vendor/bookings/Summary'),
     meta: {
       resource: 'Vendor',
       action: 'read',
-      pageTitle: 'Turfs',
+      pageTitle: 'Summary',
       breadcrumb: [
         {
           text: 'Vendor Panel',
