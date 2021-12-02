@@ -73,6 +73,48 @@ export default [
     },
   },
   {
+    path: '/vendor/bookings/:id',
+    name: 'vendor-booking',
+    component: () => import('@/views/pages/vendor/turfs/TurfPage'),
+    props: ({ params }) => ({ id: Number.parseInt(params.id, 10) || 0 }),
+    meta: {
+      resource: 'Vendor',
+      action: 'read',
+      pageTitle: 'Turfs',
+      breadcrumb: [
+        {
+          text: 'Vendor Panel',
+        },
+        {
+          text: 'Bookings',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: '/vendor/booking/new',
+    name: 'vendor-new-booking',
+    component: () => import('@/views/pages/vendor/booking/Booking'),
+    meta: {
+      resource: 'Vendor',
+      action: 'read',
+      pageTitle: 'New Booking',
+      breadcrumb: [
+        {
+          text: 'Vendor Panel',
+        },
+        {
+          text: 'Bookings',
+        },
+        {
+          text: 'New',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
     path: '/vendor/turfs/:id',
     name: 'vendor-turf',
     component: () => import('@/views/pages/vendor/turfs/TurfPage'),
