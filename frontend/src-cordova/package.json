@@ -14,22 +14,23 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "cordova-android": "^9.1.0",
-    "cordova-browser": "^6.0.0",
-    "cordova-electron": "^1.1.1",
-    "cordova-ios": "^6.2.0",
-    "cordova-osx": "^6.0.0",
+    "cordova-plugin-customurlscheme": "^5.0.2",
+    "cordova-plugin-safariviewcontroller": "^2.0.0",
     "cordova-plugin-whitelist": "^1.3.4"
   },
   "cordova": {
     "plugins": {
-      "cordova-plugin-whitelist": {}
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-safariviewcontroller": {},
+      "cordova-plugin-customurlscheme": {
+        "URL_SCHEME": "com.upturf.app",
+        "ANDROID_SCHEME": "com.upturf.app",
+        "ANDROID_HOST": "surfaturf.eu.auth0.com",
+        "ANDROID_PATHPREFIX": "/cordova/com.upturf.app/callback"
+      }
     },
     "platforms": [
-      "android",
-      "ios",
-      "browser",
-      "osx",
-      "electron"
+      "android"
     ]
   }
 }

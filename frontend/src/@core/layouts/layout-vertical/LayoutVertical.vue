@@ -211,11 +211,21 @@ export default {
   },
   watch: {
     $route(val) {
-      this.header = 'header' in val.matched[0].meta && val.matched[0].meta.header
+      if (val.matched.length > 0) {
+        this.header = 'header' in val.matched[0].meta && val.matched[0].meta.header
+      } else {
+        this.header = 'header' in val.meta && val.meta.header
+        // console.log(val)
+      }
     },
   },
   mounted() {
-    this.header = 'header' in this.$route.matched[0].meta && this.$route.matched[0].meta.header
+    if (this.$route.matched.length > 0) {
+      this.header = 'header' in this.$route.matched[0].meta && this.$route.matched[0].meta.header
+    } else {
+      this.header = 'header' in this.$route.meta && this.$route.meta.header
+      // console.log('k', this.$route)
+    }
   },
   methods: {
     navigateTo(route) {

@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "surfaturf-foretech"
+  },
+  "targets": {
+    "surfaturf-foretech": {
+      "hosting": {
+        "upturf-staging": [
+          "upturf-staging"
+        ]
+      }
+    }
   }
 }

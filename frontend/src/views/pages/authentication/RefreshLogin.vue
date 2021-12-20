@@ -15,6 +15,9 @@
         >
           Logging you in
         </h2>
+        <b-button @click="logout">
+          Logout
+        </b-button>
       </div>
     </div>
   </div>
@@ -22,7 +25,7 @@
 
 <script>
 import {
-  BLink,
+  BLink, BButton,
 } from 'bootstrap-vue'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 // import { getHomeRouteForLoggedInUser } from '@/auth/utils'
@@ -36,6 +39,7 @@ export default {
   components: {
     VuexyLogo,
     BLink,
+    BButton,
   },
   created() {
     if (this.$auth.isAuthenticated) {
@@ -49,6 +53,11 @@ export default {
     } else {
       this.$router.push({ name: 'auth-control' })
     }
+  },
+  methods: {
+    logout() {
+      this.$auth.logout()
+    },
   },
 }
 </script>

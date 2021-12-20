@@ -781,6 +781,13 @@ export default {
   },
   watch: {
     $route(val) {
+      if (val.matched.length > 0) {
+        this.filters = 'filters' in val.matched[0].meta && val.matched[0].meta.filters
+        this.search = 'search' in val.matched[0].meta && val.matched[0].meta.search
+      } else {
+        this.filters = true
+        this.search = true
+      }
       this.filters = 'filters' in val.matched[0].meta && val.matched[0].meta.filters
       this.search = 'search' in val.matched[0].meta && val.matched[0].meta.search
       this.calcFilters = false
@@ -802,8 +809,13 @@ export default {
     // },
   },
   mounted() {
-    this.filters = 'filters' in this.$route.matched[0].meta && this.$route.matched[0].meta.filters
-    this.search = 'search' in this.$route.matched[0].meta && this.$route.matched[0].meta.search
+    if (this.$route.matched.length > 0) {
+      this.filters = 'filters' in this.$route.matched[0].meta && this.$route.matched[0].meta.filters
+      this.search = 'search' in this.$route.matched[0].meta && this.$route.matched[0].meta.search
+    } else {
+      this.filters = true
+      this.search = true
+    }
     this.selectedSports = this.filterSports
     this.selectedAmenities = this.filterAmenities
     this.selectedTimeslots = this.filterTimings

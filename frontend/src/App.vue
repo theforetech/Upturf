@@ -8,10 +8,10 @@
     <component :is="layout">
       <router-view />
     </component>
-    <div
-      class="overlay-dark"
-      :class="{'open-overlay':isOpen}"
-    />
+    <!--    <div-->
+    <!--      class="overlay-dark"-->
+    <!--      :class="{'open-overlay':isOpen}"-->
+    <!--    />-->
     <scroll-to-top v-if="enableScrollToTop" />
     <PWAPrompt />
   </div>

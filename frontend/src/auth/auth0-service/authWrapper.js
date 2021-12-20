@@ -11,7 +11,7 @@ export const getInstance = () => instance
 
 export const useAuth0 = ({
   onRedirectCallback = DEFAULT_REDIRECT_CALLBACK,
-  redirectUri = `${window.location.origin + process.env.BASE_URL}callback`,
+  redirectUri = `${window.location.origin + process.env.BASE_URL}/callback`,
   ...options
 }) => {
   if (instance) return instance
