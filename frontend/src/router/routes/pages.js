@@ -2,7 +2,7 @@ export default [
   {
     path: '/access-control',
     name: 'access-control',
-    component: () => import('@/views/extensions/acl/AccessControl.vue'),
+    component: () => import(/* webpackChunkName: "auth" */'@/views/extensions/acl/AccessControl.vue'),
     meta: {
       resource: 'ACL',
       action: 'read',
@@ -11,7 +11,7 @@ export default [
   {
     path: '/redirect-to-dashboard',
     name: 'redirect-to-dashboard',
-    component: () => import('@/views/pages/authentication/RefreshLogin.vue'),
+    component: () => import(/* webpackChunkName: "auth" */'@/views/pages/authentication/RefreshLogin.vue'),
     meta: {
       layout: 'full',
       resource: 'Auth',
@@ -21,7 +21,7 @@ export default [
   {
     path: '/callback',
     name: 'auth-callback',
-    component: () => import('@/views/pages/authentication/Callback.vue'),
+    component: () => import(/* webpackChunkName: "auth" */'@/views/pages/authentication/Callback.vue'),
     meta: {
       layout: 'full',
       resource: 'Auth',
@@ -31,7 +31,7 @@ export default [
   {
     path: '/error-404',
     name: 'error-404',
-    component: () => import('@/views/error/Error404.vue'),
+    component: () => import(/* webpackChunkName: "auth" */'@/views/error/Error404.vue'),
     meta: {
       layout: 'full',
       resource: 'Auth',
@@ -41,7 +41,7 @@ export default [
   {
     path: '/profile-form',
     name: 'profile-form',
-    component: () => import('@/views/pages/forms/profile-form.vue'),
+    component: () => import(/* webpackChunkName: "user" */'@/views/pages/forms/profile-form.vue'),
     meta: {
       layout: 'full',
     },
@@ -49,7 +49,7 @@ export default [
   {
     path: '/login',
     name: 'auth-login',
-    component: () => import('@/views/pages/authentication/Login.vue'),
+    component: () => import(/* webpackChunkName: "auth" */'@/views/pages/authentication/Login.vue'),
     meta: {
       layout: 'full',
       resource: 'Auth',
@@ -59,7 +59,7 @@ export default [
   {
     path: '/register',
     name: 'auth-register',
-    component: () => import('@/views/pages/authentication/Register.vue'),
+    component: () => import(/* webpackChunkName: "auth" */'@/views/pages/authentication/Register.vue'),
     meta: {
       layout: 'full',
       resource: 'Auth',
@@ -68,7 +68,7 @@ export default [
   {
     path: '/pages/miscellaneous/coming-soon',
     name: 'misc-coming-soon',
-    component: () => import('@/views/pages/miscellaneous/ComingSoon.vue'),
+    component: () => import(/* webpackChunkName: "misc" */'@/views/pages/miscellaneous/ComingSoon.vue'),
     meta: {
       layout: 'full',
     },
@@ -76,7 +76,7 @@ export default [
   {
     path: '/pages/miscellaneous/not-authorized',
     name: 'misc-not-authorized',
-    component: () => import('@/views/pages/miscellaneous/NotAuthorized.vue'),
+    component: () => import(/* webpackChunkName: "auth" */'@/views/pages/miscellaneous/NotAuthorized.vue'),
     meta: {
       layout: 'full',
       resource: 'Auth',
@@ -85,7 +85,7 @@ export default [
   {
     path: '/pages/miscellaneous/under-maintenance',
     name: 'misc-under-maintenance',
-    component: () => import('@/views/pages/miscellaneous/UnderMaintenance.vue'),
+    component: () => import(/* webpackChunkName: "misc" */'@/views/pages/miscellaneous/UnderMaintenance.vue'),
     meta: {
       layout: 'full',
     },
@@ -93,7 +93,7 @@ export default [
   {
     path: '/pages/miscellaneous/error',
     name: 'misc-error',
-    component: () => import('@/views/pages/miscellaneous/Error.vue'),
+    component: () => import(/* webpackChunkName: "misc" */'@/views/pages/miscellaneous/Error.vue'),
     meta: {
       layout: 'full',
     },
@@ -101,7 +101,7 @@ export default [
   {
     path: '/turf/:id',
     name: 'pages-turf',
-    component: () => import('@/views/pages/components/Turf-page/TurfPage.vue'),
+    component: () => import(/* webpackChunkName: "turf" */'@/views/pages/components/Turf-page/TurfPage.vue'),
     meta: {
       layout: 'full',
     },
@@ -109,7 +109,7 @@ export default [
   {
     path: '/',
     name: 'home',
-    component: () => import('@/views/pages/components/Home.vue'),
+    component: () => import(/* webpackChunkName: "home" */'@/views/pages/components/Home.vue'),
     meta: {
       header: true,
       search: true,
@@ -119,7 +119,7 @@ export default [
   {
     path: '/categories',
     name: 'pages-categories',
-    component: () => import('@/views/pages/components/Categories.vue'),
+    component: () => import(/* webpackChunkName: "categories" */'@/views/pages/components/Categories.vue'),
     meta: {
       header: true,
       search: true,
@@ -138,7 +138,7 @@ export default [
   {
     path: '/turfs',
     name: 'pages-turfs',
-    component: () => import('@/views/pages/components/Turfs.vue'),
+    component: () => import(/* webpackChunkName: "turf" */'@/views/pages/components/Turfs.vue'),
     meta: {
       header: true,
       search: true,
@@ -155,7 +155,7 @@ export default [
   {
     path: '/wishlist',
     name: 'wishlist',
-    component: () => import('@/views/pages/components/Wishlist.vue'),
+    component: () => import(/* webpackChunkName: "wishlist" */'@/views/pages/components/Wishlist.vue'),
     meta: {
       header: true,
       pageTitle: 'Favourites',
@@ -170,7 +170,7 @@ export default [
   {
     path: '/booking',
     name: 'booking',
-    component: () => import('@/views/pages/components/booking/Booking.vue'),
+    component: () => import(/* webpackChunkName: "booking" */'@/views/pages/components/booking/Booking.vue'),
     meta: {
       layout: 'full',
       pageTitle: 'Booking',
@@ -192,7 +192,7 @@ export default [
   {
     path: '/bookings',
     name: 'user-bookings',
-    component: () => import('@/views/pages/components/user/UserBookings.vue'),
+    component: () => import(/* webpackChunkName: "booking" */'@/views/pages/components/user/UserBookings.vue'),
     meta: {
       layout: 'full',
       pageTitle: 'Bookings',
@@ -210,7 +210,7 @@ export default [
   {
     path: '/terms',
     name: 'terms',
-    component: () => import('@/views/pages/components/user/Terms.vue'),
+    component: () => import(/* webpackChunkName: "misc" */'@/views/pages/components/user/Terms.vue'),
     meta: {
       layout: 'full',
       pageTitle: 'Terms and Conditions',
@@ -228,7 +228,7 @@ export default [
   {
     path: '/update-profile',
     name: 'update-profile',
-    component: () => import('@/views/pages/components/user/UpdateProfile.vue'),
+    component: () => import(/* webpackChunkName: "user" */'@/views/pages/components/user/UpdateProfile.vue'),
     meta: {
       layout: 'full',
       pageTitle: 'Update Profile',
@@ -246,7 +246,7 @@ export default [
   {
     path: '/notifications',
     name: 'notifications',
-    component: () => import('@/views/pages/components/user/Notifications.vue'),
+    component: () => import(/* webpackChunkName: "user" */'@/views/pages/components/user/Notifications.vue'),
     meta: {
       layout: 'full',
       pageTitle: 'Notifications',
@@ -264,7 +264,7 @@ export default [
   {
     path: '/cancelpolicy',
     name: 'cancelpolicy',
-    component: () => import('@/views/pages/components/user/CancelPolicy.vue'),
+    component: () => import(/* webpackChunkName: "misc" */'@/views/pages/components/user/CancelPolicy.vue'),
     meta: {
       layout: 'full',
       pageTitle: 'Cancellation & Refund Policy',
@@ -282,7 +282,7 @@ export default [
   {
     path: '/fairusage',
     name: 'fairusage',
-    component: () => import('@/views/pages/components/user/Fair.vue'),
+    component: () => import(/* webpackChunkName: "misc" */'@/views/pages/components/user/Fair.vue'),
     meta: {
       layout: 'full',
       pageTitle: 'Fair Usage Policy',
@@ -300,7 +300,7 @@ export default [
   {
     path: '/summary/:id',
     name: 'pages-summary',
-    component: () => import('@/views/pages/components/user/Summary.vue'),
+    component: () => import(/* webpackChunkName: "booking" */'@/views/pages/components/user/Summary.vue'),
     meta: {
       layout: 'full',
       pageTitle: 'Summary',
@@ -319,7 +319,7 @@ export default [
   {
     path: '/profile',
     name: 'user-profile',
-    component: () => import('@/views/pages/components/user/UserProfile.vue'),
+    component: () => import(/* webpackChunkName: "user" */'@/views/pages/components/user/UserProfile.vue'),
     meta: {
       layout: 'full',
       pageTitle: 'Profile',
@@ -339,7 +339,7 @@ export default [
   {
     path: '/search',
     name: 'pages-search',
-    component: () => import('@/views/pages/components/Search/Search.vue'),
+    component: () => import(/* webpackChunkName: "home" */'@/views/pages/components/Search/Search.vue'),
     meta: {
       pageTitle: '',
       layout: 'full',
@@ -355,7 +355,7 @@ export default [
   {
     path: '/pages/faq',
     name: 'pages-faq',
-    component: () => import('@/views/pages/faq/Faq.vue'),
+    component: () => import(/* webpackChunkName: "misc" */'@/views/pages/faq/Faq.vue'),
     meta: {
       pageTitle: 'FAQ',
       breadcrumb: [

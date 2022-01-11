@@ -10,6 +10,7 @@ services:
       - /home/anmol150srivastava/caddy/Caddyfile:/etc/caddy/Caddyfile
       - /home/anmol150srivastava/caddy/data:/data
       - /home/anmol150srivastava/caddy/config:/config
+      - /home/anmol150srivastava/sites:/sites
     depends_on:
       - graphql-engine
       - razorpay

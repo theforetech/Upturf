@@ -1,0 +1,41 @@
+{
+  "packageId": "in.upturf.app",
+  "host": "upturf.in",
+  "name": "Upturf",
+  "launcherName": "Upturf",
+  "display": "standalone",
+  "themeColor": "#189BA3",
+  "navigationColor": "#000000",
+  "navigationColorDark": "#000000",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#189BA3",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "https://upturf.in/android-chrome-512x512.png?v=v22",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "D:\\@@ WORK @@\\Foretech\\SurfATurf\\twa\\android.keystore",
+    "alias": "android"
+  },
+  "appVersionName": "1",
+  "appVersionCode": 1,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://upturf.in/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {
+    "locationDelegation": {
+      "enabled": true
+    }
+  },
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "orientation": "portrait",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "appVersion": "1"
+}

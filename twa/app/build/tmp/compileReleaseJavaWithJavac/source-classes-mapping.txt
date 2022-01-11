@@ -1,0 +1,14 @@
+in/upturf/app/DelegationService.java
+ in.upturf.app.DelegationService
+in/upturf/app/LauncherActivity.java
+ in.upturf.app.LauncherActivity
+in/upturf/twa/Application.java
+ in.upturf.twa.Application
+in/upturf/twa/DelegationService.java
+ in.upturf.twa.DelegationService
+in/upturf/twa/LauncherActivity.java
+ in.upturf.twa.LauncherActivity
+in/upturf/app/BuildConfig.java
+ in.upturf.app.BuildConfig
+in/upturf/app/Application.java
+ in.upturf.app.Application

@@ -51,6 +51,8 @@ module.exports = {
         }
         return options
       })
+    config.plugins.store.delete('prefetch')
+    config.plugins.store.delete('preload')
   },
 
   transpileDependencies: ['vue-echarts', 'resize-detector'],
@@ -69,6 +71,6 @@ module.exports = {
   },
 
   pluginOptions: {
-    cordovaPath: 'src-cordova'
-  }
+    cordovaPath: 'src-cordova',
+  },
 }

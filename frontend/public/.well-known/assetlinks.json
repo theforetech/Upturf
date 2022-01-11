@@ -1,6 +1,10 @@
 [{
-        "relation": ["delegate_permission/common.handle_all_urls"],
-        "target" : { "namespace": "android_app", "package_name": "in.upturf.app",
-                     "sha256_cert_fingerprints": ["DA:A8:10:54:63:16:8A:71:F0:41:E6:7C:4E:21:CD:2F:73:A6:42:D7:A2:6C:1D:25:6A:E6:75:D3:14:E4:C6:AE"] }
-      }
-]
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "in.upturf.app",
+    "sha256_cert_fingerprints": [
+      "20:A0:99:83:F8:81:61:6F:E2:01:FD:8B:67:01:9C:71:FA:B8:0B:0C:93:A0:F0:77:59:6F:F0:2D:F0:FC:41:08"
+    ]
+  }
+}]

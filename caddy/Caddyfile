@@ -4,3 +4,15 @@ backend.upturf.in {
 payments.upturf.in {
     reverse_proxy razorpay:8000
 }
+upturf.in {
+   encode gzip zstd
+   root * /sites/frontend
+   try_files {path} {path}/ /index.html
+   file_server
+}
+panel.upturf.in {
+   encode gzip zstd
+   root * /sites/admin
+   try_files {path} {path}/ /index.html
+   file_server
+}
