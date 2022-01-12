@@ -31,7 +31,8 @@ VueRouter.prototype.push = function push(location, onResolve, onReject) {
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
+  // base: process.env.BASE_URL,
+  base: '/',
   scrollBehavior() {
     return { x: 0, y: 0 }
   },

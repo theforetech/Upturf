@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-  publicPath: '',
+  // publicPath: '',
 
   devServer: {
     disableHostCheck: true,
@@ -51,8 +51,8 @@ module.exports = {
         }
         return options
       })
-    config.plugins.store.delete('prefetch')
-    config.plugins.store.delete('preload')
+    // config.plugins.store.delete('prefetch')
+    // config.plugins.store.delete('preload')
   },
 
   transpileDependencies: ['vue-echarts', 'resize-detector'],
