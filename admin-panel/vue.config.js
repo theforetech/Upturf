@@ -2,6 +2,12 @@ const path = require('path')
 
 module.exports = {
   publicPath: '/',
+  devServer: {
+    disableHostCheck: true,
+    port: 8080,
+    public: 'localhost:8080',
+  },
+
   css: {
     loaderOptions: {
       sass: {

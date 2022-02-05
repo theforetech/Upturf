@@ -114,10 +114,10 @@
             @clicked="navigateTo('cancelpolicy')"
           />
           <profile-card2
-            statistic="Fair Usage Policy"
+            statistic="Privacy Policy"
             icon="CodesandboxIcon"
             color="dark"
-            @clicked="navigateTo('fairusage')"
+            @clicked="navigateTo('privacy')"
           />
           <hr>
           <profile-card2
