@@ -308,18 +308,18 @@ export default [
     },
   },
   {
-    path: '/fairusage',
-    name: 'fairusage',
+    path: '/privacy',
+    name: 'privacy',
     component: Fair,
     meta: {
       layout: 'full',
-      pageTitle: 'Fair Usage Policy',
+      pageTitle: 'Privacy Policy',
       breadcrumb: [
         {
           text: 'Pages',
         },
         {
-          text: 'Fair Usage Policy',
+          text: 'Private Policy',
           active: true,
         },
       ],
