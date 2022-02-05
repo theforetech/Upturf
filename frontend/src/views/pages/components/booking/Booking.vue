@@ -888,7 +888,7 @@ export default {
         return
       }
       const options = {
-        key: 'rzp_test_abiH700LsWApe9',
+        key: 'rzp_live_F39TocjF1ks8QX',
         currency: 'INR',
         amount: (this.currentBooking.amount * 100).toString(),
         order_id: this.currentBooking.razorpay,

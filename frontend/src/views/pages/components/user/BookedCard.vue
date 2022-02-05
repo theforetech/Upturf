@@ -333,7 +333,7 @@ export default {
         return
       }
       const options = {
-        key: 'rzp_test_abiH700LsWApe9',
+        key: 'rzp_live_F39TocjF1ks8QX',
         currency: 'INR',
         amount: (this.amount * 100).toString(),
         order_id: this.payments[0].id,

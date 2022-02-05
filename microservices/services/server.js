@@ -4,8 +4,8 @@ const moment = require("moment");
 
 const RazorpayLib = require('razorpay')
 const razorpayLib = new RazorpayLib({
-  key_id: 'rzp_test_abiH700LsWApe9',
-  key_secret: 'hoycXTVAs1KiMYGuZ7hct9ap'
+  key_id: 'rzp_live_F39TocjF1ks8QX',
+  key_secret: 'WRQWgmPm6hYB8zdusvqqbUNx'
 })
 
 const app = express();
