@@ -196,14 +196,14 @@
             <span>Total Base Fare:</span>
             <span>₹ {{ totalPrice }}</span>
           </div>
-          <div class="checkout">
-            <span>Convenience fee (5% Base Fare):</span>
-            <span>₹ {{ convFees }}</span>
-          </div>
-          <div class="checkout">
-            <span>Coupon Discount:</span>
-            <span style="color: #2BB053">-₹ {{ discount }}</span>
-          </div>
+          <!--          <div class="checkout">-->
+          <!--            <span>Convenience fee (5% Base Fare):</span>-->
+          <!--            <span>₹ {{ convFees }}</span>-->
+          <!--          </div>-->
+          <!--          <div class="checkout">-->
+          <!--            <span>Coupon Discount:</span>-->
+          <!--            <span style="color: #2BB053">-₹ {{ discount }}</span>-->
+          <!--          </div>-->
           <div
             id="totalP"
             class="checkout"
@@ -835,9 +835,7 @@ export default {
         this.totalPrice = this.tempPrice
         this.tempPrice = 0
         this.canCheckout = this.slotsSelected > 0
-        this.convFees = this.totalPrice * 0.05
-        this.discount = this.totalPrice * 0.2
-        this.checkoutAmt = this.totalPrice + this.convFees - this.discount
+        this.checkoutAmt = this.totalPrice
       } else this.showSummary = 0
     },
     isRowSelected(item) {
@@ -857,9 +855,9 @@ export default {
         this.showSummary = 0
       } else if (this.selectedSlots.length > 0) {
         this.showSummary = 1
-        this.convFees = this.totalPrice * 0.05
-        this.discount = this.totalPrice * 0.2
-        this.checkoutAmt = this.totalPrice + this.convFees - this.discount
+        // this.convFees = this.totalPrice * 0.05
+        // this.discount = this.totalPrice * 0.2
+        this.checkoutAmt = this.totalPrice
       }
     },
     loadScript(src) {
