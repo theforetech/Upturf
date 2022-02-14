@@ -105,7 +105,7 @@ app.post('/callback', async (req, res) => {
       variables
     },
     headers: {
-      "x-hasura-admin-secret": "SurfATurf"
+      "x-hasura-admin-secret": process.env.HASURA_SECRET
     }
   })
     .then(resp => {
@@ -148,7 +148,7 @@ app.post('/callback', async (req, res) => {
         variables: vars
       },
       headers: {
-        "x-hasura-admin-secret": "SurfATurf"
+        "x-hasura-admin-secret": process.env.HASURA_SECRET
       }
     })
       .then(resp => {
@@ -188,7 +188,7 @@ app.post('/callback', async (req, res) => {
         variables: vars
       },
       headers: {
-        "x-hasura-admin-secret": "SurfATurf"
+        "x-hasura-admin-secret": process.env.HASURA_SECRET
       }
     })
       .then(resp => {

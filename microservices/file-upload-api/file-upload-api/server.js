@@ -95,7 +95,7 @@ const fileUpload = async (req, res, next) => {
         variables
         },
         headers: {
-          "x-hasura-admin-secret": "SurfATurf"
+          "x-hasura-admin-secret": process.env.HASURA_SECRET
         }
       })
       .then(resp => {

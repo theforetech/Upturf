@@ -59,7 +59,7 @@ app.post('/book', async (req, res, next) => {
         variables: variables_getData
       },
       headers: {
-        "x-hasura-admin-secret": "SurfATurf"
+        "x-hasura-admin-secret": process.env.HASURA_SECRET
       }
     })
       .then(resp => {
@@ -134,7 +134,7 @@ app.post('/book', async (req, res, next) => {
         variables
       },
       headers: {
-        "x-hasura-admin-secret": "SurfATurf"
+        "x-hasura-admin-secret": process.env.HASURA_SECRET
       }
     })
       .then(resp => {
@@ -191,7 +191,7 @@ app.post('/book', async (req, res, next) => {
         variables: variables_payment
       },
       headers: {
-        "x-hasura-admin-secret": "SurfATurf"
+        "x-hasura-admin-secret": process.env.HASURA_SECRET
       }
     })
       .then(resp => {
@@ -261,7 +261,7 @@ const cancelBooking = async (bookingID, userRole) => {
           variables: variables_getData
         },
         headers: {
-          "x-hasura-admin-secret": "SurfATurf"
+          "x-hasura-admin-secret": process.env.HASURA_SECRET
         }
       })
         .then(resp => {
@@ -376,7 +376,7 @@ const cancelBooking = async (bookingID, userRole) => {
             variables
           },
           headers: {
-            "x-hasura-admin-secret": "SurfATurf"
+            "x-hasura-admin-secret": process.env.HASURA_SECRET
           }
         })
           .then(resp => {
@@ -450,7 +450,7 @@ app.post('/cleanBookings', async (req, res, next) => {
         query: GET_DATA_MUTATION,
       },
       headers: {
-        "x-hasura-admin-secret": "SurfATurf"
+        "x-hasura-admin-secret": process.env.HASURA_SECRET
       }
     })
       .then(resp => {
@@ -532,7 +532,7 @@ app.post('/cancel', async (req, res, next) => {
         variables: variables_getData
       },
       headers: {
-        "x-hasura-admin-secret": "SurfATurf"
+        "x-hasura-admin-secret": process.env.HASURA_SECRET
       }
     })
       .then(resp => {
@@ -651,7 +651,7 @@ app.post('/cancel', async (req, res, next) => {
           variables
         },
         headers: {
-          "x-hasura-admin-secret": "SurfATurf"
+          "x-hasura-admin-secret": process.env.HASURA_SECRET
         }
       })
         .then(resp => {
@@ -744,7 +744,7 @@ app.post('/createSlots', async (req, res) => {
         variables
       },
       headers: {
-        "x-hasura-admin-secret": "SurfATurf"
+        "x-hasura-admin-secret": process.env.HASURA_SECRET
       }
     })
       .then(resp => {
@@ -785,7 +785,7 @@ app.post('/createSlots', async (req, res) => {
       variables
     },
     headers: {
-      "x-hasura-admin-secret": "SurfATurf"
+      "x-hasura-admin-secret": process.env.HASURA_SECRET
     }
   })
     .then(resp => {

@@ -58,8 +58,8 @@ export const apolloClient = new ApolloClient({
     addTypename: true,
   }),
   defaultOptions: {
-    // fetchPolicy: 'no-cache',
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'no-cache',
+    // fetchPolicy: 'cache-and-network',
   },
 })
 

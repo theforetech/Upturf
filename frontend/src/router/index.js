@@ -105,7 +105,9 @@ const apolloClient = new ApolloClient({
 // eslint-disable-next-line consistent-return,import/prefer-default-export
 router.beforeEach(async (to, from, next) => {
   const authService = getInstance()
-  // eslint-disable-next-line no-empty
+  if (to.name === 'terms' || to.name === 'privacy') {
+    return next()
+  }
   await waitUntilAuth(authService)
   const fn2 = async () => {
     const isLoggedIn = authService.isAuthenticated
