@@ -7,10 +7,10 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - /home/anmol150srivastava/caddy/Caddyfile:/etc/caddy/Caddyfile
-      - /home/anmol150srivastava/caddy/data:/data
-      - /home/anmol150srivastava/caddy/config:/config
-      - /home/anmol150srivastava/sites:/sites
+      - /home/ubuntu/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - /home/ubuntu/caddy/data:/data
+      - /home/ubuntu/caddy/config:/config
+      - /home/ubuntu/sites:/sites
     depends_on:
       - graphql-engine
       - razorpay
