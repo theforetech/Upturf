@@ -203,7 +203,7 @@ export default {
       if (!this.filterSearchQuery && this.filterLocation) {
         variables.lat = this.filterLocation.lat
         variables.lon = this.filterLocation.lon
-        variables.bound = 20
+        variables.bound = 500
       }
       if (this.filterSearchQuery) {
         variables.search = this.filterSearchQuery
@@ -308,17 +308,21 @@ export default {
           rating: turf.ratings_aggregate.aggregate.avg.ratings,
           sports: [],
         }
+        const turfsSet = []
         delete t.ratings_aggregate
         delete t.facilities
         const dict = {}
         turf.facilities.forEach(facility => {
           if (!(facility.sport.id in dict)) {
             dict[facility.sport.id] = true
-            t.sports.push({
-              id: facility.sport.id,
-              name: facility.sport.name,
-              image: facility.sport.images.length > 0 && facility.sport.images[0].url,
-            })
+            if (!turfsSet.includes(facility.sport.name)) {
+              turfsSet.push(facility.sport.name)
+              t.sports.push({
+                id: facility.sport.id,
+                name: facility.sport.name,
+                image: facility.sport.images.length > 0 && facility.sport.images[0].url,
+              })
+            }
           }
         })
         return t

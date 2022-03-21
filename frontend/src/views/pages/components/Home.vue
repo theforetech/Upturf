@@ -13,19 +13,27 @@
         :interval="3000"
       >
         <b-carousel-slide
-          :img-src="require('@/assets/images/offers/homeoffer1.jpg')"
+          :img-src="require('@/assets/images/home_banner/banner_1.jpg')"
           class="cImg"
         />
         <b-carousel-slide
-          :img-src="require('@/assets/images/offers/homeoffer2.jpg')"
+          :img-src="require('@/assets/images/home_banner/banner_2.jpg')"
           class="cImg"
         />
         <b-carousel-slide
-          :img-src="require('@/assets/images/offers/homeoffer3.jpg')"
+          :img-src="require('@/assets/images/home_banner/banner_3.jpg')"
           class="cImg"
         />
         <b-carousel-slide
-          :img-src="require('@/assets/images/offers/homeoffer4.jpg')"
+          :img-src="require('@/assets/images/home_banner/banner_4.jpg')"
+          class="cImg"
+        />
+        <b-carousel-slide
+          :img-src="require('@/assets/images/home_banner/banner_5.jpg')"
+          class="cImg"
+        />
+        <b-carousel-slide
+          :img-src="require('@/assets/images/home_banner/banner_6.jpg')"
           class="cImg"
         />
       </b-carousel>
@@ -54,45 +62,45 @@
         />
       </div>
     </VueSlickCarousel>
-    <h3
-      style="margin-bottom: 2rem;margin-top:2rem; color: #000"
-    >
-      Explore Turfs Nearby
-    </h3>
-    <VueSlickCarousel v-bind="settingsNearby">
-      <div
-        v-for="x in places"
-        :key="x.place"
-      >
-        <b-media
-          no-body
-          class="nearby"
-        >
-          <b-media-aside class="mr-2">
-            <b-link :href="x.link">
-              <b-img
-                :src="x.img"
-                width="100"
-                rounded
-                height="70"
-              />
-            </b-link>
-          </b-media-aside>
-          <b-media-body>
-            <h6 class="blog-recent-post-title">
-              <b-link
-                :href="x.link"
-                class="text-body-heading"
-              >{{ x.place }}
-              </b-link>
-            </h6>
-            <span class="text-muted mb-0">
-              {{ x.state }}
-            </span>
-          </b-media-body>
-        </b-media>
-      </div>
-    </VueSlickCarousel>
+    <!--    <h3-->
+    <!--      style="margin-bottom: 2rem;margin-top:2rem; color: #000"-->
+    <!--    >-->
+    <!--      Explore Turfs Nearby-->
+    <!--    </h3>-->
+    <!--    <VueSlickCarousel v-bind="settingsNearby">-->
+    <!--      <div-->
+    <!--        v-for="x in places"-->
+    <!--        :key="x.place"-->
+    <!--      >-->
+    <!--        <b-media-->
+    <!--          no-body-->
+    <!--          class="nearby"-->
+    <!--        >-->
+    <!--          <b-media-aside class="mr-2">-->
+    <!--            <b-link :href="x.link">-->
+    <!--              <b-img-->
+    <!--                :src="x.img"-->
+    <!--                width="100"-->
+    <!--                rounded-->
+    <!--                height="70"-->
+    <!--              />-->
+    <!--            </b-link>-->
+    <!--          </b-media-aside>-->
+    <!--          <b-media-body>-->
+    <!--            <h6 class="blog-recent-post-title">-->
+    <!--              <b-link-->
+    <!--                :href="x.link"-->
+    <!--                class="text-body-heading"-->
+    <!--              >{{ x.place }}-->
+    <!--              </b-link>-->
+    <!--            </h6>-->
+    <!--            <span class="text-muted mb-0">-->
+    <!--              {{ x.state }}-->
+    <!--            </span>-->
+    <!--          </b-media-body>-->
+    <!--        </b-media>-->
+    <!--      </div>-->
+    <!--    </VueSlickCarousel>-->
     <h3
       style="margin-bottom: 2rem;margin-top:2rem; color: #000"
     >
@@ -158,9 +166,9 @@ export default {
     BCarousel,
     BCarouselSlide,
     // BCardText,
-    BImg,
-    BMedia,
-    BLink,
+    // BImg,
+    // BMedia,
+    // BLink,
     TurfCard,
     // BForm,
     // BInputGroup,
@@ -170,8 +178,8 @@ export default {
     // Carousel,
     // Slide,
     VueSlickCarousel,
-    BMediaAside,
-    BMediaBody,
+    // BMediaAside,
+    // BMediaBody,
   },
   data() {
     return {
@@ -340,17 +348,21 @@ export default {
           rating: turf.ratings_aggregate.aggregate.avg.ratings,
           sports: [],
         }
+        const turfsSet = []
         delete t.ratings_aggregate
         delete t.facilities
         const dict = {}
         turf.facilities.forEach(facility => {
           if (!(facility.sport.id in dict)) {
             dict[facility.sport.id] = true
-            t.sports.push({
-              id: facility.sport.id,
-              name: facility.sport.name,
-              image: facility.sport.images[0].url,
-            })
+            if (!turfsSet.includes(facility.sport.name)) {
+              turfsSet.push(facility.sport.name)
+              t.sports.push({
+                id: facility.sport.id,
+                name: facility.sport.name,
+                image: facility.sport.images[0].url,
+              })
+            }
           }
         })
         return t
